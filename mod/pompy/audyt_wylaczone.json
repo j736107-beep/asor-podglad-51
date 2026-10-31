@@ -1,0 +1,513 @@
+{
+ "date": "2026-10-24",
+ "disabled": [
+  {
+   "id": "adrenalina",
+   "name": "Adrenalina",
+   "amp": {
+    "content": 1,
+    "unit": "mg",
+    "volume": 1,
+    "label": "amp. 1 mg / 1 ml",
+    "src": [
+     "ADR"
+    ]
+   },
+   "diluted": true,
+   "defaults": {
+    "50": 5,
+    "20": 2,
+    "src": [
+     "LOC"
+    ]
+   },
+   "doseUnit": "ug/kg/min",
+   "weight": true,
+   "start": 0.05,
+   "range": {
+    "lo": null,
+    "hi": 0.5,
+    "text": "ChPL: wstrząs kardiogenny 0,05–0,5 µg/kg/min (bradykardia 2–10 µg/min)",
+    "src": [
+     "ADR"
+    ]
+   },
+   "maxConc": null,
+   "note": "Ampułka 1 mg/ml – NIE do wstrzyknięcia i.v. bez rozcieńczenia (ChPL). Wlew: 0,05–0,5 µg/kg/min (ChPL do 1,0). Stężenie roboczej mieszanki (5 mg/50 ml = 100 µg/ml) – DO DECYZJI LEKARZA / lokalna receptura.",
+   "hard": 1.0,
+   "hardText": "Powyżej 1 µg/kg/min (ChPL – górna granica wlewu) – nie liczę; sprawdź jednostkę (µg/kg/min vs µg/min).",
+   "chpl": {
+    "status": "wylaczona",
+    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/3065/characteristic",
+    "reason": "ChPL Adrenalina WZF podaje dawkę wlewu (0,05–0,5/1,0 µg/kg/min) i rozcieńczalniki, ale nie podaje stężenia ani przygotowania strzykawki; 5 mg/50 ml to receptura lokalna – niezweryfikowana."
+   }
+  },
+  {
+   "id": "amiodaron",
+   "name": "Amiodaron",
+   "amp": {
+    "content": 150,
+    "unit": "mg",
+    "volume": 3,
+    "label": "amp. 150 mg / 3 ml",
+    "src": [
+     "AMI"
+    ]
+   },
+   "diluted": true,
+   "defaults": {
+    "50": 2,
+    "20": 1,
+    "src": [
+     "LOC"
+    ]
+   },
+   "doseUnit": "mg/h",
+   "weight": false,
+   "start": 37.5,
+   "range": {
+    "lo": 25,
+    "hi": 50,
+    "text": "ChPL: 600–1200 mg/24 h (25–50 mg/h); tylko G5%",
+    "src": [
+     "AMI"
+    ]
+   },
+   "maxConc": null,
+   "note": null,
+   "chpl": {
+    "status": "wylaczona",
+    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/1582/characteristic",
+    "reason": "ChPL Cordarone: wlew w 250 ml glukozy 5% (tylko G5%), wlew ciągły przez dostęp centralny; strzykawka 300 mg/50 ml nie jest opisana w ChPL; dawka nasycająca i podtrzymująca wymagają osobnych schematów."
+   }
+  },
+  {
+   "id": "dopamina",
+   "name": "Dopamina",
+   "amp": {
+    "content": 200,
+    "unit": "mg",
+    "volume": 5,
+    "label": "amp. 200 mg / 5 ml",
+    "src": [
+     "DOP"
+    ]
+   },
+   "diluted": true,
+   "defaults": {
+    "50": 1,
+    "20": 1,
+    "src": []
+   },
+   "doseUnit": "ug/kg/min",
+   "weight": true,
+   "start": 5,
+   "range": {
+    "lo": null,
+    "hi": 50,
+    "text": "ChPL: start 1–5 µg/kg/min, maks. 20–50 µg/kg/min",
+    "src": [
+     "DOP"
+    ]
+   },
+   "maxConc": null,
+   "note": "Twoja baza nie ma standardu strzykawki dla dopaminy — stężenie zatwierdź lokalnie.",
+   "hard": 50,
+   "hardText": "Powyżej 50 µg/kg/min – nie liczę; sprawdź jednostkę.",
+   "chpl": {
+    "status": "wylaczona",
+    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/2035/characteristic",
+    "reason": "ChPL Dopaminum WZF: wyłącznie 100–800 mg do 250 ml (0,4–3,2 mg/ml); preset 200 mg/50 ml = 4 mg/ml (20 ml: 10 mg/ml) jest poza ChPL."
+   }
+  },
+  {
+   "id": "fentanyl",
+   "name": "Fentanyl",
+   "amp": {
+    "content": 100,
+    "unit": "ug",
+    "volume": 2,
+    "label": "amp. 100 µg / 2 ml",
+    "src": [
+     "FEN"
+    ]
+   },
+   "diluted": true,
+   "defaults": {
+    "50": 10,
+    "20": 4,
+    "src": [
+     "LOC"
+    ]
+   },
+   "doseUnit": "ug/kg/min",
+   "weight": true,
+   "start": 0.05,
+   "range": {
+    "lo": null,
+    "hi": 0.1,
+    "text": "ChPL: 0,05–0,08 µg/kg/min (oddech własny), ok. 0,1 (wentylowani)",
+    "src": [
+     "FEN"
+    ]
+   },
+   "maxConc": null,
+   "note": null,
+   "chpl": {
+    "status": "wylaczona",
+    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/2404/characteristic",
+    "reason": "ChPL Fentanyl WZF podaje dawkę wlewu (0,05–0,08 µg/kg/min oddech własny, ok. 0,1 wentylowani) i rozcieńczalniki, ale nie stężenie strzykawki; 1000 µg/50 ml to receptura lokalna."
+   }
+  },
+  {
+   "id": "furosemid",
+   "name": "Furosemid",
+   "amp": {
+    "content": 20,
+    "unit": "mg",
+    "volume": 2,
+    "label": "amp. 20 mg / 2 ml",
+    "src": [
+     "FUR"
+    ]
+   },
+   "diluted": true,
+   "defaults": {
+    "50": 10,
+    "20": 10,
+    "src": [
+     "LOC"
+    ]
+   },
+   "doseUnit": "mg/h",
+   "weight": false,
+   "start": 50,
+   "range": {
+    "lo": null,
+    "hi": 100,
+    "text": "ChPL: start 50–100 mg/h; maks. 1500 mg/dobę",
+    "src": [
+     "FUR"
+    ]
+   },
+   "maxConc": null,
+   "note": null,
+   "hard": 100,
+   "hardText": "Powyżej 100 mg/h – nie liczę; sprawdź jednostkę.",
+   "chpl": {
+    "status": "wylaczona",
+    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/19019/characteristic",
+    "reason": "ChPL Furosemide Kabi: wlew 50–100 mg/h, ≤4 mg/min, rozcieńczalnik NaCl 0,9%/Ringer z mleczanami; brak opisu stężenia/przygotowania strzykawki – receptura 200 mg/20–50 ml niezweryfikowana."
+   }
+  },
+  {
+   "id": "insulina",
+   "name": "Insulina NovoRapid",
+   "amp": {
+    "content": 1,
+    "unit": "j",
+    "volume": 0.01,
+    "label": "NovoRapid pen 100 j./ml (3 ml = 300 j.)",
+    "src": [
+     "INS"
+    ]
+   },
+   "diluted": true,
+   "defaults": {
+    "50": 50,
+    "20": 20,
+    "src": [
+     "DB"
+    ]
+   },
+   "doseUnit": "j/h",
+   "weight": false,
+   "start": null,
+   "range": {
+    "lo": null,
+    "hi": null,
+    "text": "Wytyczne (off-label): ADA/JBDS 2024 — DKA 0,1 j./kg/h; ChPL: 0,05–1 j./ml",
+    "src": [
+     "DKA",
+     "INS"
+    ]
+   },
+   "maxConc": {
+    "value": 1,
+    "text": "ChPL: stężenie 0,05–1,0 j./ml",
+    "src": [
+     "INS"
+    ]
+   },
+   "note": "Pobranie z pena/wkładu = praktyka lokalna (off-label). ChPL NovoRapid: do wlewu i.v. dopuszczone wyłącznie fiolki (nie Penfill/FlexPen); worki polipropylenowe adsorbują insulinę. Rodzaj opakowania i sposób przygotowania – DO DECYZJI LEKARZA / apteka szpitalna.",
+   "doseUnits": [
+    "j/h",
+    "j/kg/h"
+   ],
+   "header": "NovoRapid pen 100 j./ml (3 ml = 300 j.)",
+   "stepper": {
+    "label": "Liczba jednostek z pena [j.]",
+    "step": 10,
+    "free": true
+   },
+   "minConc": {
+    "value": 0.05,
+    "text": "ChPL: stężenie 0,05–1,0 j./ml"
+   },
+   "chpl": {
+    "status": "wylaczona",
+    "url": "https://www.ema.europa.eu/pl/documents/product-information/novorapid-epar-product-information_pl.pdf",
+    "reason": "ChPL NovoRapid: i.v. wyłącznie z fiolek (nie pen/Penfill); preset z pena = off-label; dawka DKA z wytycznych, nie z ChPL."
+   }
+  },
+  {
+   "id": "midazolam",
+   "name": "Midazolam",
+   "amp": {
+    "content": 5,
+    "unit": "mg",
+    "volume": 1,
+    "label": "amp. 5 mg / 1 ml",
+    "src": [
+     "MID"
+    ]
+   },
+   "diluted": true,
+   "defaults": {
+    "50": 10,
+    "20": 4,
+    "src": [
+     "LOC"
+    ]
+   },
+   "doseUnit": "mg/kg/h",
+   "weight": true,
+   "start": 0.03,
+   "range": {
+    "lo": null,
+    "hi": 0.2,
+    "text": "ChPL: sedacja OIT 0,03–0,2 mg/kg/h",
+    "src": [
+     "MID"
+    ]
+   },
+   "maxConc": null,
+   "note": null,
+   "chpl": {
+    "status": "wylaczona",
+    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/9380/characteristic",
+    "reason": "ChPL Midanium: dawka wlewu 0,03–0,2 mg/kg/h podana, ale przygotowanie opisane tylko jako mieszanie z 500 ml; brak opisu strzykawki 50 mg/50 ml – niezweryfikowana."
+   }
+  },
+  {
+   "id": "morfina",
+   "name": "Morfina",
+   "amp": {
+    "content": 10,
+    "unit": "mg",
+    "volume": 1,
+    "label": "amp. 10 mg / 1 ml",
+    "src": [
+     "MOR"
+    ]
+   },
+   "diluted": true,
+   "defaults": {
+    "50": 5,
+    "20": 2,
+    "src": [
+     "LOC"
+    ]
+   },
+   "doseUnit": "mg/h",
+   "weight": false,
+   "start": null,
+   "range": {
+    "lo": null,
+    "hi": 2.5,
+    "text": "ChPL (Morphini hydrochloridum Sopharma, RPL 29888): przeciętnie 0,8–2,5 mg/h; zwykle ≤100 mg/dobę",
+    "src": [
+     "MORS"
+    ]
+   },
+   "maxConc": {
+    "value": 1,
+    "text": "ChPL (Sopharma): rozcieńczyć do 0,1–1 mg/ml w NaCl 0,9%",
+    "src": [
+     "MORS"
+    ]
+   },
+   "note": "Dawka z ChPL innego preparatu (chlorowodorek morfiny) — dla ampułki WZF (siarczan) off-label. Wlew w warunkach intensywnego nadzoru.",
+   "chpl": {
+    "status": "wylaczona",
+    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/8478/characteristic",
+    "reason": "Zakres dawki pochodzi z ChPL innego preparatu (Sopharma, chlorowodorek); dla ampułki WZF (siarczan) receptura strzykawki niezweryfikowana."
+   }
+  },
+  {
+   "id": "nitrogliceryna",
+   "name": "Nitrogliceryna",
+   "amp": {
+    "content": 10,
+    "unit": "mg",
+    "volume": 10,
+    "label": "amp. 10 mg / 10 ml",
+    "src": [
+     "NTG"
+    ]
+   },
+   "diluted": true,
+   "defaults": {
+    "50": 5,
+    "20": 2,
+    "src": [
+     "DB"
+    ]
+   },
+   "doseUnit": "ug/min",
+   "weight": false,
+   "start": 10,
+   "range": {
+    "lo": null,
+    "hi": 167,
+    "text": "ChPL (Perlinganit): start 5–10 µg/min, maks. 167 µg/min",
+    "src": [
+     "NTG"
+    ]
+   },
+   "maxConc": null,
+   "note": "Trinity nie ma ChPL w RPL — dawki wg Perlinganit.",
+   "hard": 200,
+   "hardText": "Powyżej 200 µg/min – nie liczę; sprawdź jednostkę (µg/min vs mg/h).",
+   "chpl": {
+    "status": "wylaczona",
+    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/5252/characteristic",
+    "reason": "Używany preparat (Trinity) nie ma ChPL w RPL; dawki z ChPL Perlinganit (inny produkt) – weryfikacja konkretnego preparatu niemożliwa."
+   }
+  },
+  {
+   "id": "noradrenalina",
+   "name": "Noradrenalina",
+   "amp": {
+    "content": 4,
+    "unit": "mg",
+    "volume": 4,
+    "label": "amp. 4 mg / 4 ml",
+    "src": [
+     "NOR"
+    ]
+   },
+   "diluted": true,
+   "defaults": {
+    "50": 1,
+    "20": 1,
+    "src": [
+     "DB"
+    ]
+   },
+   "doseUnit": "ug/kg/min",
+   "weight": true,
+   "start": 0.05,
+   "range": {
+    "lo": null,
+    "hi": null,
+    "text": "ChPL: start 0,4–0,8 mg/h, zwiększać o 0,05–0,1 µg/kg/min; brak dawki maks.",
+    "src": [
+     "NOR"
+    ]
+   },
+   "maxConc": null,
+   "note": "Standard ChPL 40 µg/ml (2 mg/50 ml); standard lokalny 4 mg/50 ml = 80 µg/ml – DO DECYZJI LEKARZA (zatwierdzona lokalna receptura). Obwodowo tylko krótko (≤20 µg/ml, ≤0,1 µg/kg/min), potem centralny dostęp; wynaczynienie → fentolamina wg lokalnej procedury. Dawka w µg/kg/min (nie µg/min).",
+   "hard": 2.0,
+   "hardText": "Powyżej 2 µg/kg/min – nie liczę (twardy limit modułu AHF); sprawdź jednostkę (µg/kg/min vs µg/min) i masę.",
+   "softConc": {
+    "value": 0.04,
+    "text": "ChPL: standard 40 µg/ml (2 mg/50 ml). 80 µg/ml (4 mg/50 ml) = lokalna receptura – DO DECYZJI LEKARZA; obwodowo ≤20 µg/ml i ≤0,1 µg/kg/min, dłużej – dostęp centralny.",
+    "unit": "mg/ml (=40 µg/ml)"
+   },
+   "chpl": {
+    "status": "wylaczona",
+    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/3745/characteristic",
+    "reason": "Stary preset 4 mg/50 ml = 80 µg/ml (20 ml: 200 µg/ml) – poza ChPL Levonor (stabilność 10–40 mg/l, standard 40 µg/ml). Zastąpiony dwoma zweryfikowanymi wariantami: centralny 40 µg/ml i obwodowy 20 µg/ml."
+   }
+  },
+  {
+   "id": "oktreotyd",
+   "name": "Oktreotyd",
+   "amp": {
+    "content": 100,
+    "unit": "ug",
+    "volume": 1,
+    "label": "amp. 100 µg / 1 ml",
+    "src": [
+     "OKT"
+    ]
+   },
+   "diluted": true,
+   "defaults": {
+    "50": 5,
+    "20": 2,
+    "src": [
+     "LOC"
+    ]
+   },
+   "doseUnit": "ug/h",
+   "weight": false,
+   "start": 25,
+   "range": {
+    "lo": null,
+    "hi": 50,
+    "text": "ChPL: 25 µg/h, do 50 µg/h",
+    "src": [
+     "OKT"
+    ]
+   },
+   "maxConc": null,
+   "note": null,
+   "chpl": {
+    "status": "wylaczona",
+    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/5999/characteristic",
+    "reason": "ChPL w źródle (RPL 5999) dotyczy Sandostatin 50 µg/ml, a preset zakłada ampułkę 100 µg/ml – niezgodność preparatu; brak weryfikacji wlewu."
+   }
+  },
+  {
+   "id": "pantoprazol",
+   "name": "Pantoprazol",
+   "amp": {
+    "content": 40,
+    "unit": "mg",
+    "volume": 10,
+    "label": "fiolka 40 mg (rozpuścić w 10 ml NaCl 0,9%)",
+    "src": [
+     "ESGE"
+    ]
+   },
+   "diluted": true,
+   "defaults": {
+    "50": 2,
+    "20": 1,
+    "src": [
+     "LOC"
+    ]
+   },
+   "doseUnit": "mg/h",
+   "weight": false,
+   "start": 8,
+   "range": {
+    "lo": null,
+    "hi": 8,
+    "text": "Wytyczne (off-label): ESGE 2021 — 8 mg/h po bolusie 80 mg",
+    "src": [
+     "ESGE"
+    ]
+   },
+   "maxConc": null,
+   "note": null,
+   "chpl": {
+    "status": "wylaczona",
+    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/45188/characteristic",
+    "reason": "Wlew 8 mg/h po 80 mg to schemat ESGE (off-label), ChPL Pantoprazol Zentiva nie opisuje wlewu ciągłego."
+   }
+  }
+ ]
+}

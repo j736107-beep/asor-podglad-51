@@ -1,0 +1,30 @@
+:root{--pink:#ff5fa2;--pink2:#ffe3f0;--vio:#7b3fe4;--vio2:#efe6ff;--mint:#2ec4a6;--mint2:#dcfaf2;--ink:#3a2357;--soft:#7d6a96;--red:#e0245e;--red2:#ffe0ea;--amb:#d98a00;--bg:#fff7fb}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:16px}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top) + 8px) 12px 8px;background:linear-gradient(120deg,var(--pink),var(--vio));color:#fff}
+header h1{margin:0;font-size:20px;font-weight:800}#back{background:#ffffff33;border:0;color:#fff;font-size:30px;width:42px;height:42px;border-radius:12px}
+main{padding:10px 12px 46px;max-width:560px;margin:0 auto}
+.disc{position:fixed;bottom:0;left:0;right:0;padding:5px 8px calc(env(safe-area-inset-bottom) + 5px);background:var(--vio2);color:var(--vio);font-size:11px;text-align:center}
+.search{width:100%!important;text-align:left!important;padding:13px;border-radius:14px;border:2px solid #e8d6ff;font-size:17px;margin-bottom:8px;color:var(--ink)}
+.list{display:grid;grid-template-columns:1fr 1fr;gap:8px}.dbtn{padding:16px 10px;border-radius:16px;border:0;background:#fff;color:var(--ink);font-size:17px;font-weight:700;box-shadow:0 2px 8px #ff5fa22a;border-left:6px solid var(--pink);text-align:left}
+.amp{font-size:14px;color:var(--soft);margin:0 0 8px}.amp b{color:var(--vio)}
+.tog{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}.tog button{padding:14px;font-size:20px;font-weight:800;border-radius:14px;border:2px solid #d9c8ff;background:#fff;color:var(--vio)}
+.tog button.on{background:linear-gradient(120deg,var(--pink),var(--vio));color:#fff;border-color:transparent;box-shadow:0 0 14px #7b3fe466}
+.row{display:flex;align-items:center;gap:8px;margin:6px 0}.row label{flex:1;font-size:14px;font-weight:700;color:var(--soft)}
+.step{display:flex;align-items:center;gap:6px}.step button{width:46px;height:46px;border-radius:12px;border:0;background:var(--vio2);color:var(--vio);font-size:26px;font-weight:800}.step b{min-width:40px;text-align:center;font-size:22px}
+input{width:150px;padding:10px;border-radius:12px;border:2px solid #e8d6ff;font-size:20px;text-align:right;color:var(--ink);background:#fff}
+.conc{background:var(--mint2);border-radius:12px;padding:8px 10px;font-size:15px;margin:6px 0}.conc b{font-size:17px}
+.out{background:linear-gradient(120deg,var(--mint2),var(--vio2));border-radius:16px;padding:10px;margin:8px 0;text-align:center;border:3px solid transparent}
+.out .v{font-size:44px;font-weight:900;color:var(--vio);line-height:1.1}.out .s{font-size:15px;color:var(--ink)}
+.out.bad,input.bad{border-color:var(--red)!important;background:var(--red2)}
+.rng{font-size:13px;color:var(--soft);margin:4px 0}.rng.bad{color:var(--red);font-weight:700}
+.err{background:var(--red2);color:var(--red);border:2px solid var(--red);border-radius:12px;padding:8px;font-weight:700;margin:6px 0}
+.warn{background:#fff3d6;color:#8a5800;border-radius:10px;padding:6px 8px;font-size:13px;margin:6px 0}
+.src{font-size:11px;color:var(--soft)}.src a{color:var(--vio)}
+.badge{display:inline-block;padding:4px 8px;border-radius:8px;font-size:12px;font-weight:800;margin-bottom:4px}.badge.ok{background:var(--mint2);color:#0d7a63}.badge.loc{background:#ffe9c2;color:#8a3b00;border:2px solid var(--amb)}
+.dbtn small{display:block;font-size:11px;font-weight:600;color:var(--soft)}.dbtn.loc{border-left-color:var(--amb)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}.lab{font-size:12px;color:var(--soft);font-weight:700}.v2{font-size:22px;font-weight:800;color:var(--ink)}
+.card{background:#fff;border-radius:12px;padding:8px 10px;margin:8px 0;box-shadow:0 1px 5px #7b3fe41a}.chk{font-size:15px}.chk input{width:auto}
+select{padding:9px;border-radius:12px;border:2px solid #e8d6ff;font-size:16px;max-width:60%}
+.link{width:100%;margin:10px 0;padding:12px;border-radius:12px;border:2px dashed var(--vio);background:#fff;color:var(--vio);font-weight:700;font-size:15px}
+.pbtn{padding:12px 16px;border:0;border-radius:8px;background:#16556b;color:#fff;font-size:15px}.sbtn{padding:10px 14px;border:1px solid #16556b;border-radius:8px;background:#fff;color:#16556b;font-size:15px}
+.nomo{border-collapse:collapse;font-size:13px;margin:6px 0}.nomo td,.nomo th{border:1px solid #e8d6ff;padding:3px 6px}
