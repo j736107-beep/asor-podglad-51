@@ -61,3 +61,4 @@ table.dt th{width:auto}
 textarea#copyOut{width:100%;min-height:120px;font-size:12.5px;border-radius:10px;border:2px solid #e8d6ff;padding:6px}
 .lst{margin:4px 0 4px 16px;padding:0;font-size:13px}.lst li{margin:3px 0}
 .hdf{font-size:12px;background:var(--vio2);color:var(--vio);border-radius:8px;padding:4px 8px;margin:4px 0;font-weight:800}
+.reg.prop{border-left-color:#6a1b9a;background:#faf5ff}

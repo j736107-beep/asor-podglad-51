@@ -5,7 +5,7 @@ Object.keys(st).forEach(function(k){if(st[k]===null)st[k]=NaN;});
 function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
 function num(v){v=String(v==null?'':v).replace(',','.').trim();return v===''?NaN:parseFloat(v);}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]});}
-function rich(s){return esc(s).replace(/DO DECYZJI LEKARZA/g,'<span class="dw">DO DECYZJI LEKARZA</span>');}
+function rich(s){return esc(s).replace(/STANDARD LOKALNY – zatwierdzony przez lekarza/g,'<span class="lok">STANDARD LOKALNY – zatwierdzony przez lekarza</span>').replace(/DO DECYZJI LEKARZA/g,'<span class="dw">DO DECYZJI LEKARZA</span>');}
 function v(x){return typeof x==='number'&&isFinite(x)?String(x).replace('.',','):'';}
 var fromBar={};
 // dane z paska pacjenta (gdy moduł otwarty wewnątrz Asystenta)
@@ -36,7 +36,7 @@ function input(){var o=st.o,u=num(st.urea);if(st.ureaU==='mgdl')u=u/6.006;
 var last=null;
 function drug(x){var cls=x.ravoid?'av':(x.rmod||x.rdec||x.tdm?'mod':'');
  return '<div class="drug" data-k="'+x.k+'"><div class="nm">'+esc(x.n)+'<a href="'+x.url+'" target="_blank" rel="noopener">ChPL: '+esc(x.brand)+'</a></div><div class="ds">'+esc(x.dose)+' · '+esc(x.route)+' · '+esc(x.q)+'</div>'+
-  (x.calc?'<div class="hdf">'+rich(x.calc)+'</div>':'')+'<div class="rn2 '+cls+'">Nerki: '+rich(x.renal)+'</div>'+(x.warn?'<div class="mx">'+rich(x.warn)+'</div>':'')+(x.pregNote?'<div class="bz">'+rich(x.pregNote)+'</div>':'')+(x.qt?'<div class="bz">Wydłuża QT – EKG (QTc) przed i w trakcie</div>':'')+'<div class="gl">'+rich(x.g)+'</div></div>';}
+  (x.lok?'<div class="lok">✔ '+esc(Z.LOK)+': '+esc(x.lok)+'</div>':'')+(x.note?'<div class="bz">'+rich(x.note)+'</div>':'')+(x.calc?'<div class="hdf">'+rich(x.calc)+'</div>':'')+'<div class="rn2 '+cls+'">Nerki: '+rich(x.renal)+'</div>'+(x.warn?'<div class="mx">'+rich(x.warn)+'</div>':'')+(x.pregNote?'<div class="bz">'+rich(x.pregNote)+'</div>':'')+(x.qt?'<div class="bz">Wydłuża QT – EKG (QTc) przed i w trakcie</div>':'')+'<div class="gl">'+rich(x.g)+'</div></div>';}
 function result(){var i=input(),o=Z.plan(i);last=o;var c=Z.curb65(i),pl=o.place;
  $('#curbOut').innerHTML='<div class="curb"><div class="big">'+(c.complete?'':'≥')+c.score+'<small>/5</small></div><div><b>CURB-65</b>'+(c.complete?'':' – brak: '+esc(c.missing.join(', ')))+'<br><span class="mut">'+esc((pl.why||[]).join('; '))+'</span></div></div>';
  var bi=Object.keys(fromBar);$('#barInfo').innerHTML=bi.length?'<div class="hdf">Z paska pacjenta: '+bi.join(', ')+'</div>':'';
@@ -46,7 +46,7 @@ function result(){var i=input(),o=Z.plan(i);last=o;var c=Z.curb65(i),pl=o.place;
  h+='<div class="sev '+lv+'">'+pn+(st.place?' (wybrane ręcznie)':' (wg skali)')+'</div>';
  h+='<div class="frm">CrCl: <b>'+(isFinite(o.crcl.v)?o.crcl.v+' ml/min':'–')+'</b> ('+esc(o.crcl.src)+')</div>';
  if(o.avoid.length)h+='<div class="step red"><h3>Wykluczone / unikać</h3><ul class="lst">'+o.avoid.map(function(x){return '<li>'+rich(x)+'</li>'}).join('')+'</ul></div>';
- o.regs.forEach(function(r,ix){h+='<div class="reg '+(r.tier==='alt'?'alt':'')+'" data-reg="'+ix+'"><h3>'+(r.tier==='pref'?'✅ ':'↔️ ')+rich(r.t)+'</h3>'+r.items.map(drug).join('')+'<div class="why">'+rich(r.why)+'</div>'+(r.dur?'<div class="dur">⏱ Czas: '+rich(r.dur)+'</div>':'')+'<div class="st">Źródła: '+r.src.map(function(k){return '<a href="'+Z.S[k].url+'" target="_blank" rel="noopener">'+esc(Z.S[k].n.split(' – ')[0])+'</a>'}).join(', ')+'</div><button class="cp" data-cp="'+ix+'">📋 Kopiuj do zaleceń wypisowych</button></div>';});
+ o.regs.forEach(function(r,ix){h+='<div class="reg '+(r.tier==='alt'?'alt':r.tier==='prop'?'prop':'')+'" data-reg="'+ix+'"><h3>'+(r.tier==='pref'?'✅ ':r.tier==='prop'?'🟣 ':'↔️ ')+rich(r.t).replace('PROPOZYCJA – DO AKCEPTACJI LEKARZA','<span class="dw" style="background:#6a1b9a">PROPOZYCJA – DO AKCEPTACJI LEKARZA</span>')+'</h3>'+r.items.map(drug).join('')+'<div class="why">'+rich(r.why)+'</div>'+(r.dur?'<div class="dur">⏱ Czas: '+rich(r.dur)+'</div>':'')+'<div class="st">Źródła: '+r.src.map(function(k){return '<a href="'+Z.S[k].url+'" target="_blank" rel="noopener">'+esc(Z.S[k].n.split(' – ')[0])+'</a>'}).join(', ')+'</div><button class="cp" data-cp="'+ix+'">📋 Kopiuj do zaleceń wypisowych</button></div>';});
  if(!o.regs.length)h+='<div class="sev red">Brak zweryfikowanego schematu przy tych ograniczeniach – DO DECYZJI LEKARZA</div>';
  if(o.dec.length)h+='<div class="step orange"><h3>DO DECYZJI LEKARZA ('+o.dec.length+')</h3><ul class="lst">'+o.dec.map(function(x){return '<li>'+rich(x)+'</li>'}).join('')+'</ul></div>';
  if(o.ix.length)h+='<div class="step orange"><h3>Interakcje i QT</h3><ul class="lst">'+o.ix.map(function(x){return '<li>'+rich(x)+'</li>'}).join('')+'</ul></div>';
