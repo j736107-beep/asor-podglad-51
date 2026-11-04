@@ -4,7 +4,81 @@
  "uwagi": "Numery 4-cyfrowe = wewnętrzne naszego szpitala (wew.). Numery 9-cyfrowe = pełne/komórkowe. Numery wew. innych szpitali mają pole „centrala” (link dzwoni na centralę i dopisuje numer wew.). Plik edytowalny: dist/data/telefony.json (po zmianie uruchom: node tools/telefony_build.cjs). Oznaczenia: ✓ sprawdzony przez lekarza = standard lokalny (numer podstawowy); „zapasowo (strona placówki)” = numer z oficjalnej strony, gdy inny.",
  "grupy": [
   {
-   "nazwa": "Nasz szpital (PSZS Nowy Targ) – oddziały",
+   "id": "najwazniejsze",
+   "nazwa": "NAJWAŻNIEJSZE",
+   "pozycje": [
+    {
+     "nazwa": "Transport KPR z lekarzem (Krakowskie Pogotowie Ratunkowe) – całodobowo",
+     "info": "Gdy transport wymaga lekarza – transport KPR z lekarzem. Rodzaje transportu: T, RT, RT z lekarzem.",
+     "www": "https://www.kpr.med.pl",
+     "zrodlo": "https://www.kpr.med.pl/artykul/29,transport-medyczny",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "124222999",
+       "opis": "zamawianie transportu (24 h)",
+       "st": "lok"
+      },
+      {
+       "typ": "tel",
+       "nr": "124244272",
+       "opis": "sekretariat KPR",
+       "zap": true
+      }
+     ]
+    },
+    {
+     "nazwa": "Wojewódzki Lekarz Koordynator Ratownictwa Medycznego – Kraków",
+     "email": "krm@malopolska.uw.gov.pl",
+     "www": "http://lkrm.pl",
+     "zrodlo": "http://lkrm.pl/contact.php",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "123921909",
+       "opis": "lekarz koordynator",
+       "st": "ok"
+      }
+     ],
+     "info": "Fax 12 422 72 08."
+    },
+    {
+     "nazwa": "Dyspozytornia medyczna – Kraków",
+     "info": "Bezpośredniego numeru dyspozytorni medycznej nie ma na oficjalnych stronach – sprawdź (Nowy Targ może podlegać innej dyspozytorni – sprawdź). Numer WPR to sekretariat wydziału, nie linia dyspozytora.",
+     "www": "https://malopolska.uw.gov.pl",
+     "zrodlo": "https://malopolska.uw.gov.pl/default.aspx?page=WPR",
+     "numery": [
+      {
+       "typ": "alarm",
+       "nr": "999",
+       "opis": "numer alarmowy ratownictwa medycznego"
+      },
+      {
+       "typ": "alarm",
+       "nr": "112",
+       "opis": "numer alarmowy"
+      },
+      {
+       "typ": "tel",
+       "nr": "123921997",
+       "opis": "Wydział Powiadamiania Ratunkowego MUW – sekretariat",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "123921569",
+       "opis": "Oddział Ratownictwa Medycznego MUW",
+       "uwaga": "źródło: ogłoszenie naboru (nabory.kprm.gov.pl) – sprawdź"
+      }
+     ]
+    }
+   ],
+   "modul": "ksiazka"
+  },
+  {
+   "id": "oiom",
+   "modul": "szpital",
+   "nazwa": "Nasz szpital (PSZS Nowy Targ) – OIOM / anestezjologia",
    "pozycje": [
     {
      "nazwa": "Oddział Anestezjologii i Intensywnej Terapii (OIOM)",
@@ -28,7 +102,12 @@
        "opis": "anestezjolog na położnictwie"
       }
      ]
-    },
+    }
+   ]
+  },
+  {
+   "nazwa": "Nasz szpital (PSZS Nowy Targ) – oddziały",
+   "pozycje": [
     {
      "nazwa": "Oddziałowa SOR",
      "numery": [
@@ -527,78 +606,6 @@
     }
    ],
    "modul": "szpital"
-  },
-  {
-   "id": "najwazniejsze",
-   "nazwa": "NAJWAŻNIEJSZE",
-   "pozycje": [
-    {
-     "nazwa": "Transport KPR z lekarzem (Krakowskie Pogotowie Ratunkowe) – całodobowo",
-     "info": "Gdy transport wymaga lekarza – transport KPR z lekarzem. Rodzaje transportu: T, RT, RT z lekarzem.",
-     "www": "https://www.kpr.med.pl",
-     "zrodlo": "https://www.kpr.med.pl/artykul/29,transport-medyczny",
-     "numery": [
-      {
-       "typ": "tel",
-       "nr": "124222999",
-       "opis": "zamawianie transportu (24 h)",
-       "st": "lok"
-      },
-      {
-       "typ": "tel",
-       "nr": "124244272",
-       "opis": "sekretariat KPR",
-       "zap": true
-      }
-     ]
-    },
-    {
-     "nazwa": "Wojewódzki Lekarz Koordynator Ratownictwa Medycznego – Kraków",
-     "email": "krm@malopolska.uw.gov.pl",
-     "www": "http://lkrm.pl",
-     "zrodlo": "http://lkrm.pl/contact.php",
-     "numery": [
-      {
-       "typ": "tel",
-       "nr": "123921909",
-       "opis": "lekarz koordynator",
-       "st": "ok"
-      }
-     ],
-     "info": "Fax 12 422 72 08."
-    },
-    {
-     "nazwa": "Dyspozytornia medyczna – Kraków",
-     "info": "Bezpośredniego numeru dyspozytorni medycznej nie ma na oficjalnych stronach – sprawdź (Nowy Targ może podlegać innej dyspozytorni – sprawdź). Numer WPR to sekretariat wydziału, nie linia dyspozytora.",
-     "www": "https://malopolska.uw.gov.pl",
-     "zrodlo": "https://malopolska.uw.gov.pl/default.aspx?page=WPR",
-     "numery": [
-      {
-       "typ": "alarm",
-       "nr": "999",
-       "opis": "numer alarmowy ratownictwa medycznego"
-      },
-      {
-       "typ": "alarm",
-       "nr": "112",
-       "opis": "numer alarmowy"
-      },
-      {
-       "typ": "tel",
-       "nr": "123921997",
-       "opis": "Wydział Powiadamiania Ratunkowego MUW – sekretariat",
-       "st": "ok"
-      },
-      {
-       "typ": "tel",
-       "nr": "123921569",
-       "opis": "Oddział Ratownictwa Medycznego MUW",
-       "uwaga": "źródło: ogłoszenie naboru (nabory.kprm.gov.pl) – sprawdź"
-      }
-     ]
-    }
-   ],
-   "modul": "ksiazka"
   },
   {
    "id": "apteki",
