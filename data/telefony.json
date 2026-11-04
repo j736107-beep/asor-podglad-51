@@ -302,12 +302,13 @@
    "nazwa": "Nasz szpital (PSZS Nowy Targ) – diagnostyka i pracownie",
    "pozycje": [
     {
-     "nazwa": "Zakład Diagnostyki Obrazowej (radiologia)",
+     "nazwa": "Radiolog / Rentgen PSZS (Zakład Diagnostyki Obrazowej, ZDO)",
      "numery": [
       {
        "typ": "tel",
        "nr": "573900870",
-       "st": "lok"
+       "st": "lok",
+       "opis": "ZDO"
       },
       {
        "typ": "wew",
@@ -319,6 +320,16 @@
        "typ": "wew",
        "nr": "3509",
        "opis": "MR (rezonans)",
+       "st": "lok"
+      }
+     ]
+    },
+    {
+     "nazwa": "Laboratorium PSZS",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "503736186",
        "st": "lok"
       }
      ]
@@ -391,8 +402,8 @@
      ]
     },
     {
-     "nazwa": "Sekcje – Wiesław Frasik",
-     "info": "Brak numeru – do uzupełnienia.",
+     "nazwa": "Patomorfologia / sekcje – dr Wiesław Frasik",
+     "info": "Brak numeru telefonu. Dane wpisywać na skierowania (sekcja).",
      "numery": []
     }
    ],
