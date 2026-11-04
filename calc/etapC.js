@@ -21,7 +21,7 @@ var SRC={
  cant2:'CANT II – Wybraniec M.T. i wsp., Pol Arch Intern Med 2022;132(6):16234, doi:10.20452/pamw.16234, PMID 35293200 (rejestr, n=1365)',
  phen:'ChPL Phenazolinum 50 mg/ml, roztwór do wstrzykiwań (Polpharma, pozwolenie R/0934; rejestr RPL, dostęp 23.10.2026)',
  rytm:'ChPL Rytmonorm 150 (propafenon), rejestr RPL (dostęp 23.10.2026) – brak schematu jednorazowej dawki „pill in the pocket”',
- pip:'Schemat „pill in the pocket” propafenon 450 mg (<70 kg) / 600 mg (>70 kg): afguidelines.com/pl/propafenon (Wytyczne MP 2026, źródło WTÓRNE, oparte na ESC 2024); PAMW 2023: u chorych <70 kg stosować niższą dawkę',
+ pip:'Schemat „pill in the pocket” propafenon 450 mg (≤70 kg) / 600 mg (>70 kg) – STANDARD LOKALNY zatwierdzony przez lekarza: afguidelines.com/pl/propafenon (Wytyczne MP 2026, źródło WTÓRNE, oparte na ESC 2024); PAMW 2023: u chorych <70 kg stosować niższą dawkę',
  dart23:'Dart R.C. i wsp., Management of Acetaminophen Poisoning in the US and Canada, JAMA Netw Open 2023, doi:10.1001/jamanetworkopen.2023.27739',
  nacchpl:'ChPL Acetylcysteine SANDOZ 100 mg/ml, roztwór do infuzji (pozwolenie 7893; rejestr RPL, dostęp 23.10.2026)',
  bpc26:'Belgian Poison Centre – Protocol paracetamoloverdosis volwassenen en kinderen v.2 (kwiecień 2026) – m.in. schemat Prescotta, SNAP, King’s College, masa maks. 110 kg',
@@ -179,14 +179,15 @@ var SEDATION=[
 function sedationPlan(w){w=num(w);var ok=w>=30&&w<=350;return{ok:ok,drugs:SEDATION.map(function(d){var o={drug:d.drug,dose:d.dose,src:d.src};if(ok){if(d.drug==='Etomidat')o.calc=r1(0.1*w)+' mg (0,1 mg/kg), do ok. '+r1(0.2*w)+' mg łącznie';if(d.drug==='Propofol')o.calc=r1(0.5*w)+'–'+r1(1*w)+' mg (0,5–1 mg/kg), miareczkować';}return o;}),
  notes:['Sedacja / znieczulenie do kardiowersji: ESC 2024 – midazolam, propofol lub etomidat (dożylnie); głębokość i dobór leku: '+DEC+' (zespół z doświadczeniem w sedacji / anestezjolog; lokalny protokół).','Pacjent na czczo wg lokalnych zasad sedacji – '+DEC+'; zapewnij sprzęt do udrożnienia dróg oddechowych, kapnografię / pulsoksymetrię, dostęp i.v.','Analgezja (np. opioid) do kardiowersji: brak zweryfikowanych dawek w tej wersji – '+DEC+'.'],src:[SRC.esc24,SRC.mida,SRC.etom,SRC.prop]};}
 // farmakologiczna
-function propafenonePIP(w){w=num(w);if(!(w>=30&&w<=250))return{ok:false,msg:nz(w)?'Masa poza zakresem 30–250 kg – brak wyniku.':'Podaj masę ciała – brak wyniku.'};
- var esc=w<70?450:(w>70?600:null);var usr=w<=80?450:600;
- var o={ok:true,w:w,escMg:esc,userMg:usr,tabsEsc:esc?esc/150:null,tabsUser:usr/150,boundary:w===70,discrepancy:esc!==null&&esc!==usr,
-  src:[SRC.pip,SRC.rytm,SRC.esc24]};
- o.txt=esc===null?'Masa dokładnie 70 kg – źródła mówią „<70 kg: 450 mg” i „>70 kg: 600 mg”: '+DEC+'.':'Wg źródła (próg 70 kg): '+esc+' mg = '+(esc/150)+' tabl. Rytmonorm 150 mg.';
- o.userTxt='Wg progu podanego przez użytkownika (≤80 kg: 450 mg; >80 kg: 600 mg): '+usr+' mg = '+(usr/150)+' tabl.';
- if(o.discrepancy)o.warn='ROZBIEŻNOŚĆ: dla masy '+w+' kg (>70, ≤80 kg) źródło (70 kg) daje 600 mg, a próg użytkownika (80 kg) – 450 mg. Domyślnie pokazano wartość ze źródła; '+DEC+'.';
- return o;}
+function propafenonePIP(w){w=num(w);var LOC='STANDARD LOKALNY – zatwierdzony przez lekarza';
+ if(!nz(w))return{ok:true,noWeight:true,w:null,escMg:null,userMg:null,tabsEsc:null,local:LOC,both:true,discrepancy:false,boundary:false,
+  txt:'Brak masy ciała: ≤70 kg → 450 mg p.o. (3 tabl. po 150 mg); >70 kg → 600 mg p.o. (4 tabl. po 150 mg) – jednorazowo.',
+  warn:'Podaj masę ciała, aby wybrać jedną dawkę (próg 70 kg).',src:[SRC.pip,SRC.rytm,SRC.esc24]};
+ if(!(w>=30&&w<=250))return{ok:false,msg:'Masa poza zakresem 30–250 kg – brak wyniku.'};
+ var mg=w<=70?450:600;
+ return{ok:true,w:w,escMg:mg,userMg:mg,tabsEsc:mg/150,tabsUser:mg/150,boundary:false,discrepancy:false,local:LOC,
+  txt:(w<=70?'Masa ≤70 kg':'Masa >70 kg')+' → '+mg+' mg p.o. jednorazowo = '+(mg/150)+' tabl. Rytmonorm 150 mg ('+LOC+'; zgodne z ESC 2024 „pill in the pocket”).',
+  src:[SRC.pip,SRC.rytm,SRC.esc24]};}
 var PIP_CONTRA=['istotna strukturalna choroba serca: zawał <3 mies. (ChPL); choroba wieńcowa i przerost LK – przeciwwskazane w ESC 2024 dla klasy Ic','niewyrównana niewydolność serca z EF <35% (ChPL); HFrEF – przeciwwskazane w ESC 2024 dla klasy Ic','objawowa ciężka bradykardia, zaburzenia czynności węzła zatokowego, blok AV II° lub wyższy, blok odnogi / blok dystalny bez stymulatora (ChPL)','zespół Brugadów (ChPL); zatrzymaj, gdy QRS poszerza się o >25% (ESC 2024)','ciężkie niedociśnienie, wstrząs kardiogenny (ChPL)','zaburzenia wodno-elektrolitowe (np. potas), ciężka obturacyjna choroba płuc, miastenia (ChPL)','jednoczesne stosowanie rytonawiru (ChPL); nie łącz z innym lekiem przeciwarytmicznym (PAMW 2023)','TRZEPOTANIE przedsionków – nie do kardiowersji propafenonem (ryzyko przewodzenia 1:1)'];
 function amiodarone(w){w=num(w);var o={ok:true,dose:'300 mg i.v. w 30–60 min, następnie 900–1200 mg i.v. w ciągu 24 h (ESC 2024, Tab. 13); skuteczność ok. 44% (ESC 2024), działanie opóźnione: 8–12 h do kilku dni.',alt:'Moduł v4.x podawał 5–7 mg/kg w 1–2 h – rozbieżność z ESC 2024; przyjęto ESC 2024: '+DEC+'.',
   how:['Rozcieńczenie, droga dostępu i pompa wg ChPL amiodaronu (nie zweryfikowano w tej sesji) – '+DEC+'.','Ryzyko: hipotensja, bradykardia / blok AV, wydłużenie QT; nadczynność tarczycy – tylko gdy brak alternatywy; liczne interakcje.','Kardiowersja farmakologiczna wymaga TEGO SAMEGO zabezpieczenia przeciwzakrzepowego co elektryczna: AF >24–48 h / czas nieznany bez OAC ≥3 tyg. lub TOE → ryzyko udaru / zatoru po konwersji (ESC 2024; PAMW 2023).'],src:[SRC.esc24,SRC.pamw23]};
