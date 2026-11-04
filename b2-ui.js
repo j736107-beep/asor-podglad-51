@@ -158,7 +158,7 @@ function speciesCard(sp,P){var tx=M.TX[sp.syndrome],ama=sp.syndrome==='amatoksyn
  h+='<p><b>Opis (tylko wywiad, nie identyfikacja):</b> '+esc(sp.desc)+'</p><p><b>Z czym bywa mylony:</b> '+esc(sp.conf)+'</p>';
  h+='<p><b>Toksyna / mechanizm:</b> '+esc(base.mech||'')+'</p><p><b>Okres utajenia:</b> '+esc(base.lat||'')+'</p><p><b>Objawy:</b> '+esc(base.sym||'')+'</p>';
  if(sp.note)h+='<p><b>Uwagi:</b> '+rich(sp.note)+'</p>';
- if(tx){h+='<h4 class="b1h">Leczenie ('+esc(sp.syndrome)+')</h4><ul><li>'+rich(tx.what)+'</li><li><b>Węgiel aktywny:</b> '+rich(tx.charcoal)+'</li><li><b>Odtrutka / leki:</b> '+rich(tx.antidote)+'</li>'+(tx.avail?'<li class="o"><b>Dostępność w Nowym Targu:</b> '+rich(tx.avail)+'</li>':'')+(tx.transplant?'<li><b>Transplantacja wątroby:</b> '+rich(tx.transplant)+'</li>':'')+'</ul>';}
+ if(tx){h+='<h4 class="b1h">Leczenie ('+esc(sp.syndrome)+')</h4><ul><li>'+rich(tx.what)+'</li><li><b>Węgiel aktywny:</b> '+rich(tx.charcoal)+'</li><li><b>Odtrutka / leki:</b> '+rich(tx.antidote)+'</li>'+(tx.avail?'<li class="o"><b>Dostępność w Nowym Targu:</b> '+rich(tx.avail)+'</li>':'')+(tx.transplant?'<li><b>Transplantacja wątroby:</b> '+rich(tx.transplant)+(window.SORTel&&SORTel.liverHtml?SORTel.liverHtml():'')+'</li>':'')+'</ul>';}
  if(ama&&nz(P.w)&&P.w>=40&&P.w<=200)h+=bx('orange','Silibinina – rachunek referencyjny'+dw(),'Dorosły '+F(P.w,0)+' kg: dawka nasycająca 5 mg/kg = <b>'+F(P.w*5,0)+' mg</b> w 1 h, następnie 20 mg/kg/dobę = <b>'+F(P.w*20,0)+' mg/dobę</b> (Toxins 2026); wg Legalon SIL (DE): 20 mg/kg/dobę w 4 wlewach po 2 h = '+F(P.w*5,0)+' mg na wlew. Fiolka Legalon SIL = 350 mg silibininy (528,5 mg soli). Preparat niedostępny w Nowym Targu; import/zamienniki – '+DEC+'.');
  h+='<h4 class="b1h">Próbki: co i kiedy</h4>'+tbl(['Kiedy','Co pobrać','Dokąd / uwagi'],M.SAMPLES.map(function(r){return r.map(rich);}));
  h+='<div class="b2nt">'+esc(M.NT)+'</div>';
@@ -172,7 +172,7 @@ function mushTabs(H){var number=H.number,select=H.select,group=H.group,tri=H.tri
    group('Kryteria do rozważenia konsultacji / transferu (zaznacz występujące)',M.TRANSFER.map(function(t,i){return check('t'+i,t[0]);}).join(''))},
   calc:function(g,P){var tr=M.triage({latency:g('latency'),since:g('since'),suspect:g('suspect'),gi:g('gi'),liver:g('liver'),renal:g('renal')});
    var h='';if(!tr.ok)h+=missing('Brak wyniku: '+tr.msg);else{
-    h+=box(tr.level==='red'?'[HOSPITALIZACJA BEZWZGLĘDNA] – podejrzenie ciężkiego zatrucia grzybami':'Zatrucie grzybami – ocena wstępna','<ul><li>'+tr.reasons.map(rich).join('</li><li>')+'</li></ul><p>Okres pozornej poprawy nie wyklucza narastającej niewydolności wątroby/nerek. Pilna konsultacja toksykologiczna. <b>'+rich(tr.transferHint)+'</b></p>',tr.level==='red'?'red':'orange');
+    h+=box(tr.level==='red'?'[HOSPITALIZACJA BEZWZGLĘDNA] – podejrzenie ciężkiego zatrucia grzybami':'Zatrucie grzybami – ocena wstępna','<ul><li>'+tr.reasons.map(rich).join('</li><li>')+'</li></ul><p>Okres pozornej poprawy nie wyklucza narastającej niewydolności wątroby/nerek. Pilna konsultacja toksykologiczna. <b>'+rich(tr.transferHint)+'</b></p>'+(window.SORTel&&SORTel.liverHtml?SORTel.liverHtml():''),tr.level==='red'?'red':'orange');
     h+=box('Pobieranie próbek – okno czasowe',rich(tr.sampling.text),tr.sampling.window==='early'||tr.sampling.window==='window'?'orange':'');}
    h+=tbl(['Kiedy','Co pobrać','Dokąd / uwagi'],M.SAMPLES.map(function(r){return r.map(rich);}));
    var ta=M.transferAssess((function(){var o={};M.TRANSFER.forEach(function(t,i){o['t'+i]=g('t'+i);});return o;})());

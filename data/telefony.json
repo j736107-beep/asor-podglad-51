@@ -4,172 +4,62 @@
  "uwagi": "Numery 4-cyfrowe = wewnętrzne naszego szpitala (wew.). Numery 9-cyfrowe = pełne/komórkowe. Numery wew. innych szpitali mają pole „centrala” (link dzwoni na centralę i dopisuje numer wew.). Plik edytowalny: dist/data/telefony.json (po zmianie uruchom: node tools/telefony_build.cjs). Oznaczenia: ✓ sprawdzony przez lekarza = standard lokalny (numer podstawowy); „zapasowo (strona placówki)” = numer z oficjalnej strony, gdy inny.",
  "grupy": [
   {
-   "id": "najwazniejsze",
-   "nazwa": "NAJWAŻNIEJSZE",
-   "pozycje": [
-    {
-     "nazwa": "Transport KPR z lekarzem (Krakowskie Pogotowie Ratunkowe) – całodobowo",
-     "info": "Gdy transport wymaga lekarza – transport KPR z lekarzem. Rodzaje transportu: T, RT, RT z lekarzem.",
-     "www": "https://www.kpr.med.pl",
-     "zrodlo": "https://www.kpr.med.pl/artykul/29,transport-medyczny",
-     "numery": [
-      {
-       "typ": "tel",
-       "nr": "124222999",
-       "opis": "zamawianie transportu (24 h)",
-       "st": "lok"
-      },
-      {
-       "typ": "tel",
-       "nr": "124244272",
-       "opis": "sekretariat KPR",
-       "zap": true
-      }
-     ]
-    },
-    {
-     "nazwa": "Wojewódzki Lekarz Koordynator Ratownictwa Medycznego – Kraków",
-     "email": "krm@malopolska.uw.gov.pl",
-     "www": "http://lkrm.pl",
-     "zrodlo": "http://lkrm.pl/contact.php",
-     "numery": [
-      {
-       "typ": "tel",
-       "nr": "123921909",
-       "opis": "lekarz koordynator",
-       "st": "ok"
-      }
-     ],
-     "info": "Fax 12 422 72 08."
-    },
-    {
-     "nazwa": "Dyspozytornia medyczna – Kraków",
-     "info": "Bezpośredniego numeru dyspozytorni medycznej nie ma na oficjalnych stronach – sprawdź (Nowy Targ może podlegać innej dyspozytorni – sprawdź). Numer WPR to sekretariat wydziału, nie linia dyspozytora.",
-     "www": "https://malopolska.uw.gov.pl",
-     "zrodlo": "https://malopolska.uw.gov.pl/default.aspx?page=WPR",
-     "numery": [
-      {
-       "typ": "alarm",
-       "nr": "999",
-       "opis": "numer alarmowy ratownictwa medycznego"
-      },
-      {
-       "typ": "alarm",
-       "nr": "112",
-       "opis": "numer alarmowy"
-      },
-      {
-       "typ": "tel",
-       "nr": "123921997",
-       "opis": "Wydział Powiadamiania Ratunkowego MUW – sekretariat",
-       "st": "ok"
-      },
-      {
-       "typ": "tel",
-       "nr": "123921569",
-       "opis": "Oddział Ratownictwa Medycznego MUW",
-       "uwaga": "źródło: ogłoszenie naboru (nabory.kprm.gov.pl) – sprawdź"
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "nazwa": "Nasz szpital (PSZS Nowy Targ) – diagnostyka i pracownie",
-   "pozycje": [
-    {
-     "nazwa": "Zakład Diagnostyki Obrazowej (radiologia)",
-     "numery": [
-      {
-       "typ": "tel",
-       "nr": "573900870",
-       "st": "lok"
-      },
-      {
-       "typ": "wew",
-       "nr": "3500",
-       "opis": "TK (tomografia)",
-       "st": "lok"
-      },
-      {
-       "typ": "wew",
-       "nr": "3509",
-       "opis": "MR (rezonans)",
-       "st": "lok"
-      }
-     ]
-    },
-    {
-     "nazwa": "Teleradiologia JEKA",
-     "numery": [
-      {
-       "typ": "tel",
-       "nr": "733334450",
-       "st": "lok"
-      }
-     ]
-    },
-    {
-     "nazwa": "Pracownia Serologii Transfuzjologicznej",
-     "numery": [
-      {
-       "typ": "wew",
-       "nr": "3546",
-       "st": "lok"
-      }
-     ]
-    },
-    {
-     "nazwa": "Pracownia Mikrobiologii – dr Anna Ślemp",
-     "numery": [
-      {
-       "typ": "tel",
-       "nr": "502140524",
-       "st": "lok"
-      },
-      {
-       "typ": "tel",
-       "nr": "604897088",
-       "opis": "lub",
-       "st": "lok"
-      }
-     ]
-    },
-    {
-     "nazwa": "Pracownia Endoskopii (gastroskopia)",
-     "numery": [
-      {
-       "typ": "wew",
-       "nr": "3910",
-       "st": "lok"
-      },
-      {
-       "typ": "wew",
-       "nr": "3911",
-       "st": "lok"
-      },
-      {
-       "typ": "wew",
-       "nr": "3365",
-       "st": "lok"
-      },
-      {
-       "typ": "tel",
-       "nr": "513347113",
-       "st": "lok"
-      }
-     ]
-    },
-    {
-     "nazwa": "Sekcje – Wiesław Frasik",
-     "info": "Brak numeru – do uzupełnienia.",
-     "numery": []
-    }
-   ]
-  },
-  {
    "nazwa": "Nasz szpital (PSZS Nowy Targ) – oddziały",
    "pozycje": [
+    {
+     "nazwa": "Oddział Anestezjologii i Intensywnej Terapii (OIOM)",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "503735714",
+       "st": "lok",
+       "opis": "reanimacja i konsultacje"
+      },
+      {
+       "typ": "tel",
+       "nr": "503736372",
+       "st": "lok",
+       "opis": "zabiegi poza oddziałem (np. kardiowersja)"
+      },
+      {
+       "typ": "tel",
+       "nr": "690536728",
+       "st": "lok",
+       "opis": "anestezjolog na położnictwie"
+      }
+     ]
+    },
+    {
+     "nazwa": "Oddziałowa SOR",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "504162321",
+       "st": "lok"
+      }
+     ]
+    },
+    {
+     "nazwa": "Oddział Wewnętrzny – lekarz dyżurny",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "664775084",
+       "st": "lok",
+       "opis": "lekarz dyżurny"
+      }
+     ]
+    },
+    {
+     "nazwa": "Oddział Neurologiczny",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "503734562",
+       "st": "lok"
+      }
+     ]
+    },
     {
      "nazwa": "Oddział Kardiologiczny",
      "numery": [
@@ -279,7 +169,7 @@
      ]
     },
     {
-     "nazwa": "Oddział Medycyny Paliatywnej – ordynator dr Sosnowski",
+     "nazwa": "Oddział Medycyny Paliatywnej – ordynator dr Czosnowski",
      "numery": [
       {
        "typ": "wew",
@@ -294,7 +184,7 @@
       {
        "typ": "tel",
        "nr": "606968616",
-       "opis": "dr Sosnowski, kom.",
+       "opis": "dr Czosnowski, kom.",
        "st": "lok"
       }
      ]
@@ -315,8 +205,119 @@
        "st": "lok"
       }
      ]
+    },
+    {
+     "nazwa": "Oddział Onkologiczny – dr Liszka",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "888390673",
+       "st": "lok"
+      }
+     ]
     }
-   ]
+   ],
+   "modul": "szpital"
+  },
+  {
+   "nazwa": "Nasz szpital (PSZS Nowy Targ) – diagnostyka i pracownie",
+   "pozycje": [
+    {
+     "nazwa": "Zakład Diagnostyki Obrazowej (radiologia)",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "573900870",
+       "st": "lok"
+      },
+      {
+       "typ": "wew",
+       "nr": "3500",
+       "opis": "TK (tomografia)",
+       "st": "lok"
+      },
+      {
+       "typ": "wew",
+       "nr": "3509",
+       "opis": "MR (rezonans)",
+       "st": "lok"
+      }
+     ]
+    },
+    {
+     "nazwa": "Teleradiologia JEKA",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "733334450",
+       "st": "lok"
+      }
+     ]
+    },
+    {
+     "nazwa": "Pracownia Serologii Transfuzjologicznej",
+     "numery": [
+      {
+       "typ": "wew",
+       "nr": "3546",
+       "st": "lok"
+      }
+     ]
+    },
+    {
+     "nazwa": "Pracownia Mikrobiologii – dr Anna Ślemp",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "502140524",
+       "st": "lok"
+      },
+      {
+       "typ": "tel",
+       "nr": "604897088",
+       "opis": "lub",
+       "st": "lok"
+      },
+      {
+       "typ": "tel",
+       "nr": "503736494",
+       "st": "lok",
+       "opis": "pracownia"
+      }
+     ]
+    },
+    {
+     "nazwa": "Pracownia Endoskopii (gastroskopia)",
+     "numery": [
+      {
+       "typ": "wew",
+       "nr": "3910",
+       "st": "lok"
+      },
+      {
+       "typ": "wew",
+       "nr": "3911",
+       "st": "lok"
+      },
+      {
+       "typ": "wew",
+       "nr": "3365",
+       "st": "lok"
+      },
+      {
+       "typ": "tel",
+       "nr": "513347113",
+       "st": "lok"
+      }
+     ]
+    },
+    {
+     "nazwa": "Sekcje – Wiesław Frasik",
+     "info": "Brak numeru – do uzupełnienia.",
+     "numery": []
+    }
+   ],
+   "modul": "szpital"
   },
   {
    "nazwa": "Nasz szpital (PSZS Nowy Targ) – poradnie",
@@ -377,7 +378,8 @@
       }
      ]
     }
-   ]
+   ],
+   "modul": "szpital"
   },
   {
    "nazwa": "Nasz szpital (PSZS Nowy Targ) – dializy",
@@ -427,11 +429,40 @@
       }
      ]
     }
-   ]
+   ],
+   "modul": "szpital"
   },
   {
    "nazwa": "Nasz szpital (PSZS Nowy Targ) – administracja i IT",
    "pozycje": [
+    {
+     "nazwa": "Apteka szpitalna",
+     "numery": [
+      {
+       "typ": "wew",
+       "nr": "3087",
+       "st": "lok"
+      },
+      {
+       "typ": "tel",
+       "nr": "182633600",
+       "st": "lok",
+       "opis": "Kierownik"
+      },
+      {
+       "typ": "tel",
+       "nr": "182633601",
+       "st": "lok",
+       "opis": "Magazyn leków"
+      },
+      {
+       "typ": "tel",
+       "nr": "182633954",
+       "st": "lok",
+       "opis": "Wydawanie leków"
+      }
+     ]
+    },
     {
      "nazwa": "Dział Informatyki (informatycy)",
      "email": "informatyka@pszs.eu",
@@ -494,22 +525,85 @@
       }
      ]
     }
-   ]
+   ],
+   "modul": "szpital"
+  },
+  {
+   "id": "najwazniejsze",
+   "nazwa": "NAJWAŻNIEJSZE",
+   "pozycje": [
+    {
+     "nazwa": "Transport KPR z lekarzem (Krakowskie Pogotowie Ratunkowe) – całodobowo",
+     "info": "Gdy transport wymaga lekarza – transport KPR z lekarzem. Rodzaje transportu: T, RT, RT z lekarzem.",
+     "www": "https://www.kpr.med.pl",
+     "zrodlo": "https://www.kpr.med.pl/artykul/29,transport-medyczny",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "124222999",
+       "opis": "zamawianie transportu (24 h)",
+       "st": "lok"
+      },
+      {
+       "typ": "tel",
+       "nr": "124244272",
+       "opis": "sekretariat KPR",
+       "zap": true
+      }
+     ]
+    },
+    {
+     "nazwa": "Wojewódzki Lekarz Koordynator Ratownictwa Medycznego – Kraków",
+     "email": "krm@malopolska.uw.gov.pl",
+     "www": "http://lkrm.pl",
+     "zrodlo": "http://lkrm.pl/contact.php",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "123921909",
+       "opis": "lekarz koordynator",
+       "st": "ok"
+      }
+     ],
+     "info": "Fax 12 422 72 08."
+    },
+    {
+     "nazwa": "Dyspozytornia medyczna – Kraków",
+     "info": "Bezpośredniego numeru dyspozytorni medycznej nie ma na oficjalnych stronach – sprawdź (Nowy Targ może podlegać innej dyspozytorni – sprawdź). Numer WPR to sekretariat wydziału, nie linia dyspozytora.",
+     "www": "https://malopolska.uw.gov.pl",
+     "zrodlo": "https://malopolska.uw.gov.pl/default.aspx?page=WPR",
+     "numery": [
+      {
+       "typ": "alarm",
+       "nr": "999",
+       "opis": "numer alarmowy ratownictwa medycznego"
+      },
+      {
+       "typ": "alarm",
+       "nr": "112",
+       "opis": "numer alarmowy"
+      },
+      {
+       "typ": "tel",
+       "nr": "123921997",
+       "opis": "Wydział Powiadamiania Ratunkowego MUW – sekretariat",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "123921569",
+       "opis": "Oddział Ratownictwa Medycznego MUW",
+       "uwaga": "źródło: ogłoszenie naboru (nabory.kprm.gov.pl) – sprawdź"
+      }
+     ]
+    }
+   ],
+   "modul": "ksiazka"
   },
   {
    "id": "apteki",
    "nazwa": "Apteki Nowy Targ",
    "pozycje": [
-    {
-     "nazwa": "Apteka szpitalna",
-     "numery": [
-      {
-       "typ": "wew",
-       "nr": "3087",
-       "st": "lok"
-      }
-     ]
-    },
     {
      "nazwa": "Apteka Długa 57, Nowy Targ (Xarelto, Pradaxa)",
      "numery": [
@@ -547,6 +641,39 @@
        "typ": "tel",
        "nr": "513905331",
        "st": "lok"
+      }
+     ]
+    }
+   ],
+   "modul": "ksiazka"
+  },
+  {
+   "id": "sanepid",
+   "modul": "ksiazka",
+   "nazwa": "Sanepid",
+   "pozycje": [
+    {
+     "nazwa": "PSSE Nowy Targ (Powiatowa Stacja Sanitarno-Epidemiologiczna)",
+     "godziny": "pn–pt 7:30–15:05",
+     "email": "psse.nowytarg@sanepid.gov.pl",
+     "epuap": "/PSSE_Nowy_Targ/Sekretariat",
+     "edor": "AE:PL-14950-82247-EDADJ-31",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "182662914",
+       "st": "lok"
+      },
+      {
+       "typ": "tel",
+       "nr": "182663165",
+       "st": "lok"
+      },
+      {
+       "typ": "fax",
+       "nr": "182669777",
+       "st": "lok",
+       "opis": "fax"
       }
      ]
     }
@@ -882,12 +1009,31 @@
       }
      ]
     }
-   ]
+   ],
+   "modul": "ksiazka"
   },
   {
    "id": "toks",
    "nazwa": "Małopolska – toksykologia",
    "pozycje": [
+    {
+     "nazwa": "Ośrodek transplantacji wątroby",
+     "info": "Ośrodek transplantacji wątroby — wybór i przyjęcie uzgodnić z toksykologiem dyżurnym w Krakowie: 12 411 99 99 (24 h). Kontakt do ośrodka w Katowicach: 32 259 12 00, przez centralę do dyżurnego chirurgii transplantacyjnej.",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "124119999",
+       "st": "lok",
+       "opis": "toksykolog dyżurny Kraków (24 h)"
+      },
+      {
+       "typ": "tel",
+       "nr": "322591200",
+       "st": "lok",
+       "opis": "Katowice – centrala → dyżurny chirurgii transplantacyjnej"
+      }
+     ]
+    },
     {
      "nazwa": "Szpital Uniwersytecki – Toksykologia (Oddział Kliniczny Gastroenterologii, Hepatologii, Toksykologii), ul. Jakubowskiego 2, Kraków",
      "www": "https://www.su.krakow.pl",
@@ -897,8 +1043,7 @@
        "typ": "tel",
        "nr": "124119999",
        "opis": "telefon alarmowy – informacja toksykologiczna 24 h (lekarz dyżurny)",
-       "uwaga": "źródło: oit.cm.uj.edu.pl/o-pracowni/informacje/",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "tel",
@@ -950,7 +1095,9 @@
       }
      ]
     }
-   ]
+   ],
+   "modul": "ksiazka",
+   "uwagi": "Ośrodek transplantacji wątroby — wybór i przyjęcie uzgodnić z toksykologiem dyżurnym w Krakowie: 12 411 99 99 (24 h). Kontakt do ośrodka w Katowicach: 32 259 12 00, przez centralę do dyżurnego chirurgii transplantacyjnej."
   },
   {
    "id": "laryng",
@@ -1082,7 +1229,8 @@
       }
      ]
     }
-   ]
+   ],
+   "modul": "ksiazka"
   },
   {
    "id": "szczek",
@@ -1169,7 +1317,8 @@
       }
      ]
     }
-   ]
+   ],
+   "modul": "ksiazka"
   },
   {
    "id": "derm",
@@ -1206,7 +1355,8 @@
       }
      ]
     }
-   ]
+   ],
+   "modul": "ksiazka"
   }
  ]
 }
