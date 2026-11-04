@@ -1,7 +1,7 @@
 {
- "wersja": "2026-11-04 pw9",
+ "wersja": "2026-11-04 pw10",
  "zrodlo": "Lista z wydruku i dyktowania lekarza (04.11.2026), porównana z oficjalnymi stronami placówek (linki „Strona placówki” / „Źródło”).",
- "uwagi": "Numery 4-cyfrowe = wewnętrzne naszego szpitala (wew.). Numery 9-cyfrowe = pełne/komórkowe. Numery wew. innych szpitali mają pole „centrala” (link dzwoni na centralę i dopisuje numer wew.). Plik edytowalny: dist/data/telefony.json (po zmianie uruchom: node tools/telefony_build.cjs). Oznaczenia: ✓ zgodny ze stroną; ⚠ rozbieżność – do decyzji lekarza; ⚠ sprawdź – brak na stronie.",
+ "uwagi": "Numery 4-cyfrowe = wewnętrzne naszego szpitala (wew.). Numery 9-cyfrowe = pełne/komórkowe. Numery wew. innych szpitali mają pole „centrala” (link dzwoni na centralę i dopisuje numer wew.). Plik edytowalny: dist/data/telefony.json (po zmianie uruchom: node tools/telefony_build.cjs). Oznaczenia: ✓ sprawdzony przez lekarza = standard lokalny (numer podstawowy); „zapasowo (strona placówki)” = numer z oficjalnej strony, gdy inny.",
  "grupy": [
   {
    "id": "najwazniejsze",
@@ -17,13 +17,13 @@
        "typ": "tel",
        "nr": "124222999",
        "opis": "zamawianie transportu (24 h)",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "124244272",
        "opis": "sekretariat KPR",
-       "st": "ok"
+       "zap": true
       }
      ]
     },
@@ -82,17 +82,20 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "573900870"
+       "nr": "573900870",
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "3500",
-       "opis": "TK (tomografia)"
+       "opis": "TK (tomografia)",
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "3509",
-       "opis": "MR (rezonans)"
+       "opis": "MR (rezonans)",
+       "st": "lok"
       }
      ]
     },
@@ -101,7 +104,8 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "733334450"
+       "nr": "733334450",
+       "st": "lok"
       }
      ]
     },
@@ -110,7 +114,8 @@
      "numery": [
       {
        "typ": "wew",
-       "nr": "3546"
+       "nr": "3546",
+       "st": "lok"
       }
      ]
     },
@@ -119,12 +124,14 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "502140524"
+       "nr": "502140524",
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "604897088",
-       "opis": "lub"
+       "opis": "lub",
+       "st": "lok"
       }
      ]
     },
@@ -133,19 +140,23 @@
      "numery": [
       {
        "typ": "wew",
-       "nr": "3910"
+       "nr": "3910",
+       "st": "lok"
       },
       {
        "typ": "wew",
-       "nr": "3911"
+       "nr": "3911",
+       "st": "lok"
       },
       {
        "typ": "wew",
-       "nr": "3365"
+       "nr": "3365",
+       "st": "lok"
       },
       {
        "typ": "tel",
-       "nr": "513347113"
+       "nr": "513347113",
+       "st": "lok"
       }
      ]
     },
@@ -164,7 +175,8 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "519097100"
+       "nr": "519097100",
+       "st": "lok"
       }
      ]
     },
@@ -173,11 +185,13 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "519097104"
+       "nr": "519097104",
+       "st": "lok"
       },
       {
        "typ": "wew",
-       "nr": "3368"
+       "nr": "3368",
+       "st": "lok"
       }
      ]
     },
@@ -187,26 +201,29 @@
       {
        "typ": "tel",
        "nr": "517097100",
-       "uwaga": "na kartce 517…, kardiologia ma 519097100 – sprawdź"
+       "st": "lok"
       },
       {
        "typ": "wew",
-       "nr": "3830"
+       "nr": "3830",
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "2834",
-       "uwaga": "na kartce 2834 – może 3834, sprawdź"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "3833",
-       "opis": "lekarz chirurgii"
+       "opis": "lekarz chirurgii",
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "3836",
-       "opis": "pielęgniarki"
+       "opis": "pielęgniarki",
+       "st": "lok"
       }
      ]
     },
@@ -215,7 +232,8 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "573900866"
+       "nr": "573900866",
+       "st": "lok"
       }
      ]
     },
@@ -224,7 +242,8 @@
      "numery": [
       {
        "typ": "wew",
-       "nr": "3658"
+       "nr": "3658",
+       "st": "lok"
       }
      ]
     },
@@ -233,11 +252,13 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "573900867"
+       "nr": "573900867",
+       "st": "lok"
       },
       {
        "typ": "wew",
-       "nr": "3317"
+       "nr": "3317",
+       "st": "lok"
       }
      ]
     },
@@ -246,12 +267,14 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "519097103"
+       "nr": "519097103",
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "3463",
-       "opis": "lekarz"
+       "opis": "lekarz",
+       "st": "lok"
       }
      ]
     },
@@ -261,16 +284,18 @@
       {
        "typ": "wew",
        "nr": "3394",
-       "uwaga": "(odczytane z kartki 33-94 – sprawdź)"
+       "st": "lok"
       },
       {
        "typ": "wew",
-       "nr": "3661"
+       "nr": "3661",
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "606968616",
-       "opis": "dr Sosnowski, kom."
+       "opis": "dr Sosnowski, kom.",
+       "st": "lok"
       }
      ]
     },
@@ -280,12 +305,14 @@
       {
        "typ": "tel",
        "nr": "797488253",
-       "opis": "lekarz"
+       "opis": "lekarz",
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "3817",
-       "opis": "pielęgniarki"
+       "opis": "pielęgniarki",
+       "st": "lok"
       }
      ]
     }
@@ -299,11 +326,13 @@
      "numery": [
       {
        "typ": "wew",
-       "nr": "3712"
+       "nr": "3712",
+       "st": "lok"
       },
       {
        "typ": "wew",
-       "nr": "3613"
+       "nr": "3613",
+       "st": "lok"
       }
      ]
     },
@@ -312,11 +341,13 @@
      "numery": [
       {
        "typ": "wew",
-       "nr": "3723"
+       "nr": "3723",
+       "st": "lok"
       },
       {
        "typ": "wew",
-       "nr": "3724"
+       "nr": "3724",
+       "st": "lok"
       }
      ]
     },
@@ -325,7 +356,8 @@
      "numery": [
       {
        "typ": "wew",
-       "nr": "3726"
+       "nr": "3726",
+       "st": "lok"
       }
      ]
     },
@@ -355,20 +387,23 @@
      "numery": [
       {
        "typ": "wew",
-       "nr": "3370"
+       "nr": "3370",
+       "st": "lok"
       },
       {
        "typ": "wew",
-       "nr": "3376"
+       "nr": "3376",
+       "st": "lok"
       },
       {
        "typ": "wew",
-       "nr": "3962"
+       "nr": "3962",
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "182611788",
-       "uwaga": "na kartce dalej ucięty kolejny numer 18261… – sprawdź"
+       "st": "lok"
       }
      ]
     },
@@ -377,7 +412,8 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "781447767"
+       "nr": "781447767",
+       "st": "lok"
       }
      ]
     },
@@ -386,7 +422,8 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "733887052"
+       "nr": "733887052",
+       "st": "lok"
       }
      ]
     }
@@ -402,17 +439,20 @@
      "numery": [
       {
        "typ": "wew",
-       "nr": "3154"
+       "nr": "3154",
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "182633154",
-       "opis": "pełny numer"
+       "opis": "pełny numer",
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "790666163",
-       "opis": "po 14:35 – tylko awarie uniemożliwiające pracę w systemach"
+       "opis": "po 14:35 – tylko awarie uniemożliwiające pracę w systemach",
+       "st": "lok"
       }
      ]
     },
@@ -421,11 +461,13 @@
      "numery": [
       {
        "typ": "wew",
-       "nr": "3021"
+       "nr": "3021",
+       "st": "lok"
       },
       {
        "typ": "wew",
-       "nr": "3025"
+       "nr": "3025",
+       "st": "lok"
       }
      ]
     },
@@ -434,7 +476,8 @@
      "numery": [
       {
        "typ": "wew",
-       "nr": "3010"
+       "nr": "3010",
+       "st": "lok"
       }
      ]
     },
@@ -462,7 +505,8 @@
      "numery": [
       {
        "typ": "wew",
-       "nr": "3087"
+       "nr": "3087",
+       "st": "lok"
       }
      ]
     },
@@ -471,7 +515,8 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "182663550"
+       "nr": "182663550",
+       "st": "lok"
       }
      ]
     },
@@ -480,7 +525,8 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "182672648"
+       "nr": "182672648",
+       "st": "lok"
       }
      ]
     },
@@ -489,7 +535,8 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "182665495"
+       "nr": "182665495",
+       "st": "lok"
       }
      ]
     },
@@ -498,7 +545,8 @@
      "numery": [
       {
        "typ": "tel",
-       "nr": "513905331"
+       "nr": "513905331",
+       "st": "lok"
       }
      ]
     }
@@ -517,21 +565,19 @@
       {
        "typ": "tel",
        "nr": "124002045",
-       "opis": "podyktowany",
-       "uwaga": "rozbieżność – do decyzji lekarza: numeru brak na stronie (sekretariat 12 400 20 00, ruch chorych 12 400 20 13)",
-       "st": "rozb"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "124002000",
-       "opis": "sekretariat – wg strony",
-       "st": "ok"
+       "opis": "sekretariat",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "124002013",
-       "opis": "ruch chorych – wg strony",
-       "st": "ok"
+       "opis": "ruch chorych",
+       "zap": true
       }
      ]
     },
@@ -544,25 +590,25 @@
        "typ": "tel",
        "nr": "126229390",
        "opis": "dyżurka lekarska",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "126229353",
        "opis": "dyżurka pielęgniarek",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "126229403",
-       "opis": "sekretariat – wg strony",
-       "st": "ok"
+       "opis": "sekretariat",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "126440144",
-       "opis": "centrala – wg strony",
-       "st": "ok"
+       "opis": "centrala",
+       "zap": true
       }
      ]
     },
@@ -574,48 +620,47 @@
       {
        "typ": "tel",
        "nr": "126308138",
-       "opis": "centrala (podyktowana)",
-       "uwaga": "nie potwierdzono na stronie – sprawdź"
+       "opis": "centrala",
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "147",
        "opis": "pielęgniarki",
        "centrala": "126308138",
-       "uwaga": "rozbieżność – do decyzji lekarza: wg strony dyżurka pielęgniarska 12 630 82 47",
-       "st": "rozb"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "245",
        "opis": "lekarze",
        "centrala": "126308138",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "254",
        "opis": "lekarze",
        "centrala": "126308138",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "126308245",
-       "opis": "dyżurka lekarska – wg strony (bezpośredni)",
-       "st": "ok"
+       "opis": "dyżurka lekarska (bezpośredni)",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "126308247",
-       "opis": "dyżurka pielęgniarska – wg strony (bezpośredni)",
-       "st": "ok"
+       "opis": "dyżurka pielęgniarska (bezpośredni)",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "126308250",
-       "opis": "sekretariat – wg strony",
-       "st": "ok"
+       "opis": "sekretariat",
+       "zap": true
       }
      ]
     },
@@ -627,50 +672,47 @@
       {
        "typ": "tel",
        "nr": "146443328",
-       "opis": "centrala (podyktowana)",
-       "uwaga": "rozbieżność – do decyzji lekarza: wg strony centrala 14 644 32 20",
-       "st": "rozb"
+       "opis": "centrala",
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "246",
        "opis": "dyżurka lekarska",
        "centrala": "146443328",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "261",
        "opis": "dyżurka lekarska",
        "centrala": "146443328",
-       "uwaga": "wg strony 14 644 32 61 = kierownik oddziału",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "284",
        "opis": "pielęgniarki",
        "centrala": "146443328",
-       "uwaga": "rozbieżność – do decyzji lekarza: wg strony dyżurka pielęgniarska 14 644 32 86",
-       "st": "rozb"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "146443288",
-       "opis": "dyżurka lekarska – wg strony",
-       "st": "ok"
+       "opis": "dyżurka lekarska",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "146443286",
-       "opis": "dyżurka pielęgniarska – wg strony",
-       "st": "ok"
+       "opis": "dyżurka pielęgniarska",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "146443220",
-       "opis": "centrala – wg strony",
-       "st": "ok"
+       "opis": "centrala",
+       "zap": true
       }
      ]
     },
@@ -683,39 +725,38 @@
        "typ": "tel",
        "nr": "123865211",
        "opis": "dyżurka lekarska (do południa)",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "123865162",
        "opis": "lub – dyżurka lekarska (do południa)",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "198",
        "opis": "lekarz dyżurny",
        "centrala": "123865211",
-       "uwaga": "rozbieżność – do decyzji lekarza: na kartce przez 12 386 52 11 (to dyżurka lekarska); wg strony centrala 12 386 51 05",
-       "st": "rozb"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "123865160",
        "opis": "pielęgniarki",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "123865105",
-       "opis": "centrala – wg strony",
-       "st": "ok"
+       "opis": "centrala",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "123865210",
-       "opis": "sekretariat – wg strony",
-       "st": "ok"
+       "opis": "sekretariat",
+       "zap": true
       }
      ]
     },
@@ -728,34 +769,32 @@
        "typ": "tel",
        "nr": "184432123",
        "opis": "pielęgniarki – łączą z lekarzem dyżurnym",
-       "uwaga": "wg strony: numer ogólny oddziału",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "184425890",
-       "opis": "podyktowany",
-       "uwaga": "na stronie tylko wew. 890 (dyżurka lekarska) – numer bezpośredni sprawdź"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "890",
-       "opis": "dyżurka lekarska – wg strony",
+       "opis": "dyżurka lekarska",
        "centrala": "184438877",
-       "st": "ok"
+       "zap": true
       },
       {
        "typ": "wew",
        "nr": "889",
-       "opis": "dyżurka pielęgniarki oddziałowej – wg strony",
+       "opis": "dyżurka pielęgniarki oddziałowej",
        "centrala": "184438877",
-       "st": "ok"
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "184438877",
-       "opis": "centrala – wg strony",
-       "st": "ok"
+       "opis": "centrala",
+       "zap": true
       }
      ]
     },
@@ -768,32 +807,32 @@
        "typ": "tel",
        "nr": "413820364",
        "opis": "pielęgniarki",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "299",
        "opis": "sekretariat / dyżurka lekarska",
        "centrala": "413820100",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "315",
        "centrala": "413820100",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "413820299",
-       "opis": "sekretariat / dyżurka lekarska – wg strony (bezpośredni)",
-       "st": "ok"
+       "opis": "sekretariat / dyżurka lekarska (bezpośredni)",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "413820100",
-       "opis": "centrala – wg strony",
-       "st": "ok"
+       "opis": "centrala",
+       "zap": true
       }
      ]
     },
@@ -807,40 +846,39 @@
        "typ": "tel",
        "nr": "122730303",
        "opis": "pielęgniarki",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "354",
        "opis": "lekarze",
        "centrala": "122730355",
-       "uwaga": "wg strony dyżurka lekarska 12 273 03 54",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "352",
        "opis": "lekarze (lub)",
        "centrala": "122730355",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "122730354",
-       "opis": "dyżurka lekarska – wg strony (bezpośredni)",
-       "st": "ok"
+       "opis": "dyżurka lekarska (bezpośredni)",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "122730350",
-       "opis": "sekretariat – wg strony",
-       "st": "ok"
+       "opis": "sekretariat",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "122730355",
-       "opis": "centrala – wg strony",
-       "st": "ok"
+       "opis": "centrala",
+       "zap": true
       }
      ]
     }
@@ -865,20 +903,18 @@
       {
        "typ": "tel",
        "nr": "124002655",
-       "opis": "podyktowany",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "124002697",
-       "opis": "podyktowany",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "124002650",
-       "opis": "sekretariat / ruch chorych toksykologii – wg strony",
-       "st": "ok"
+       "opis": "sekretariat / ruch chorych toksykologii",
+       "zap": true
       }
      ]
     },
@@ -904,13 +940,13 @@
        "typ": "tel",
        "nr": "126468550",
        "opis": "„na ratunek”",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "126468404",
-       "opis": "sekretariat – wg strony",
-       "st": "ok"
+       "opis": "sekretariat",
+       "zap": true
       }
      ]
     }
@@ -929,25 +965,25 @@
        "typ": "tel",
        "nr": "126308181",
        "opis": "dyżurka pielęgniarska",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "126308180",
        "opis": "lekarz (wew. 180)",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "729317688",
-       "opis": "komórka (podyktowany)",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "opis": "komórka",
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "126308183",
-       "opis": "sekretariat – wg strony",
-       "st": "ok"
+       "opis": "sekretariat",
+       "zap": true
       }
      ]
     },
@@ -959,39 +995,37 @@
       {
        "typ": "tel",
        "nr": "124002797",
-       "opis": "podyktowany",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "124002760",
-       "opis": "wew. 2760 (podyktowany)",
-       "uwaga": "rozbieżność – do decyzji lekarza: wg strony sekretariat 12 400 27 50",
-       "st": "rozb"
+       "opis": "wew. 2760",
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "124002750",
-       "opis": "sekretariat – wg strony",
-       "st": "ok"
+       "opis": "sekretariat",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "124002761",
        "opis": "ruch chorych",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "124002762",
        "opis": "dyżurka lekarska",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "124002755",
        "opis": "punkt pielęgniarski",
-       "st": "ok"
+       "st": "lok"
       }
      ]
     },
@@ -1004,47 +1038,47 @@
        "typ": "tel",
        "nr": "602138924",
        "opis": "dr Barbara Chojecka (kom., podyktowany)",
-       "uwaga": "numer prywatny – nie do sprawdzenia na stronie"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "905",
        "opis": "dyżurka lekarza kierującego / lekarska",
        "centrala": "184438877",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "824",
        "opis": "dyżurka pielęgniarska",
        "centrala": "184438877",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "849",
        "opis": "ambulatorium",
        "centrala": "184438877",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "805",
-       "opis": "sekretariat – wg strony",
+       "opis": "sekretariat",
        "centrala": "184438877",
-       "st": "ok"
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "184425824",
-       "opis": "pielęgniarki (podyktowany, bezpośredni)",
-       "uwaga": "na stronie tylko wew. 824 przez centralę – sprawdź"
+       "opis": "pielęgniarki",
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "184438877",
-       "opis": "centrala – wg strony",
-       "st": "ok"
+       "opis": "centrala",
+       "zap": true
       }
      ]
     }
@@ -1062,48 +1096,47 @@
       {
        "typ": "tel",
        "nr": "126468800",
-       "opis": "centrala (podyktowana)",
-       "uwaga": "rozbieżność – do decyzji lekarza: wg strony centrala/infolinia 12 646 80 00",
-       "st": "rozb"
+       "opis": "centrala",
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "126468000",
-       "opis": "centrala – wg strony",
-       "st": "ok"
+       "opis": "centrala",
+       "zap": true
       },
       {
        "typ": "wew",
        "nr": "391",
        "opis": "lekarz – dzień",
-       "centrala": "126468000",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "centrala": "126468800",
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "641",
        "opis": "lekarz – noc",
-       "centrala": "126468000",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "centrala": "126468800",
+       "st": "lok"
       },
       {
        "typ": "wew",
        "nr": "591",
        "opis": "pielęgniarki",
-       "centrala": "126468000",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "centrala": "126468800",
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "126468836",
-       "opis": "sekretariat – wg strony",
-       "st": "ok"
+       "opis": "sekretariat",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "126468341",
-       "opis": "oddział – wg strony",
-       "st": "ok"
+       "opis": "oddział",
+       "zap": true
       }
      ]
     },
@@ -1115,26 +1148,24 @@
       {
        "typ": "tel",
        "nr": "124002800",
-       "opis": "sekretariat (wg strony – to sekretariat, nie centrala)",
-       "st": "ok"
+       "opis": "sekretariat ( – to sekretariat, nie centrala)",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "124002805",
-       "opis": "podyktowany",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "124002847",
-       "opis": "podyktowany",
-       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "124001000",
-       "opis": "centrala SU – wg strony",
-       "st": "ok"
+       "opis": "centrala SU",
+       "zap": true
       }
      ]
     }
@@ -1146,34 +1177,32 @@
    "pozycje": [
     {
      "nazwa": "Szpital Uniwersytecki – Oddział Kliniczny Dermatologii i Alergologii",
-     "adres": "Wg kontaktów: ul. Botaniczna 3 (w opisie oddziału wciąż ul. Kopernika 50) – rozbieżność – do decyzji lekarza",
+     "adres": "ul. Kopernika (wg lekarza); zapasowo (strona placówki): ul. Botaniczna 3",
      "www": "https://www.su.krakow.pl",
      "zrodlo": "https://www.su.krakow.pl/jednostki/oddzialy-kliniczne/oddzial-kliniczny-dermatologii",
      "numery": [
       {
        "typ": "tel",
        "nr": "124248624",
-       "opis": "podyktowany",
-       "uwaga": "rozbieżność – do decyzji lekarza: wg strony sekretariat 12 424 86 62",
-       "st": "rozb"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "124248662",
-       "opis": "sekretariat – wg strony",
-       "st": "ok"
+       "opis": "sekretariat",
+       "zap": true
       },
       {
        "typ": "tel",
        "nr": "124248699",
        "opis": "ruch chorych (wew. 8699)",
-       "st": "ok"
+       "st": "lok"
       },
       {
        "typ": "tel",
        "nr": "123516601",
-       "opis": "poradnia – wg strony",
-       "st": "ok"
+       "opis": "poradnia",
+       "zap": true
       }
      ]
     }
