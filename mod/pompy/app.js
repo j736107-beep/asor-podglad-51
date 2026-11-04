@@ -9,19 +9,20 @@ function srcs(l){return (l||[]).map(function(k){var s=DB.sources[k];if(!s)return
 function approvals(){try{return JSON.parse(localStorage.getItem(AK)||'{}')||{}}catch(e){return{}}}
 function setApproval(id,on){var a=approvals();if(on)a[id]={at:new Date().toISOString()};else delete a[id];try{localStorage.setItem(AK,JSON.stringify(a))}catch(e){}}
 function isLocal(d){return d.status!=='chpl';}
-function approved(d){return !isLocal(d)||!!approvals()[d.id];}
-function badge(d){return isLocal(d)?'<span class="badge loc">'+esc(DB.localLabel)+(approvals()[d.id]?' · zatwierdzono lokalnie':'')+'</span>':'<span class="badge ok">ZGODNE Z ChPL</span>';}
+function preApp(d){return d.status==='zatwierdzony';}
+function approved(d){return !isLocal(d)||preApp(d)||!!approvals()[d.id];}
+function badge(d){return preApp(d)?'<span class="badge ok">'+esc(DB.approvedLabel||'STANDARD LOKALNY – zatwierdzony przez lekarza')+'</span>':isLocal(d)?'<span class="badge loc">'+esc(DB.localLabel)+(approvals()[d.id]?' · zatwierdzono lokalnie':'')+'</span>':'<span class="badge ok">ZGODNE Z ChPL</span>';}
 function parentW(){try{var p=parent.SKS&&parent.SKS.P&&parent.SKS.P();return p&&p.w>0?String(p.w).replace('.',','):''}catch(e){return''}}
 function defSyr(){try{return parent.SKS.S.syr||50}catch(e){return 50}}
 function home(){$('#title').textContent='Pompy SOR';$('#back').hidden=true;
  $('#main').innerHTML='<input class="search" id="q" placeholder="Szukaj leku…"><div class="list" id="l"></div>'+
  '<button class="link" id="goSet">⚙ Ustawienia: zatwierdzanie standardów lokalnych</button>'+
  '<details class="src"><summary>Receptury wyłączone ('+DB.excluded.length+')</summary><ul>'+DB.excluded.map(function(x){return'<li><b>'+esc(x.name)+'</b>: '+esc(x.reason)+'</li>'}).join('')+'</ul></details>';
- function draw(){var q=$('#q').value.toLowerCase();$('#l').innerHTML=DB.drugs.filter(function(d){return d.name.toLowerCase().indexOf(q)>=0}).map(function(d){return'<button class="dbtn'+(isLocal(d)?' loc':'')+'" data-id="'+d.id+'">'+esc(d.name)+'<small>'+(isLocal(d)?(approvals()[d.id]?'lokalny ✓ zatwierdzony':'STANDARD LOKALNY'):'ChPL')+'</small></button>'}).join('');}
+ function draw(){var q=$('#q').value.toLowerCase();$('#l').innerHTML=DB.drugs.filter(function(d){return d.name.toLowerCase().indexOf(q)>=0}).map(function(d){return'<button class="dbtn'+(isLocal(d)?' loc':'')+'" data-id="'+d.id+'">'+esc(d.name)+'<small>'+(preApp(d)?'STANDARD LOKALNY ✓ zatwierdzony przez lekarza':isLocal(d)?(approvals()[d.id]?'lokalny ✓ zatwierdzony':'STANDARD LOKALNY'):'ChPL')+'</small></button>'}).join('');}
  $('#q').oninput=draw;draw();$('#l').onclick=function(e){var b=e.target.closest('.dbtn');if(b)location.hash='d/'+b.dataset.id;};$('#goSet').onclick=function(){location.hash='ustawienia';};}
 function settings(){$('#title').textContent='Ustawienia pomp';$('#back').hidden=false;var a=approvals();
  $('#main').innerHTML='<p class="warn">Receptury oznaczone „'+esc(DB.localLabel)+'” nie wynikają wprost z ChPL. Lekarz zatwierdza je jednorazowo (zapis tylko w tej przeglądarce). Bez zatwierdzenia kalkulator liczy, ale nie przenosi nastawy do rejestru ani raportu.</p>'+
- DB.drugs.filter(isLocal).map(function(d){var r=Object.keys(d.rec).map(function(s){var p=E.recipe(d,+s);return s+' ml: '+E.fmt(p.amount)+' '+cu(d.amp.unit)+' → '+E.fmt(p.conc)+' '+cu(d.amp.unit)+'/ml'}).join(' · ');
+ DB.drugs.filter(function(d){return isLocal(d)&&!preApp(d)}).map(function(d){var r=Object.keys(d.rec).map(function(s){var p=E.recipe(d,+s);return s+' ml: '+E.fmt(p.amount)+' '+cu(d.amp.unit)+' → '+E.fmt(p.conc)+' '+cu(d.amp.unit)+'/ml'}).join(' · ');
   return '<div class="card"><label class="chk"><input type="checkbox" data-ap="'+d.id+'"'+(a[d.id]?' checked':'')+'> <b>'+esc(d.name)+'</b></label><div class="src">'+esc(r)+'<br>'+esc(d.why)+'</div>'+(a[d.id]?'<div class="src">Zatwierdzono: '+esc(new Date(a[d.id].at).toLocaleString('pl-PL'))+'</div>':'')+'</div>';}).join('');
  document.querySelectorAll('[data-ap]').forEach(function(c){c.onchange=function(){var d=DB.drugs.find(function(x){return x.id===c.dataset.ap});
   if(c.checked){var ok=true;try{ok=window.confirm('Zatwierdzam standard lokalny: '+d.name+'. Odpowiedzialność za recepturę ponosi lekarz.');}catch(e){}if(!ok){c.checked=false;return;}}

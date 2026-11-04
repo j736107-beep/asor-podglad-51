@@ -99,7 +99,7 @@
    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/29888/characteristic"
   },
   "LEV": {
-   "label": "ChPL Levonor 1 mg/ml (RPL 3745), pkt 4.2",
+   "label": "ChPL Levonor 1 mg/ml (RPL 3745), pkt 4.2 – podanie obwodowe ≤ 20 µg/ml",
    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/3745/characteristic"
   },
   "SAL": {
@@ -304,8 +304,92 @@
    ]
   },
   {
+   "id": "noradrenalina_c80",
+   "name": "Noradrenalina – dostęp centralny 80 µg/ml (DOMYŚLNA, cała ampułka)",
+   "status": "zatwierdzony",
+   "product": "Noradrenaline Kabi 1 mg/ml – ampułka 4 ml (4 mg)",
+   "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/43461/characteristic",
+   "amp": {
+    "content": 4,
+    "unit": "mg",
+    "volume": 4,
+    "label": "amp. 4 mg / 4 ml (1 mg/ml noradrenaliny zasady = 2 mg/ml winianu)"
+   },
+   "diluted": true,
+   "diluents": [
+    "Glukoza 5%",
+    "NaCl 0,9%",
+    "Glukoza 5% + NaCl 0,9%"
+   ],
+   "rec": {
+    "20": 1.6,
+    "50": 4
+   },
+   "units": [
+    {
+     "u": "ug/kg/min",
+     "text": "Start 0,05 µg/kg/min (ICS/FICM 2020; ≈ dolny start ChPL 0,2 mg/h przy 70 kg). Zwiększać o 0,05–0,1 µg/kg/min wg RR (ChPL). ChPL bez dawki maksymalnej – DO DECYZJI LEKARZA"
+    },
+    {
+     "u": "mg/h",
+     "lo": 0.2,
+     "hi": 0.8,
+     "text": "ChPL: start 0,4–0,8 mg/h (lub mniejszy 0,2 mg/h), dalej wg RR; brak dawki maks."
+    }
+   ],
+   "access": "CENTRALNY (cewnik centralny).",
+   "monitor": "Ciągle RR, EKG; miejsce wkłucia. Roztwór stabilny 24 h w 25°C (ChPL); ampułkę zużyć od razu po otwarciu.",
+   "why": "STANDARD LOKALNY – zatwierdzony przez lekarza (04.11.2026): domyślne stężenie centralne 80 µg/ml – cała ampułka 4 mg + 46 ml = 80 µg/ml w 50 ml (bez marnowania leku); 20 ml: 1,6 ml + 18,4 ml = 80 µg/ml (resztę ampułki utylizować). ChPL Kabi dopuszcza inne stężenia niż 40 µg/ml z przeliczeniem szybkości (pkt 4.2, 6.6), ale nie podaje danych o stabilności dla 80 µg/ml. Alternatywa: 40 µg/ml (ChPL).",
+   "src": [
+    "NKB",
+    "SSC",
+    "ICS",
+    "AUD"
+   ],
+   "doseStart": {
+    "ug/kg/min": 0.05,
+    "mg/h": 0.2
+   },
+   "doseSteps": {
+    "ug/kg/min": [
+     0.02,
+     0.03,
+     0.05,
+     0.075,
+     0.1,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.4,
+     0.5,
+     0.75,
+     1.0
+    ],
+    "mg/h": [
+     0.1,
+     0.2,
+     0.3,
+     0.4,
+     0.5,
+     0.6,
+     0.8,
+     1.0,
+     1.2,
+     1.5,
+     2.0
+    ]
+   },
+   "blocked": [
+    "4 mg / 20 ml = 200 µg/ml – ZABLOKOWANE: 5× standard ChPL (40 µg/ml), brak danych o stabilności, bardzo małe przepływy (70 kg, 0,05 µg/kg/min ≈ 1 ml/h) – ryzyko błędu dawki.",
+    "8 mg / 50 ml = 160 µg/ml (2 ampułki) – NIE OFEROWANE: 4× standard ChPL, brak danych o stabilności; tylko z decyzji lekarza/OIT."
+   ],
+   "bp": "Cel MAP ≥ 65 mmHg (SSC 2021; ChPL Noradrenaline Kabi: MAP > 65–80 mmHg zależnie od stanu lub SBP 100–120 mmHg), modyfikuj indywidualnie. Pomiar RR: preferowany inwazyjny (linia tętnicza) – ICS/FICM 2020, SSC 2021. Przy pomiarze nieinwazyjnym: co 5 min po starcie i po każdej zmianie dawki, potem co 15 min przy stabilnym RR – STANDARD LOKALNY – zatwierdzony przez lekarza (04.11.2026). EKG ciągle.",
+   "default": true
+  },
+  {
    "id": "noradrenalina_c",
-   "name": "Noradrenalina – dostęp centralny 40 µg/ml (ChPL)",
+   "name": "Noradrenalina – dostęp centralny 40 µg/ml (ChPL, alternatywa)",
    "status": "chpl",
    "product": "Noradrenaline Kabi 1 mg/ml – ampułka 4 ml (4 mg)",
    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/43461/characteristic",
@@ -339,7 +423,7 @@
    ],
    "access": "CENTRALNY (cewnik centralny).",
    "monitor": "Ciągle RR, EKG; miejsce wkłucia. Roztwór stabilny 24 h w 25°C (ChPL); ampułkę zużyć od razu po otwarciu.",
-   "why": "ChPL Noradrenaline Kabi pkt 6.6: pompa strzykawkowa 2 ml koncentratu + 48 ml = 40 µg/ml. Z ampułki 4 ml: 50 ml = 2 ml (pół ampułki) + 48 ml; 20 ml = 0,8 ml + 19,2 ml. Reszty ampułki nie przechowywać (użyć natychmiast po otwarciu – ChPL 6.3).",
+   "why": "ChPL Noradrenaline Kabi pkt 6.6: pompa strzykawkowa 2 ml koncentratu + 48 ml = 40 µg/ml. Z ampułki 4 ml: 50 ml = 2 ml (pół ampułki) + 48 ml; 20 ml = 0,8 ml + 19,2 ml. Reszty ampułki nie przechowywać (użyć natychmiast po otwarciu – ChPL 6.3). Alternatywa – domyślnie lokalnie 80 µg/ml (cała ampułka).",
    "src": [
     "NKB",
     "SSC",
@@ -384,95 +468,12 @@
     "4 mg / 20 ml = 200 µg/ml – ZABLOKOWANE: 5× standard ChPL (40 µg/ml), brak danych o stabilności, bardzo małe przepływy (70 kg, 0,05 µg/kg/min ≈ 1 ml/h) – ryzyko błędu dawki.",
     "8 mg / 50 ml = 160 µg/ml (2 ampułki) – NIE OFEROWANE: 4× standard ChPL, brak danych o stabilności; tylko z decyzji lekarza/OIT."
    ],
-   "bp": "ZALECENIE (do weryfikacji): cel MAP ≥ 65 mmHg (SSC 2021; ChPL Noradrenaline Kabi: MAP > 65–80 mmHg zależnie od stanu lub SBP 100–120 mmHg), modyfikuj indywidualnie. Pomiar RR: preferowany inwazyjny (linia tętnicza) – ICS/FICM 2020, SSC 2021. Przy pomiarze nieinwazyjnym: co 2–5 min po starcie i po każdej zmianie dawki przez 15–30 min, potem co 15 min przy stabilnym RR – częstotliwość to PROPOZYCJA – DO DECYZJI LEKARZA (wytyczne podają tylko „regularnie”/„często”). EKG ciągle."
-  },
-  {
-   "id": "noradrenalina_c80",
-   "name": "Noradrenalina – dostęp centralny 80 µg/ml (cała ampułka)",
-   "status": "lokalny",
-   "product": "Noradrenaline Kabi 1 mg/ml – ampułka 4 ml (4 mg)",
-   "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/43461/characteristic",
-   "amp": {
-    "content": 4,
-    "unit": "mg",
-    "volume": 4,
-    "label": "amp. 4 mg / 4 ml (1 mg/ml noradrenaliny zasady = 2 mg/ml winianu)"
-   },
-   "diluted": true,
-   "diluents": [
-    "Glukoza 5%",
-    "NaCl 0,9%",
-    "Glukoza 5% + NaCl 0,9%"
-   ],
-   "rec": {
-    "20": 1.6,
-    "50": 4
-   },
-   "units": [
-    {
-     "u": "ug/kg/min",
-     "text": "Start 0,05 µg/kg/min (ICS/FICM 2020; ≈ dolny start ChPL 0,2 mg/h przy 70 kg). Zwiększać o 0,05–0,1 µg/kg/min wg RR (ChPL). ChPL bez dawki maksymalnej – DO DECYZJI LEKARZA"
-    },
-    {
-     "u": "mg/h",
-     "lo": 0.2,
-     "hi": 0.8,
-     "text": "ChPL: start 0,4–0,8 mg/h (lub mniejszy 0,2 mg/h), dalej wg RR; brak dawki maks."
-    }
-   ],
-   "access": "CENTRALNY (cewnik centralny).",
-   "monitor": "Ciągle RR, EKG; miejsce wkłucia. Roztwór stabilny 24 h w 25°C (ChPL); ampułkę zużyć od razu po otwarciu.",
-   "why": "PROPOZYCJA – DO DECYZJI LEKARZA: cała ampułka 4 mg + 46 ml = 80 µg/ml w 50 ml (bez marnowania leku). ChPL Kabi dopuszcza inne stężenia niż 40 µg/ml z przeliczeniem szybkości (pkt 4.2, 6.6), ale nie podaje danych o stabilności dla 80 µg/ml (Levonor: 10–40 µg/ml). 20 ml: 1,6 ml + 18,4 ml = 80 µg/ml (resztę ampułki utylizować).",
-   "src": [
-    "NKB",
-    "SSC",
-    "ICS",
-    "AUD"
-   ],
-   "doseStart": {
-    "ug/kg/min": 0.05,
-    "mg/h": 0.2
-   },
-   "doseSteps": {
-    "ug/kg/min": [
-     0.02,
-     0.03,
-     0.05,
-     0.075,
-     0.1,
-     0.15,
-     0.2,
-     0.25,
-     0.3,
-     0.4,
-     0.5,
-     0.75,
-     1.0
-    ],
-    "mg/h": [
-     0.1,
-     0.2,
-     0.3,
-     0.4,
-     0.5,
-     0.6,
-     0.8,
-     1.0,
-     1.2,
-     1.5,
-     2.0
-    ]
-   },
-   "blocked": [
-    "4 mg / 20 ml = 200 µg/ml – ZABLOKOWANE: 5× standard ChPL (40 µg/ml), brak danych o stabilności, bardzo małe przepływy (70 kg, 0,05 µg/kg/min ≈ 1 ml/h) – ryzyko błędu dawki.",
-    "8 mg / 50 ml = 160 µg/ml (2 ampułki) – NIE OFEROWANE: 4× standard ChPL, brak danych o stabilności; tylko z decyzji lekarza/OIT."
-   ],
-   "bp": "ZALECENIE (do weryfikacji): cel MAP ≥ 65 mmHg (SSC 2021; ChPL Noradrenaline Kabi: MAP > 65–80 mmHg zależnie od stanu lub SBP 100–120 mmHg), modyfikuj indywidualnie. Pomiar RR: preferowany inwazyjny (linia tętnicza) – ICS/FICM 2020, SSC 2021. Przy pomiarze nieinwazyjnym: co 2–5 min po starcie i po każdej zmianie dawki przez 15–30 min, potem co 15 min przy stabilnym RR – częstotliwość to PROPOZYCJA – DO DECYZJI LEKARZA (wytyczne podają tylko „regularnie”/„często”). EKG ciągle."
+   "bp": "Cel MAP ≥ 65 mmHg (SSC 2021; ChPL Noradrenaline Kabi: MAP > 65–80 mmHg zależnie od stanu lub SBP 100–120 mmHg), modyfikuj indywidualnie. Pomiar RR: preferowany inwazyjny (linia tętnicza) – ICS/FICM 2020, SSC 2021. Przy pomiarze nieinwazyjnym: co 5 min po starcie i po każdej zmianie dawki, potem co 15 min przy stabilnym RR – STANDARD LOKALNY – zatwierdzony przez lekarza (04.11.2026). EKG ciągle."
   },
   {
    "id": "noradrenalina_p",
-   "name": "Noradrenalina – dostęp obwodowy 16 µg/ml",
-   "status": "lokalny",
+   "name": "Noradrenalina – dostęp obwodowy 20 µg/ml (ChPL Levonor)",
+   "status": "zatwierdzony",
    "product": "Noradrenaline Kabi 1 mg/ml – ampułka 4 ml (4 mg)",
    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/43461/characteristic",
    "amp": {
@@ -488,8 +489,8 @@
     "Glukoza 5% + NaCl 0,9%"
    ],
    "rec": {
-    "20": 0.32,
-    "50": 0.8
+    "20": 0.4,
+    "50": 1
    },
    "units": [
     {
@@ -502,13 +503,13 @@
      "text": "Limit obwodowy liczony w µg/kg/min (0,1) – przełącz jednostkę"
     }
    ],
-   "access": "OBWODOWY – duża żyła przedramienia/dołu łokciowego (ChPL Kabi), kaniula ≥20G, ≤16 µg/ml (ICS/FICM 2020), osobne wkłucie, mankiet RR na drugiej kończynie; możliwie szybko dostęp centralny.",
+   "access": "OBWODOWY – duża żyła przedramienia/dołu łokciowego (ChPL Kabi), kaniula ≥20G, ≤20 µg/ml (ChPL Levonor), osobne wkłucie, mankiet RR na drugiej kończynie; możliwie szybko dostęp centralny.",
    "monitor": "Ciągle RR, EKG; miejsce wkłucia (wynaczynienie) – często.",
-   "why": "PROPOZYCJA – DO DECYZJI LEKARZA: część ampułki do 16 µg/ml (ICS/FICM 2020: standard obwodowy 16 µg/ml = 4 mg w 250 ml). 50 ml: 0,8 ml z ampułki 4 mg/4 ml (0,8 mg) + 49,2 ml = 16 µg/ml; 20 ml: 0,32 ml + 19,68 ml = 16 µg/ml – odmierzać strzykawką 1 ml, resztę ampułki utylizować. Alternatywa: 20 µg/ml (1 ml + 49 ml) – górna granica obwodowa wg ChPL Levonor, nieco powyżej ICS – DO DECYZJI LEKARZA. Alternatywa ICS: cała ampułka 4 mg w 250 ml (worek).",
+   "why": "STANDARD LOKALNY – zatwierdzony przez lekarza (04.11.2026): 20 µg/ml – górna granica stężenia dla podania obwodowego wg ChPL Levonor 1 mg/ml (RPL 3745, pkt 4.2). 50 ml: 1 ml z ampułki 4 mg/4 ml (1 mg) + 49 ml = 20 µg/ml; 20 ml: 0,4 ml + 19,6 ml = 20 µg/ml – odmierzać strzykawką 1 ml, resztę ampułki utylizować. (ICS/FICM 2020 podaje 16 µg/ml w worku 250 ml.)",
    "src": [
+    "LEV",
     "NKB",
     "ICS",
-    "LEV",
     "SSC",
     "AUD"
    ],
@@ -527,12 +528,14 @@
     ]
    },
    "blocked": [
-    "4 mg / 20 ml = 200 µg/ml – ZABLOKOWANE obwodowo: 12,5× powyżej 16 µg/ml (ICS/FICM 2020).",
-    "4 mg / 50 ml = 80 µg/ml – ZABLOKOWANE obwodowo: 5× powyżej 16 µg/ml (ICS/FICM 2020) i 4× powyżej 20 µg/ml (ChPL Levonor).",
-    "2 mg / 50 ml = 40 µg/ml (standard centralny ChPL) – ZABLOKOWANE obwodowo: 2,5× powyżej 16 µg/ml.",
-    "Żadne wypełnienie całą ampułką 4 mg w strzykawce 20 lub 50 ml nie mieści się w limicie obwodowym (4 mg wymaga ≥ 250 ml)."
+    "Każde stężenie > 20 µg/ml – ZABLOKOWANE obwodowo (ChPL Levonor).",
+    "4 mg / 20 ml = 200 µg/ml – ZABLOKOWANE obwodowo: 10× powyżej 20 µg/ml (ChPL Levonor).",
+    "4 mg / 50 ml = 80 µg/ml – ZABLOKOWANE obwodowo: 4× powyżej 20 µg/ml (ChPL Levonor).",
+    "2 mg / 50 ml = 40 µg/ml (standard centralny ChPL) – ZABLOKOWANE obwodowo: 2× powyżej 20 µg/ml.",
+    "Żadne wypełnienie całą ampułką 4 mg w strzykawce 20 lub 50 ml nie mieści się w limicie obwodowym (4 mg wymaga ≥ 200 ml)."
    ],
-   "bp": "ZALECENIE (do weryfikacji): cel MAP ≥ 65 mmHg (SSC 2021; ChPL Noradrenaline Kabi: MAP > 65–80 mmHg zależnie od stanu lub SBP 100–120 mmHg), modyfikuj indywidualnie. Pomiar RR: preferowany inwazyjny (linia tętnicza) – ICS/FICM 2020, SSC 2021. Przy pomiarze nieinwazyjnym: co 2–5 min po starcie i po każdej zmianie dawki przez 15–30 min, potem co 15 min przy stabilnym RR – częstotliwość to PROPOZYCJA – DO DECYZJI LEKARZA (wytyczne podają tylko „regularnie”/„często”). EKG ciągle. Przy wlewie obwodowym mankiet NIE na kończynie z wkłuciem (ChPL Levonor)."
+   "bp": "Cel MAP ≥ 65 mmHg (SSC 2021; ChPL Noradrenaline Kabi: MAP > 65–80 mmHg zależnie od stanu lub SBP 100–120 mmHg), modyfikuj indywidualnie. Pomiar RR: preferowany inwazyjny (linia tętnicza) – ICS/FICM 2020, SSC 2021. Przy pomiarze nieinwazyjnym: co 5 min po starcie i po każdej zmianie dawki, potem co 15 min przy stabilnym RR – STANDARD LOKALNY – zatwierdzony przez lekarza (04.11.2026). EKG ciągle. Przy wlewie obwodowym mankiet NIE na kończynie z wkłuciem (ChPL Levonor).",
+   "maxConc": 0.02
   },
   {
    "id": "nitrogliceryna",
@@ -1014,7 +1017,7 @@
   {
    "id": "noradrenalina",
    "name": "Noradrenalina",
-   "reason": "Stary preset 4 mg/50 ml bez podziału na dostęp i 20 ml = 200 µg/ml – zastąpiony wariantami dla ampułki Noradrenaline Kabi 4 mg/4 ml: centralny 40 µg/ml (ChPL), centralny 80 µg/ml (cała ampułka – PROPOZYCJA, DO DECYZJI LEKARZA), obwodowy 16 µg/ml (ICS/FICM 2020). 200 µg/ml zablokowane."
+   "reason": "Stary preset 4 mg/50 ml bez podziału na dostęp i 20 ml = 200 µg/ml – zastąpiony wariantami dla ampułki Noradrenaline Kabi 4 mg/4 ml: centralny 80 µg/ml (cała ampułka – domyślny, STANDARD LOKALNY – zatwierdzony przez lekarza), centralny 40 µg/ml (ChPL, alternatywa), obwodowy 20 µg/ml (ChPL Levonor). >20 µg/ml obwodowo i 200 µg/ml zablokowane."
   },
   {
    "id": "oktreotyd",
@@ -1025,5 +1028,6 @@
  "audit": {
   "date": "2026-10-26",
   "rule": "Receptura zgodna z ChPL – aktywna. Standard lokalny / poza ChPL – dostępny z etykietą „STANDARD LOKALNY – DO DECYZJI LEKARZA”, przeniesienie do rejestru dopiero po jednorazowym zatwierdzeniu przez lekarza (localStorage). Amiodaron – wyłącznie G5%."
- }
+ },
+ "approvedLabel": "STANDARD LOKALNY – zatwierdzony przez lekarza"
 }
