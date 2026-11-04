@@ -83,9 +83,9 @@ $('result').addEventListener('click',function(e){var t=e.target.closest('button'
  if(t.id==='back'){stopSiren();show('form');renderStep()}if(t.id==='newA')reset()});
 function reset(){stopSiren();fresh();ov=null;current=null;step=0;show('form');renderStep()}
 var siren=new Audio('siren.wav');siren.preload='auto';
-function playSiren(){if(settings.P_sound===false)return;try{siren.currentTime=0;var p=siren.play();if(p&&p.catch)p.catch(function(){})}catch(e){}
+function playSiren(){if(settings.P_sound===false)return;var SS=window.SORSound||(window.parent&&window.parent.SORSound);if(SS&&SS.tone()!=='classic'){try{SS.play(SS.tone(),null,{repeat:2})}catch(e){}}else try{siren.currentTime=0;var p=siren.play();if(p&&p.catch)p.catch(function(){})}catch(e){}
  try{if(navigator.vibrate)navigator.vibrate([400,200,400,200,400,200,800])}catch(e){}}
-function stopSiren(){try{siren.pause();siren.currentTime=0}catch(e){}try{if(navigator.vibrate)navigator.vibrate(0)}catch(e){}}
+function stopSiren(){try{var SS=window.SORSound||(window.parent&&window.parent.SORSound);SS&&SS.stop()}catch(e){}try{siren.pause();siren.currentTime=0}catch(e){}try{if(navigator.vibrate)navigator.vibrate(0)}catch(e){}}
 $('btnEval').onclick=function(){current=E.evaluate(R,input(),settings);ov=null;renderResult();if(current.color==='red')playSiren();else stopSiren()};
 function opt(key,title,desc,opts){var h='<div class="set"><b>'+title+'</b><small>'+desc+'</small><select data-s="'+key+'">';opts.forEach(function(o){h+='<option value="'+o[0]+'"'+(String(settings[key])===String(o[0])?' selected':'')+'>'+o[1]+'</option>'});return h+'</select></div>'}
 function renderSettings(){var h='<div class="box"><h4>Ustawienia reguł (P1–P10)</h4><small>Domyślnie wybrano warianty ostrożne. Zmiany zapisują się tylko w telefonie.</small>';

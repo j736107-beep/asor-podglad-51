@@ -88,7 +88,7 @@ table{border-collapse:collapse;width:100%}td,th{border:1px solid #ddd;padding:4p
 <li>Lokalna „KARTA SOR — OZW i troponiny — AKTUALNA” (SOR Nowy Targ, 19.08.2026).</li></ul></div>
 </main>
 <div id="pr"></div>
-<script src="../../calc/trop.js"></script>
+<script src="../../sound.js"></script><script src="../../calc/trop.js"></script>
 <script>
 const T=SK.trop;
 const $=id=>document.getElementById(id);const S={h:{},r:{},v:{},e:{}};
@@ -113,7 +113,7 @@ document.querySelectorAll('input,select').forEach(i=>{if(i.id!=='pesel')i.addEve
 function urlv(){const sx=$('sex').value;if($('sexurl').checked&&sx)return sx==='f'?9:16;return num('url')||14}
 // --- siren ---
 let AC=null,osc=null,muted=false,sirenOn=false,sweep=null;
-function siren(on){if(window.parent!==window)return;if(on&&!muted){if(sirenOn)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume();osc=AC.createOscillator();const g=AC.createGain();g.gain.value=.18;osc.type='sawtooth';osc.connect(g).connect(AC.destination);osc.start();let up=true;sweep=setInterval(()=>{osc.frequency.setTargetAtTime(up?1300:650,AC.currentTime,.12);up=!up},450);sirenOn=true}catch(e){}}
+function siren(on){if(window.parent!==window)return;if(window.SORSound&&SORSound.tone()!=='classic'){if(on&&!muted){if(!sirenOn){sirenOn=true;SORSound.play(SORSound.tone(),null,{repeat:3})}}else if(sirenOn){SORSound.stop();sirenOn=false}return}if(on&&!muted){if(sirenOn)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume();osc=AC.createOscillator();const g=AC.createGain();g.gain.value=.18;osc.type='sawtooth';osc.connect(g).connect(AC.destination);osc.start();let up=true;sweep=setInterval(()=>{osc.frequency.setTargetAtTime(up?1300:650,AC.currentTime,.12);up=!up},450);sirenOn=true}catch(e){}}
  else if(sirenOn){try{clearInterval(sweep);osc.stop()}catch(e){}sirenOn=false}}
 $('mute').onclick=()=>{muted=!muted;$('mute').textContent=muted?'🔊 Włącz syrenę':'🔇 Wycisz syrenę';draw()};
 function onsetH(){const h=num('onseth');if(h!=null)return h;const o=tmin('onset'),t=tmin('t0');if(o==null)return null;let ref=t!=null?t:(new Date().getHours()*60+new Date().getMinutes());let d=ref-o;if(d<0)d+=1440;return d/60}

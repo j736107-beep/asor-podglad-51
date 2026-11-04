@@ -1,5 +1,5 @@
 (function(){var C=SK.core,$=function(s,r){return (r||document).querySelector(s)};
-var DEF={sound:true,vol:0.7,units:'conv',fs:16,syr:50};
+var DEF={sound:true,vol:0.7,tone:'bells',units:'conv',fs:16,syr:50};
 function load(k,d){try{return Object.assign({},d,JSON.parse(localStorage.getItem(k)||'{}'))}catch(e){return Object.assign({},d)}}
 var S=load('sk_settings',DEF),PT=load('sk_patient',{w:'',age:'',sex:'',crea:'',h:'',co:{}}),UN=SK.units,
  LEG=S.units==='mmol'?'si':S.units==='mgdl'?'conv':S.units==='si'?'si':'conv';
@@ -17,12 +17,8 @@ var siren=$('#siren');
 var AC=null,osc=null,lfo=null,gn=null,stopT=null;
 function ac(){try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state!=='running')AC.resume();}catch(e){}return AC}
 ['pointerdown','keydown','touchstart'].forEach(function(ev){document.addEventListener(ev,function(){ac()},{passive:true})});
-function sirenStop(){try{if(osc){osc.stop();osc=null}if(lfo){lfo.stop();lfo=null}}catch(e){}clearTimeout(stopT);try{siren.pause()}catch(e){}}
-function sirenPlay(){var c=ac();if(!c)return;sirenStop();try{
- gn=c.createGain();gn.gain.value=Math.max(0.05,S.vol);gn.connect(c.destination);
- osc=c.createOscillator();osc.type='sawtooth';osc.frequency.value=750;
- lfo=c.createOscillator();lfo.type='triangle';lfo.frequency.value=1.2;var lg=c.createGain();lg.gain.value=300;lfo.connect(lg);lg.connect(osc.frequency);
- osc.connect(gn);osc.start();lfo.start();stopT=setTimeout(sirenStop,4000);}catch(e){}}
+function sirenStop(){try{window.SORSound&&SORSound.stop()}catch(e){}clearTimeout(stopT);try{siren.pause()}catch(e){}}
+function sirenPlay(){sirenStop();try{var len=SORSound.play(S.tone||'bells',S.vol,{repeat:2});}catch(e){}}
 function alarm(key,on){var isNew=on&&!alarms[key];if(on)alarms[key]=1;else delete alarms[key];var any=Object.keys(alarms).length>0;$('#lamp').classList.toggle('on',any);
  if(isNew&&S.sound&&!muted){sirenPlay()}
  if(!any){sirenStop()}}
