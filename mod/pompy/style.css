@@ -28,3 +28,11 @@ select{padding:9px;border-radius:12px;border:2px solid #e8d6ff;font-size:16px;ma
 .link{width:100%;margin:10px 0;padding:12px;border-radius:12px;border:2px dashed var(--vio);background:#fff;color:var(--vio);font-weight:700;font-size:15px}
 .pbtn{padding:12px 16px;border:0;border-radius:8px;background:#16556b;color:#fff;font-size:15px}.sbtn{padding:10px 14px;border:1px solid #16556b;border-radius:8px;background:#fff;color:#16556b;font-size:15px}
 .nomo{border-collapse:collapse;font-size:13px;margin:6px 0}.nomo td,.nomo th{border:1px solid #e8d6ff;padding:3px 6px}
+
+/* 5.1: czytelność (lekarz – słaby wzrok): większe, czarne opisy */
+.row label{font-size:17px;color:#111;font-weight:800}.rng{font-size:16px;color:#111;font-weight:600}.lab{font-size:15px;color:#111}
+.src{font-size:14px;color:#1a1a1a;line-height:1.4}.amp{font-size:16px;color:#111}.dbtn small{font-size:13px;color:#111}.conc{color:#111;font-size:16px}.out .s{color:#111;font-size:16px}
+.acc{font-size:18px;font-weight:900;color:#000;background:#fff;border:3px solid #111;border-radius:12px;padding:8px 10px;margin:6px 0}.acc.c{border-color:#0d5c8c;background:#e6f2fb}.acc.p{border-color:#b35a00;background:#fff1e0}
+.bp{background:#eef7ff;border:2px solid #0d5c8c;border-radius:12px;padding:10px;margin:8px 0;font-size:16px;color:#000;line-height:1.45}.bp small{font-size:13px;color:#111}
+.dstep select{flex:1;max-width:none;font-size:17px;color:#000}.sb{width:48px;height:48px;border-radius:12px;border:0;background:var(--vio2);color:#000;font-size:28px;font-weight:900}
+.err{font-size:15px}

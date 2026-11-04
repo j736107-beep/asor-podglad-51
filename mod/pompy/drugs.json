@@ -129,20 +129,32 @@
   "AUD": {
    "label": "Audyt kompletności danych pomp vs ChPL, 26.10.2026 (pompy_dane_audyt.md)",
    "url": ""
+  },
+  "ICS": {
+   "label": "ICS/FICM 2020 – Guidance: Vasopressor Agents by Peripheral Intravenous Infusion in Adult Critical Care (adrenalina obwodowo 16 µg/ml; start 0,05 µg/kg/min; inwazyjny pomiar RR zalecany)",
+   "url": "https://ics.ac.uk/static/3b607648-9292-4ec7-b913d5fcca6f7d55/PeripheralVasopressorguidefinal.pdf"
+  },
+  "SSC": {
+   "label": "Surviving Sepsis Campaign 2021 (Evans i wsp., Crit Care Med 2021;49:e1063) – docelowe MAP 65 mmHg; inwazyjny pomiar RR możliwie szybko",
+   "url": "https://doi.org/10.1097/CCM.0000000000005337"
+  },
+  "CCX": {
+   "label": "Crit Care Explor – tabela protokołu wazopresorów obwodowych: adrenalina 5 mg/250 ml (20 µg/ml), limit 0,125 µg/kg/min",
+   "url": "https://links.lww.com/CCX/B675"
   }
  },
  "drugs": [
   {
    "id": "adrenalina",
-   "name": "Adrenalina",
+   "name": "Adrenalina – dostęp centralny",
    "status": "lokalny",
-   "product": "Adrenalina WZF 0,1% (1 mg/1 ml)",
+   "product": "Adrenalina – ampułka 4 mg (zgodnie z wyposażeniem SOR). UWAGA: w RPL nie znaleziono adrenaliny 4 mg/4 ml – zarejestrowana jest Adrenalina WZF 1 mg/1 ml; 4 mg/4 ml ma Noradrenaline Kabi – sprawdź, czy to nie noradrenalina!",
    "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/3065/characteristic",
    "amp": {
-    "content": 1,
+    "content": 4,
     "unit": "mg",
-    "volume": 1,
-    "label": "amp. 1 mg / 1 ml"
+    "volume": 4,
+    "label": "amp. 4 mg (objętość przyjęta 4 ml = 1 mg/ml – SPRAWDŹ NA AMPUŁCE, DO DECYZJI LEKARZA)"
    },
    "diluted": true,
    "diluents": [
@@ -151,8 +163,8 @@
     "Woda do wstrzykiwań"
    ],
    "rec": {
-    "20": 2,
-    "50": 5
+    "20": 1.6,
+    "50": 4
    },
    "units": [
     {
@@ -169,14 +181,134 @@
      "text": "ChPL: bradykardia 2–10 µg/min"
     }
    ],
-   "access": "ChPL nie określa; wytyczne: preferowany dostęp centralny (lokalnie).",
+   "access": "CENTRALNY (cewnik centralny).",
    "monitor": "Ciągle RR, EKG; miejsce wkłucia.",
    "bolus": "NZK: 1 mg i.v. co 3–5 min; po ROSC bolusy 50–100 µg (ChPL).",
-   "why": "ChPL podaje typowe stężenie 1:10 000 (100 µg/ml) i dawki wlewu, ale nie opisuje przygotowania strzykawki ani stabilności w strzykawce; wybór 100 µg/ml, dostęp i czas ważności – standard lokalny.",
+   "why": "50 ml: cała ampułka 4 mg + 46 ml = 80 µg/ml (≤ 100 µg/ml z ChPL). 20 ml: 1,6 ml z ampułki (1,6 mg) + 18,4 ml = 80 µg/ml – to samo stężenie co 50 ml, resztę ampułki utylizować. Objętość ampułki i stabilność w strzykawce – DO DECYZJI LEKARZA.",
    "src": [
     "ADR",
+    "SSC",
     "AUD"
-   ]
+   ],
+   "doseStart": {
+    "ug/kg/min": 0.05
+   },
+   "doseSteps": {
+    "ug/kg/min": [
+     0.01,
+     0.02,
+     0.03,
+     0.05,
+     0.075,
+     0.1,
+     0.125,
+     0.15,
+     0.2,
+     0.25,
+     0.3,
+     0.4,
+     0.5,
+     0.75,
+     1.0
+    ],
+    "ug/min": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     8,
+     10,
+     15,
+     20
+    ]
+   },
+   "blocked": [
+    "4 mg / 20 ml = 200 µg/ml – ZABLOKOWANE: 2× bardziej stężone niż 1:10 000 (100 µg/ml) opisane w ChPL; brak danych o stabilności i ryzyko pomyłki przy małych przepływach."
+   ],
+   "bp": "ZALECENIE (do weryfikacji): cel MAP ≥ 65 mmHg (SSC 2021), modyfikuj indywidualnie. Pomiar RR: preferowany inwazyjny (linia tętnicza) – ICS/FICM 2020, SSC 2021. Przy pomiarze nieinwazyjnym: co 2–5 min po starcie i po każdej zmianie dawki przez 15–30 min, potem co 15 min przy stabilnym RR – częstotliwość to PROPOZYCJA – DO DECYZJI LEKARZA (wytyczne podają tylko „regularnie”). EKG ciągle."
+  },
+  {
+   "id": "adrenalina_p",
+   "name": "Adrenalina – dostęp obwodowy",
+   "status": "lokalny",
+   "product": "Adrenalina – ampułka 4 mg (zgodnie z wyposażeniem SOR). UWAGA: w RPL nie znaleziono adrenaliny 4 mg/4 ml – zarejestrowana jest Adrenalina WZF 1 mg/1 ml; 4 mg/4 ml ma Noradrenaline Kabi – sprawdź, czy to nie noradrenalina!",
+   "url": "https://rejestry.ezdrowie.gov.pl/api/rpl/medicinal-products/3065/characteristic",
+   "amp": {
+    "content": 4,
+    "unit": "mg",
+    "volume": 4,
+    "label": "amp. 4 mg (objętość przyjęta 4 ml = 1 mg/ml – SPRAWDŹ NA AMPUŁCE, DO DECYZJI LEKARZA)"
+   },
+   "diluted": true,
+   "diluents": [
+    "NaCl 0,9%",
+    "Glukoza 5%",
+    "Woda do wstrzykiwań"
+   ],
+   "rec": {
+    "20": 0.32,
+    "50": 0.8
+   },
+   "units": [
+    {
+     "u": "ug/kg/min",
+     "lo": 0.05,
+     "hi": 0.125,
+     "max": 1,
+     "text": "Start 0,05 µg/kg/min (ICS/FICM 2020). Obwodowo protokoły do ok. 0,125 µg/kg/min (CCX) – powyżej: dostęp centralny, DO DECYZJI LEKARZA; maks. 1,0 µg/kg/min (ChPL)"
+    },
+    {
+     "u": "ug/min",
+     "lo": 2,
+     "hi": 10,
+     "text": "ChPL: bradykardia 2–10 µg/min"
+    }
+   ],
+   "access": "OBWODOWY – duża żyła przedramienia/łokciowa, kaniula ≥20G, ≤16 µg/ml (ICS/FICM 2020); krótko, możliwie szybko dostęp centralny.",
+   "monitor": "Ciągle RR, EKG; miejsce wkłucia.",
+   "bolus": "NZK: 1 mg i.v. co 3–5 min; po ROSC bolusy 50–100 µg (ChPL).",
+   "why": "PROPOZYCJA – DO DECYZJI LEKARZA: część ampułki do 16 µg/ml (ICS/FICM 2020). 50 ml: 0,8 ml z ampułki 4 mg/4 ml (0,8 mg) + 49,2 ml = 16 µg/ml; 20 ml: 0,32 ml (0,32 mg) + 19,68 ml = 16 µg/ml – odmierzać strzykawką 1 ml, resztę ampułki utylizować. Alternatywa ICS: 4 mg w 250 ml (worek, nie strzykawka).",
+   "src": [
+    "ADR",
+    "ICS",
+    "CCX",
+    "SSC",
+    "AUD"
+   ],
+   "doseStart": {
+    "ug/kg/min": 0.05
+   },
+   "doseSteps": {
+    "ug/kg/min": [
+     0.01,
+     0.02,
+     0.03,
+     0.05,
+     0.075,
+     0.1,
+     0.125,
+     0.15,
+     0.2
+    ],
+    "ug/min": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     8,
+     10
+    ]
+   },
+   "blocked": [
+    "4 mg / 20 ml = 200 µg/ml – ZABLOKOWANE obwodowo: 12,5× powyżej 16 µg/ml (ICS/FICM 2020).",
+    "4 mg / 50 ml = 80 µg/ml – ZABLOKOWANE obwodowo: 5× powyżej 16 µg/ml (ICS/FICM 2020); protokoły obwodowe stosują 16–20 µg/ml.",
+    "Żadne wypełnienie całą ampułką 4 mg w strzykawce 20 lub 50 ml nie mieści się w limicie obwodowym (4 mg wymaga ≥ 250 ml)."
+   ],
+   "bp": "ZALECENIE (do weryfikacji): cel MAP ≥ 65 mmHg (SSC 2021), modyfikuj indywidualnie. Pomiar RR: preferowany inwazyjny (linia tętnicza) – ICS/FICM 2020, SSC 2021. Przy pomiarze nieinwazyjnym: co 2–5 min po starcie i po każdej zmianie dawki przez 15–30 min, potem co 15 min przy stabilnym RR – częstotliwość to PROPOZYCJA – DO DECYZJI LEKARZA (wytyczne podają tylko „regularnie”). EKG ciągle."
   },
   {
    "id": "dobutamina",

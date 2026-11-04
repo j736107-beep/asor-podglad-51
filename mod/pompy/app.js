@@ -34,20 +34,20 @@ function drug(d){$('#title').textContent=d.name;$('#back').hidden=false;
  $('#main').innerHTML='<div class="hd">'+badge(d)+'<p class="amp">Preparat: <b>'+esc(d.product)+'</b> · <a href="'+esc(d.url)+'" target="_blank" rel="noopener">ChPL</a></p></div>'+
  (loc&&!approved(d)?'<div class="err" id="locw">'+esc(DB.localLabel)+'. Receptura nie wynika wprost z ChPL – przed przeniesieniem nastawy zatwierdź ją w <a href="#ustawienia">ustawieniach</a>.</div>':'')+
  '<div class="tog" id="sy">'+SY.map(function(v){return '<button data-s="'+v+'">STRZYKAWKA '+v+' ml</button>'}).join('')+'</div>'+
- '<div id="pr"></div>'+
+ '<div class="acc '+(/CENTRALNY/.test(d.access)?'c':/OBWODOWY/.test(d.access)?'p':'')+'" id="acc">Dostęp: '+esc(d.access)+'</div>'+(d.blocked?'<div class="err" id="blk"><b>Wykluczone receptury:</b><br>'+d.blocked.map(esc).join('<br>')+'</div>':'')+'<div id="pr"></div>'+
  (d.diluted?'<div class="row"><label>Rozcieńczalnik'+(d.id==='amiodaron'?' (tylko G5%)':'')+'</label><select id="dil">'+(d.diluents.length>1?'<option value="">— wybierz —</option>':'')+d.diluents.map(function(x){return '<option'+(s.dil===x?' selected':'')+'>'+esc(x)+'</option>'}).join('')+'</select></div>':'')+
  (d.units.length>1?'<div class="tog" id="ut">'+d.units.map(function(x){return'<button data-u="'+x.u+'">'+esc(UL(x.u))+'</button>'}).join('')+'</div>':'')+
  '<p class="rng" id="r"></p>'+
  (pk?'<div class="row"><label>Masa ciała [kg]</label><input id="w" inputmode="decimal"></div>':'')+
- '<div class="row"><label>Dawka ['+esc(UL(s.unit))+']</label><input id="ds" inputmode="decimal"></div>'+
+ '<div class="row"><label>Dawka ['+esc(UL(s.unit))+']</label><input id="ds" inputmode="decimal"></div>'+stepHtml(d,s.unit)+
  '<div class="row"><label>lub przepływ [ml/h]</label><input id="ml" inputmode="decimal"></div>'+
  '<div class="out" id="o"></div>'+
  '<details class="card" id="adj"><summary><b>Korekta przepływu</b></summary><div class="row"><label>Zmień</label><select id="am"><option value="abs">dawkę o (± '+esc(UL(s.unit))+')</option><option value="pct">dawkę o (± %)</option><option value="mlh">przepływ o (± ml/h)</option></select></div><div class="row"><label>Wartość zmiany</label><input id="ax" inputmode="decimal" placeholder="np. 0,05 lub -10"></div><div id="ao" class="conc"></div></details>'+
- (d.heparin?hepHtml(d):'')+(d.glyc?'<div class="warn" id="glyc">'+esc(d.glyc)+'</div>':'')+(d.bolus?'<p class="src">Bolus/nasycenie: '+esc(d.bolus)+'</p>':'')+
+ (d.bp?'<div class="bp" id="bp"><b>Ciśnienie – monitorowanie i cel</b><br>'+esc(d.bp)+'<br><small>Źródła: '+srcs(['SSC','ICS'])+'</small></div>':'')+(d.heparin?hepHtml(d):'')+(d.glyc?'<div class="warn" id="glyc">'+esc(d.glyc)+'</div>':'')+(d.bolus?'<p class="src">Bolus/nasycenie: '+esc(d.bolus)+'</p>':'')+
  '<div class="src">Dostęp: '+esc(d.access)+' Monitorowanie: '+esc(d.monitor)+'<br>Status: '+esc(d.why)+'</div>'+
  '<p class="src">Źródła: '+srcs(d.src)+'</p>'+
  '<button id="recordCalc" class="pbtn">Przenieś do rejestru leczenia</button><p id="recordStatus" role="status"></p><div class="row"><button id="savePump" class="sbtn">Zapisz nastawę do raportu</button> <button id="printPump" class="sbtn">🖨 Drukuj nastawy</button></div><p id="saveStatus" role="status"></p>';
- if(pk)$('#w').value=s.w;$('#ds').value=s.dose;$('#ml').value=s.mlh;
+ if(s.dose===''&&s.last==='dose'&&d.doseStart&&d.doseStart[s.unit]!=null)s.dose=E.fmt(d.doseStart[s.unit]);if(pk)$('#w').value=s.w;$('#ds').value=s.dose;$('#ml').value=s.mlh;
  var cur={};
  function upd(){document.querySelectorAll('#sy button').forEach(function(b){b.classList.toggle('on',+b.dataset.s===s.syr)});
   document.querySelectorAll('#ut button').forEach(function(b){b.classList.toggle('on',b.dataset.u===s.unit)});
@@ -55,7 +55,7 @@ function drug(d){$('#title').textContent=d.name;$('#back').hidden=false;
   var dil=d.diluted?(s.dil||'rozcieńczalnika (wybierz)'):'';
   var ampTxt=E.fmt(p.amps)+' '+(d.heparin?'fiolki':d.id==='pantoprazol'?'fiolki 40 mg':'amp.')+' ('+E.fmt(p.drugVol)+' ml leku)';
   $('#pr').innerHTML='<div class="conc" id="recipe"><div>Receptura: <b>'+ampTxt+'</b>'+(d.diluted?' + <b>'+E.fmt(p.diluent)+' ml</b> '+esc(dil):' bez rozcieńczania')+' = <b>'+s.syr+' ml</b></div><div>Ilość leku: <b>'+E.fmt(p.amount)+' '+c+'</b> · stężenie: <b id="cc">'+E.fmt(p.conc)+' '+c+'/ml</b>'+(d.amp.unit==='mg'&&p.conc<1?' <small>('+E.fmt(p.conc*1000)+' µg/ml)</small>':'')+'</div></div>';
-  var R=E.rangeFor(d,s.unit),rt=R.text||'';$('#r').textContent='Zakres: '+rt;$('#r').classList.remove('bad');
+  if($('#dsel')){var dv=num($('#ds').value),hit=(d.doseSteps[s.unit]||[]).find(function(v){return Math.abs(v-dv)<1e-9});$('#dsel').value=hit!=null?String(hit):'';}var R=E.rangeFor(d,s.unit),rt=R.text||'';$('#r').textContent='Zakres: '+rt;$('#r').classList.remove('bad');
   var w=pk?num(s.w):1,ww=pk?E.checkWeight(w):null,wmsg='';
   if(pk){$('#w').classList.toggle('bad',ww==='red');if(ww==='red')wmsg='<div class="err">Nieprawidłowa masa ciała (30–250 kg) — nie liczę.</div>';else if(ww)wmsg='<div class="warn">Nietypowa masa ciała — sprawdź.</div>';
    if(!(w>0)||ww==='red'){o.innerHTML=wmsg||'<div class="s">Podaj masę ciała</div>';cur.ok=false;adjUpd();hepUpd();return;}}
@@ -83,7 +83,12 @@ function drug(d){$('#title').textContent=d.name;$('#back').hidden=false;
  if($('#ut'))$('#ut').onclick=function(e){var b=e.target.closest('button');if(b&&b.dataset.u!==s.unit){s.unit=b.dataset.u;s.last='dose';s.dose='';s.mlh='';drug(d);}};
  if($('#dil'))$('#dil').onchange=function(){s.dil=this.value;upd();};
  if(pk)$('#w').oninput=function(){s.w=this.value;upd();};
- $('#ds').oninput=function(){s.dose=this.value;s.last='dose';upd();};$('#ml').oninput=function(){s.mlh=this.value;s.last='ml';upd();};
+ $('#ds').oninput=function(){s.dose=this.value;s.last='dose';upd();};
+ if($('#dsel')){var SL=d.doseSteps[s.unit];var setD=function(v){s.dose=E.fmt(v);s.last='dose';$('#ds').value=s.dose;upd();};
+  $('#dsel').onchange=function(){if(this.value!=='')setD(+this.value);};
+  var stepTo=function(dir){var c=num($('#ds').value),i;if(!isFinite(c)){setD(d.doseStart&&d.doseStart[s.unit]!=null?d.doseStart[s.unit]:SL[0]);return;}
+   if(dir>0){i=SL.findIndex(function(v){return v>c+1e-9});if(i<0)i=SL.length-1;}else{i=-1;for(var j=SL.length-1;j>=0;j--)if(SL[j]<c-1e-9){i=j;break;}if(i<0)i=0;}setD(SL[i]);};
+  $('#dm').onclick=function(){stepTo(-1)};$('#dp').onclick=function(){stepTo(1)};}$('#ml').oninput=function(){s.mlh=this.value;s.last='ml';upd();};
  $('#ax').oninput=adjUpd;$('#am').onchange=adjUpd;
  if(d.heparin){if(!$('#hw').value)$('#hw').value=s.w||parentW();['#hw','#hbk','#hik','#hap'].forEach(function(k){$(k).oninput=hepUpd;});$('#hb').onchange=function(){var bo=d.heparin.bolusOpts.find(function(x){return x.k===$('#hb').value});$('#hbk').value=String(bo.v).replace('.',',');hepUpd();};}
  upd();
@@ -96,6 +101,8 @@ function drug(d){$('#title').textContent=d.name;$('#back').hidden=false;
   parent.SORTreatment.seed({kind:'infusion',name:d.name,dose:E.fmt(cur.dose)+' '+UL(s.unit),route:'i.v.'+(/CENTRALNY/.test(d.access)?' centralnie':/OBWODOWY/.test(d.access)?' obwodowo':''),amount:E.fmt(p.amount)+' '+c,diluent:d.diluted?s.dil:'bez rozcieńczania',volume:String(p.finalVol).replace('.',','),concentration:E.fmt(p.conc)+' '+c+'/ml',rate:E.fmt(cur.mlh,2),note:(loc?DB.localLabel+' – zatwierdzono lokalnie; ':'Receptura zgodna z ChPL; ')+d.product+' ('+d.url+')'});
   $('#recordStatus').textContent='Przeniesiono do rejestru leczenia.';}catch(err){$('#recordStatus').textContent=err.message;}};
 }
+function stepHtml(d,u){var L=d.doseSteps&&d.doseSteps[u];if(!L)return'';var R=E.rangeFor(d,u);
+ return '<div class="row dstep"><label>Szybki wybór dawki</label><button type="button" class="sb" id="dm" aria-label="mniejsza dawka">−</button><select id="dsel"><option value="">— lista —</option>'+L.map(function(v){var t=(R.max!=null&&v>R.max)?' (POWYŻEJ MAKS.)':((R.lo!=null&&v<R.lo)||(R.hi!=null&&v>R.hi))?' (poza zakresem)':' ✓';return'<option value="'+v+'">'+E.fmt(v)+' '+esc(UL(u))+t+'</option>'}).join('')+'</select><button type="button" class="sb" id="dp" aria-label="większa dawka">+</button></div>';}
 function hepHtml(d){var H=d.heparin;return '<details class="card" id="hep" open><summary><b>Heparyna: bolus, wlew j./kg/h, korekta wg APTT (6 h)</b></summary>'+
  '<div class="row"><label>Masa ciała [kg]</label><input id="hw" inputmode="decimal"></div>'+
  '<div class="row"><label>Schemat bolusa</label><select id="hb">'+H.bolusOpts.map(function(o){return'<option value="'+o.k+'">'+esc(o.l)+'</option>'}).join('')+'</select></div>'+
