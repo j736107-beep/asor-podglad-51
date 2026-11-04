@@ -3,8 +3,9 @@
 <header><h1>Przegląd wyników <span>– czujnik bezpieczeństwa</span></h1><p class="sub">Wklej wyniki i opisy badań z Optimedu. Program uporządkuje je i wskaże, czego nie przeoczyć.</p></header>
 <label for="paste" class="lbl">Wklej wyniki z Optimedu</label>
 <textarea id="paste" autocomplete="off" spellcheck="false" placeholder="Zaznacz w Optimedzie wyniki (także kilka pobrań) i opisy RTG / TK / USG / EKG, skopiuj i wklej tutaj."></textarea>
+<div id="cnt" class="cnt" aria-live="polite">0 / 50 000 znaków</div>
 <div class="btns"><button id="go" class="pri">Analizuj</button><button id="ex">Wczytaj przykład</button><button id="clr">Wyczyść</button></div>
-<p class="priv">Dane nie są nigdzie wysyłane ani zapisywane – znikają po zamknięciu lub wyczyszczeniu.</p>
+<p class="priv">Dane nie są nigdzie wysyłane ani zapisywane – są trzymane tylko w pamięci na czas tej sesji (powrót z innego modułu je przywraca) i znikają po zamknięciu aplikacji lub „Wyczyść”.</p>
 <div id="out" aria-live="polite"></div>
 <p class="disc">Narzędzie pomocnicze, niecertyfikowane. Nie zastępuje przeczytania pełnych wyników i opisów. Progi i działania oznaczone „DO DECYZJI LEKARZA” są propozycją do zatwierdzenia.</p>
 </main>

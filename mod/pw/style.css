@@ -55,3 +55,7 @@ details pre{white-space:pre-wrap;font:16px/1.4 inherit;margin:6px 0}
 .disc{margin-top:28px;font-size:16px;color:#222;border-top:2px solid #111;padding-top:10px}
 @media(max-width:600px){.row{grid-template-areas:"n v d" "r r r" "s s s"}.sp svg{height:70px}body{font-size:18px}main{padding:12px 10px 30px}h1{font-size:23px}.tiles{grid-template-columns:1fr}.row{grid-template-columns:1fr auto auto}.sp svg{width:100%;max-width:330px}.sp{justify-self:stretch}.d{min-width:70px}}
 @media print{.btns,textarea,.lbl,.priv{display:none}}
+.cnt{font-size:16px;color:#111;font-weight:600;text-align:right;margin-top:4px}.cnt.over{color:#c00000}
+.row.abn .v b,.row.crit .v b,.v.bad b{color:#c00000}
+.hist{display:flex;flex-wrap:wrap;gap:4px 6px;margin-top:4px}.hv{display:inline-block;border:1.5px solid #999;border-radius:6px;padding:1px 7px;font-size:16px;font-weight:700;color:#111;background:#fff}
+.hv small{font-size:12px;font-weight:600;color:#333;margin-right:5px}.hv.bad{color:#c00000;border-color:#c00000;background:#fdecec}.hv.bad small{color:#7a0000}.hv.last{outline:2px solid #111}
