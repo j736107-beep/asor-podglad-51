@@ -14,7 +14,9 @@
  wbc:{alertHi:12,critHi:30,alertLo:4,critLo:1},
  crea:{riseAbs:0.3,riseX:1.5,alert:2.0},      // KDIGO: wzrost ≥0,3 mg/dl lub ×1,5
  egfr:{alert:30},
- trop:{riseRel:0.5,critX:5},                  // względem górnej granicy normy z wklejki
+ trop:{uln:14,delta:5,riseRel:0.5,critX:5,near:2,status:'STANDARD LOKALNY – zatwierdzony przez lekarza'}, // hs-troponina: GGN 14 ng/l, istotna delta 5 ng/l, schemat 0/1/3 h (lokalny); critX/near – DO DECYZJI
+ ddim:{base:500,ageFrom:50,perYear:10,status:'STANDARD LOKALNY – zatwierdzony przez lekarza',
+  preg:{t1:950,t2:1290,t3:1700,unknown:500,src:'Abbassi-Ghanavati M, Greer LG, Cunningham FG. Obstet Gynecol 2009;114:1326–31 (zakresy referencyjne w ciąży: I trym. 50–950, II 320–1290, III 130–1700 µg/l FEU); pregnancy-adapted YEARS (van der Pol LM i wsp., NEJM 2019;380:1139–49): 0 kryteriów YEARS → próg 1000, ≥1 kryterium → 500 ng/ml',status:'DO DECYZJI LEKARZA'}}, // µg/l FEU; ≤50 r.ż. 500, >50 r.ż. wiek×10
  glu:{critLo:54,alertLo:70,alertHi:250,critHi:400},
  inr:{alert:3,crit:5},
  plt:{alert:50,crit:20},

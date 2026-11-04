@@ -41,13 +41,22 @@ document.querySelectorAll('.tg').forEach(function(b){b.onclick=function(){PT.co[
 var MODS=SKM.list,active=null;
 function side(){$('#side').innerHTML=MODS.map(function(m){return m.sep?'<hr>':'<button data-id="'+m.id+'" class="'+(m.id===cur?'on ':'')+(m.soon?'soon':'')+'">'+m.icon+' '+m.name+'</button>'}).join('');}
 var navS=[];function go(id){if(id===cur){show();return;}navS.push(cur);try{history.pushState({sk:id},'')}catch(e){}cur=id;localStorage.setItem('sk_mod',cur);show();}
-function back(){if(!navS.length)return;cur=navS.pop();localStorage.setItem('sk_mod',cur);show();}
+function back(){if(!navS.length){if(cur!=='dashboard'){cur='dashboard';localStorage.setItem('sk_mod',cur);show();}return;}cur=navS.pop();localStorage.setItem('sk_mod',cur);show();}
 window.addEventListener('popstate',function(){back();});
-window.SKS.back=function(){if(navS.length)history.back();};
+window.SKS.back=function(){if(navS.length)history.back();else back();};
 $('#side').onclick=function(e){var b=e.target.closest('button');if(b){go(b.dataset.id);return;cur=b.dataset.id;localStorage.setItem('sk_mod',cur);show();}};
-function show(){if(window.SORReport&&active)SORReport.capture(active);side();alarms={};alarm('_',false);var m=MODS.filter(function(x){return x.id===cur})[0]||MODS[0],el=$('#main');active=m;el.className='';el.innerHTML='';var bk=document.createElement('button');bk.id='skBack';bk.type='button';bk.onclick=function(){SKS.back()};el.appendChild(bk);var pv=navS.length&&MODS.filter(function(x){return x.id===navS[navS.length-1]})[0];bk.hidden=!pv;bk.innerHTML='&#x2190; Wróć'+(pv?' <span>do: '+pv.name+'</span>':'');
+var navBar=null,navBot=null,navObs=null;
+function mkNav(m){var pv=navS.length&&MODS.filter(function(x){return x.id===navS[navS.length-1]})[0],home=m.id==='dashboard';
+ navBar=document.createElement('div');navBar.id='skNav';navBar.className='sk-nav';
+ var bk=document.createElement('button');bk.id='skBack';bk.type='button';bk.onclick=function(){SKS.back()};bk.hidden=home&&!pv;bk.innerHTML='&#x2190; Wróć'+(pv?' <span>do: '+pv.name+'</span>':' <span>do: Pulpit dyżuru</span>');
+ var hm=document.createElement('button');hm.id='skHome';hm.type='button';hm.hidden=home;hm.innerHTML='&#x2302; Pulpit dyżuru';hm.onclick=function(){go('dashboard')};
+ navBar.appendChild(bk);navBar.appendChild(hm);
+ navBot=document.createElement('div');navBot.id='skNavBot';navBot.className='sk-nav bot';var cl=document.createElement('button');cl.id='skClear';cl.type='button';cl.innerHTML='&#x1F5D1; Wyczyść dane pacjenta';cl.title='Czyści wszystkie dane pacjenta we wszystkich modułach (ustawienia zostają)';cl.onclick=function(){SKS.clearData()};navBot.appendChild(cl);}
+function ensureNav(){var el=$('#main');if(!navBar)return;if(el.firstChild!==navBar)el.insertBefore(navBar,el.firstChild);if(el.lastChild!==navBot)el.appendChild(navBot);}
+function show(){if(window.SORReport&&active)SORReport.capture(active);side();alarms={};alarm('_',false);var m=MODS.filter(function(x){return x.id===cur})[0]||MODS[0],el=$('#main');active=m;el.className='';if(navObs)navObs.disconnect();el.innerHTML='';mkNav(m);el.appendChild(navBar);
  if(m.frame){el.className='fr';var f=document.createElement('iframe');f.src=m.frame;f.onload=function(){bridge(f,m)};el.appendChild(f);m.sync=function(){sync(f,m)};}
- else m.render(el,SKS);}
+ else m.render(el,SKS);
+ ensureNav();if(!navObs)navObs=new MutationObserver(function(){ensureNav()});navObs.observe(el,{childList:true});}
 function refresh(){if(active&&active.sync)active.sync();else if(active&&active.update)active.update();}
 // ---------- most do modułów v6/v4 (ten sam origin) ----------
 function bridge(f,m){var w=f.contentWindow,d=w.document,st=d.createElement('style');
@@ -67,12 +76,13 @@ function sync(f,m){var d;try{d=f.contentWindow.document}catch(e){return}if(!d||!
 // ---------- start ----------
 applyS();patBar();show();
 window.SKS.show=function(id){go(id);};
+window.SKS.openPropofol=function(){go('pompy');var f=$('#main iframe');if(!f)return;var set=function(){try{f.contentWindow.location.hash='d/propofol';}catch(e){}};f.addEventListener('load',set);set();};
 window.SKS.active=function(){return active};
 // migawki modułów do raportu: po zmianie danych (z opóźnieniem) i przy wyjściu z modułu
 var capT=null;function capSoon(){clearTimeout(capT);capT=setTimeout(function(){if(window.SORReport&&active)SORReport.capture(active)},900);}
 ['input','change','click'].forEach(function(ev){$('#main').addEventListener(ev,capSoon,true);});
 window.SKS.capSoon=capSoon;
-function printParts(){var id=active&&active.id;if(id==='documentation')return['doc','done'];if(id==='fluid')return['fluid'];if(id==='pompy')return['pumps'];if(id==='treatment-log')return['done'];if(!id||['dashboard','settings','about','icd10','icd9','trends'].indexOf(id)>=0)return null;return[{module:id}];}
+function printParts(){var id=active&&active.id;if(id==='documentation')return['doc','done'];if(id==='fluid')return['fluid'];if(id==='pompy')return['pumps'];if(id==='treatment-log')return['done'];if(id==='trends')return['pw'];if(!id||['dashboard','settings','about','icd10','icd9'].indexOf(id)>=0)return null;return[{module:id}];}
 $('#printMod').onclick=function(){if(active&&active.id==='about'&&window.SORAbout){SORAbout.print(SORAbout.state.tab);return;}SORReport.print(printParts()||undefined);};
 $('#printAll').onclick=function(){SORReport.print();};
 // globalna zmiana jednostek: przelicza wpisane wartości (przechowywane w SI), etykiety i wyniki na żywo, bez przeładowania
@@ -80,8 +90,10 @@ window.SKS.setUnits=function(u){u=u==='si'?'si':'conv';if(S.units===u)return;S.u
  var y=window.scrollY;show();window.scrollTo(0,y);document.dispatchEvent(new CustomEvent('sk-units',{detail:u}));};
 $('#pcu').onclick=function(){SKS.setUnits(S.units==='si'?'conv':'si');};
 window.SKS.setP=function(o){var ch=false;if(o.age!=null&&String(PT.age)!==String(o.age)){PT.age=String(o.age);$('#pa').value=PT.age;ch=true}if(o.sex&&PT.sex!==o.sex){PT.sex=o.sex;ch=true}if(o.w!=null&&String(PT.w)!==String(o.w)){PT.w=String(o.w);$('#pw').value=PT.w;ch=true}if(o.crMg!=null&&String(PT.crMg)!==String(o.crMg)){PT.crMg=o.crMg;pcShow();ch=true}if(ch){saveP();patBar();setTimeout(refresh,0);}};
-window.SKS.nextPatient=function(){if(!confirm('Następny pacjent: wyczyścić dane pacjenta i wszystkie moduły, również tekst dokumentacji i trendy? (ustawienia i ulubione zostają)'))return;window.SORClinicalUI?.reset();
+function wipe(){window.SKS.pwMem=null;window.SKS.ordMem=null;try{window.SORClinicalUI?.reset();}catch(e){}
  if(window.SORClearCase)window.SORClearCase();
- Object.keys(localStorage).forEach(function(k){if(k==='sk_settings'||k==='omdl_settings'||k==='sk_mod'||k==='sor_favorites')return;if(k.indexOf('sk_')===0||k.indexOf('omdl_')===0||k.indexOf('se4state:')===0)localStorage.removeItem(k)});location.reload();};
+ Object.keys(localStorage).forEach(function(k){if(k==='sk_settings'||k==='omdl_settings'||k==='sk_mod'||k==='sor_favorites')return;if(k.indexOf('sk_')===0||k.indexOf('omdl_')===0||k.indexOf('se4state:')===0)localStorage.removeItem(k)});location.reload();}
+window.SKS.clearData=function(){if(window.SORWypis&&SORWypis.active)return;if(!confirm('Wyczyścić wszystkie dane pacjenta we wszystkich modułach (pasek pacjenta, wklejone wyniki, karta zleceń, wykonane, dokumentacja)? Ustawienia i ulubione zostają.'))return;wipe();};
+window.SKS.nextPatient=function(){if(window.SORWypis&&SORWypis.active)return;if(!confirm('Następny pacjent: wyczyścić dane pacjenta i wszystkie moduły, również tekst dokumentacji i trendy? (ustawienia i ulubione zostają)'))return;wipe();};
 $('#nextPt').onclick=window.SKS.nextPatient;
 if(window.SKG)SKG.obs($('#main'));})();

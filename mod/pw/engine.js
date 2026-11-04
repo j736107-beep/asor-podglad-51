@@ -53,13 +53,13 @@ var AN=[
 ].map(function(a){return{key:a[0],label:a[1],group:a[2],re:new RegExp('^(?:'+a[3]+')'+L)};});
 var BYKEY={};AN.forEach(function(a){BYKEY[a.key]=a;});
 // przeliczenia do jednostek kanonicznych (tylko oczywiste); null = jednostka nierozpoznana
-var CANON={hb:'g/dl',crea:'mg/dl',urea:'mg/dl',glu:'mg/dl',bil:'mg/dl',bild:'mg/dl',ca:'mg/dl',mg:'mg/dl',lac:'mmol/l',trop:'ng/l',crp:'mg/l',pct:'ng/ml',fib:'g/l',pco2:'mmHg',po2:'mmHg',wbc:'tys/µl',plt:'tys/µl'};
-function nu(u){return String(u||'').toLowerCase().replace(/\s+/g,'').replace(/μ/g,'µ').replace(/^u(?=[a-z]+\/)/,'µ').replace(/^umol/,'µmol').replace(/^ug/,'µg').replace(/l$/,'l');}
+var CANON={hb:'g/dl',crea:'mg/dl',urea:'mg/dl',glu:'mg/dl',bil:'mg/dl',bild:'mg/dl',ca:'mg/dl',mg:'mg/dl',lac:'mmol/l',trop:'ng/l',crp:'mg/l',pct:'ng/ml',fib:'g/l',ddim:'µg/l',pco2:'mmHg',po2:'mmHg',wbc:'tys/µl',plt:'tys/µl'};
+function nu(u){return String(u||'').toLowerCase().replace(/\s+/g,'').replace(/feu$/,'').replace(/μ/g,'µ').replace(/^u(?=[a-z]+\/)/,'µ').replace(/^umol/,'µmol').replace(/^ug/,'µg').replace(/l$/,'l');}
 function factor(key,unit){var u=nu(unit);if(!CANON[key])return 1;if(!u)return 1;
  var M={hb:{'g/dl':1,'g/l':0.1,'mmol/l':1.611},crea:{'mg/dl':1,'µmol/l':1/88.4},urea:{'mg/dl':1,'mmol/l':6.006},
  glu:{'mg/dl':1,'mmol/l':18.016},bil:{'mg/dl':1,'µmol/l':1/17.1},bild:{'mg/dl':1,'µmol/l':1/17.1},ca:{'mg/dl':1,'mmol/l':4.008},mg:{'mg/dl':1,'mmol/l':2.431},
  lac:{'mmol/l':1,'mg/dl':1/9.01},trop:{'ng/l':1,'pg/ml':1,'ng/ml':1000,'µg/l':1000},crp:{'mg/l':1,'mg/dl':10},pct:{'ng/ml':1,'µg/l':1},
- fib:{'g/l':1,'mg/dl':0.01},pco2:{'mmhg':1,'kpa':7.5006},po2:{'mmhg':1,'kpa':7.5006}};
+ fib:{'g/l':1,'mg/dl':0.01},ddim:{'µg/l':1,'ng/ml':1,'mg/l':1000,'µg/ml':1000,'mg/dl':10000},pco2:{'mmhg':1,'kpa':7.5006},po2:{'mmhg':1,'kpa':7.5006}};
  if(key==='wbc'||key==='plt'){if(/^(tys\.?\/µl|10\^?3\/µl|10\^?9\/l|g\/l|x10\^?9\/l|x10\^?3\/µl|k\/µl|10e3\/µl|10\*3\/µl|tys\/mm3)$/.test(u))return 1;return null;}
  var m=M[key];return m&&m[u]!==undefined?m[u]:null;}
 var NUM='-?\\d+(?:[.,]\\d+)?';
@@ -154,7 +154,12 @@ var A={
  aki1:['Odstaw / skoryguj leki nefrotoksyczne (NLPZ, kontrast, aminoglikozydy, metformina); dawki leków wg CrCl','dec'],
  aki2:['Bilans płynów i diureza godzinowa','dec','fluid'],
  aki3:['Oporna hiperkaliemia, kwasica, przewodnienie, mocznica → konsultacja nefrologiczna (dializa)','dec'],
- trop1:['EKG 12-odpr. natychmiast; algorytm troponinowy 0/1 h lub 0/3 h – moduł Troponina / OZW','dec','trop'],
+ trop1:['EKG 12-odpr. natychmiast; algorytm troponinowy 0/1/3 h (GGN 14 ng/l, istotna delta 5 ng/l) – moduł Troponina / OZW','lok','trop'],
+ tropMI:['Istotny wzrost hs-troponiny (delta ≥ 5 ng/l, wartość > 14 ng/l): prawdopodobny zawał – postępowanie jak w OZW bez uniesienia ST, pilnie kardiolog','lok','trop'],
+ trop3:['Delta niejednoznaczna: kontrola troponiny w 3. godzinie od pierwszego pobrania (schemat 0/1/3 h); monitor EKG, powtórz EKG','lok','trop'],
+ tropX:['Po 3 oznaczeniach obraz nadal niejednoznaczny: obserwacja, konsultacja kardiologiczna, rozważ inne przyczyny wzrostu troponiny (niewydolność nerek, sepsa, zatorowość, zapalenie mięśnia sercowego)','dec','trop'],
+ ddim:['D-dimery powyżej progu: interpretuj z prawdopodobieństwem klinicznym (Wells / Geneva / YEARS) → angio-TK płuc lub USG uciskowe żył – moduł Zatorowość płucna','dec','pe'],
+ ddimP:['Ciąża: D-dimery tylko w algorytmie pregnancy-adapted YEARS (kryteria YEARS + USG uciskowe przy objawach ZŻG); próg standardowy 500 / wiek×10 nie obowiązuje','dec','pe'],
  trop2:['STEMI lub niestabilny pacjent → kardiolog / pracownia hemodynamiki','dec'],
  hypoG:['Hipoglikemia: glukoza i.v. natychmiast (dawka wg ChPL / standardu oddziału), kontrola glikemii co 15 min','dec'],
  hyperG:['Wyklucz DKA / HHS: ketony, gazometria, osmolalność – moduł DKA / HHS','dec','dka'],
@@ -184,9 +189,9 @@ var A={
 };
 var MISS={hb:'Hemoglobina',plt:'Płytki krwi',inr:'INR',aptt:'APTT',fib:'Fibrynogen',grupa:'Grupa krwi i próba krzyżowa',ret:'Retikulocyty',ferr:'Ferrytyna',urea:'Mocznik',
  ph:'Gazometria (pH, pCO₂, HCO₃⁻)',crea:'Kreatynina',glu:'Glukoza',k:'Potas',mg:'Magnez',na:'Sód',osm:'Osmolalność surowicy',lac:'Mleczany',pct:'Prokalcytonina',crp:'CRP',
- posiewy:'Posiewy krwi × 2 (jeśli nie pobrano)',ekg:'EKG 12-odprowadzeniowe',trop2:'Powtórna troponina (0/1 h lub 0/3 h)',trop:'Troponina',ket:'Ciała ketonowe',
+ posiewy:'Posiewy krwi × 2 (jeśli nie pobrano)',ekg:'EKG 12-odprowadzeniowe',trop2:'Powtórna troponina za 1 h (schemat 0/1/3 h)',trop3:'Trzecia troponina w 3. godzinie (schemat 0/1/3 h)',trop:'Troponina',ket:'Ciała ketonowe',
  ntprobnp:'NT-proBNP',lip:'Lipaza',alt:'ALT / AST',bil:'Bilirubina',mocz:'Badanie ogólne moczu',usgn:'USG nerek / dróg moczowych',moczna:'Sód i osmolalność w moczu',echo:'Echo serca',lac2:'Kontrolne mleczany za 2–4 h',ck:'CK'};
-function analyze(text){var P=parse(text),R=P.res,C=CFG,out={alerts:[],actions:[],missing:[],sev:{}};
+function analyze(text,opt){opt=opt||{};var P=parse(text),R=P.res,C=CFG,out={alerts:[],actions:[],missing:[],sev:{}};
  function S(k){return R[k]?R[k].points.filter(function(p){return!isNaN(p.v);}):[];}
  function last(k){var s=S(k);return s.length?s[s.length-1]:null;}
  function prev(k){var s=S(k);return s.length>1?s[s.length-2]:null;}
@@ -230,10 +235,22 @@ function analyze(text){var P=parse(text),R=P.res,C=CFG,out={alerts:[],actions:[]
  if((x=lv('crea'))!=null){var s=S('crea'),mn=Math.min.apply(null,s.map(function(p){return p.v;}));if(s.length>1&&(x-mn>=C.crea.riseAbs||x>=mn*C.crea.riseX)&&x>mn)al('alert','crea','Ostre uszkodzenie nerek? Kreatynina '+fmt(mn)+' → '+fmt(x)+' mg/dl'+tag('crea'));else if(x>=C.crea.alert)al('warn','crea','Kreatynina wysoka: '+V('crea')+tag('crea'));
   if(out.sev.crea){act('aki1','aki2','aki3');miss('k','ph','mocz','usgn');}}
  if((x=lv('egfr'))!=null&&x<C.egfr.alert){al('warn','egfr','eGFR < '+C.egfr.alert+': '+V('egfr')+' – korekta dawek leków');act('aki1');}
- // troponina
- if((x=lv('trop'))!=null){p1=last('trop');var uln=p1.hi!=null?p1.hi*factor('trop',p1.unit||'ng/l'):null,hiF=/H|↑|\*/.test(p1.flag||'');var above=uln!=null?x>uln:hiF;p0=prev('trop');var rise=p0&&p0.v>0&&(x-p0.v)/p0.v>=C.trop.riseRel;
-  if(above&&uln!=null&&x>=uln*C.trop.critX||above&&rise)al('crit','trop','Troponina '+(rise?'narasta: '+fmt(p0.v)+' → '+fmt(x)+' ng/l':'znacznie podwyższona: '+V('trop')));else if(above)al('alert','trop','Troponina powyżej normy: '+V('trop'));else if(rise)al('warn','trop','Troponina rośnie: '+fmt(p0.v)+' → '+fmt(x)+' ng/l');
-  if(out.sev.trop){act('trop1','trop2');miss('ekg','k');if(S('trop').length<2)miss('trop2');}}
+ // troponina (STANDARD LOKALNY: hs-troponina GGN 14 ng/l, istotna delta 5 ng/l, schemat 0/1/3 h)
+ out.trop=null;if(R.trop){var TS=S('trop');if(TS.length){var T=C.trop,tl=TS[TS.length-1],tu=tl.hi!=null&&tl.unitOk?tl.hi*factor('trop',tl.unit||'ng/l'):T.uln;var dl=[];for(var ti=1;ti<TS.length;ti++){dl.push({from:TS[ti-1],to:TS[ti],d:TS[ti].v-TS[ti-1].v,min:TS[ti].t!=null&&TS[ti-1].t!=null?Math.round((TS[ti].t-TS[ti-1].t)/60000):null});}
+  var tr={uln:tu,ulnSrc:tl.hi!=null&&tl.unitOk?'norma z wklejki':'norma lokalna',delta:T.delta,deltas:dl,n:TS.length,verdict:'',text:''},x2=tl.v,ab=x2>tu,ld=dl.length?dl[dl.length-1]:null;
+  function D(z){return(z.d>0?'+':z.d<0?'−':'±')+fmt(Math.abs(z.d))+' ng/l'+(z.min!=null?' w '+z.min+' min':'');}
+  if(!ld){if(ab){tr.verdict='alert';tr.text='Jedno oznaczenie powyżej normy ('+fmt(x2)+' ng/l > '+fmt(tu)+'). Powtórz za 1 h i policz deltę (schemat 0/1/3 h).';al(x2>=tu*T.critX?'crit':'alert','trop','Troponina powyżej normy: '+V('trop')+(x2>=tu*T.critX?' (≥ '+T.critX+'× GGN)':'')+' – powtórz za 1 h (0/1/3 h)');}
+   else{tr.verdict='single';tr.text='Jedno oznaczenie ≤ '+fmt(tu)+' ng/l – nie wyklucza zawału. Powtórz za 1 h (schemat 0/1/3 h).';}
+   miss('trop2','ekg');act('trop1');}
+  else{var dd=ld.d,both=TS.slice(-2).every(function(p){return p.v<=tu;});
+   if(ab&&dd>=T.delta){tr.verdict='mi';tr.text='Istotny wzrost: '+fmt(ld.from.v)+' → '+fmt(x2)+' ng/l, delta '+D(ld)+' (≥ '+T.delta+'), wartość > '+fmt(tu)+' – prawdopodobny zawał.';al('crit','trop','Troponina narasta: '+fmt(ld.from.v)+' → '+fmt(x2)+' ng/l, delta '+D(ld)+' – prawdopodobny zawał');act('ekg','tropMI','trop2');miss('ekg','k');}
+   else if(both&&Math.abs(dd)<T.delta&&x2<tu-T.near){tr.verdict='low';tr.text='Oba oznaczenia ≤ '+fmt(tu)+' ng/l i delta '+D(ld)+' (< '+T.delta+') – małe prawdopodobieństwo zawału, jeśli pierwsze pobranie > 3 h od początku bólu. Przy bólu < 3 h lub dalszych objawach – kontrola w 3. godzinie.';}
+   else{tr.verdict='unclear';var why=ab&&Math.abs(dd)<T.delta?'wartość > '+fmt(tu)+' ng/l, ale delta '+D(ld)+' < '+T.delta:ab&&dd<=-T.delta?'wartość > '+fmt(tu)+' ng/l i spadek '+D(ld):dd>=T.delta?'wzrost '+D(ld)+' przy wartościach w normie':'wartość blisko progu ('+fmt(x2)+' ng/l)';
+    if(TS.length>=3){tr.text='Po '+TS.length+' oznaczeniach nadal niejednoznacznie: '+why+'.';al('alert','trop','Troponina niejednoznaczna po '+TS.length+' oznaczeniach: '+why);act('ekg','tropX');}
+    else{tr.text='Delta niejednoznaczna: '+why+'. Zleć trzecią troponinę w 3. godzinie (schemat 0/1/3 h).';al(ab?'alert':'warn','trop','Troponina – delta niejednoznaczna ('+why+') – kontrola w 3. godzinie');act('ekg','trop3');miss('trop3');}}
+   if(out.sev.trop==='crit'||ab)act('trop1','trop2');}
+  tr.status=T.status;out.trop=tr;
+  TS.forEach(function(p){if(p.hi==null&&p.unitOk){var f0=factor('trop',p.unit||'ng/l')||1;p.hi=T.uln/f0;p.hiLocal=true;}});}}
  // glukoza
  if((x=lv('glu'))!=null){if(x<C.glu.critLo)al('crit','glu','Hipoglikemia ciężka: '+V('glu')+tag('glu'));else if(x<C.glu.alertLo)al('alert','glu','Hipoglikemia: '+V('glu')+tag('glu'));if(x<C.glu.alertLo)act('hypoG');
   if(x>=C.glu.critHi)al('crit','glu','Hiperglikemia ciężka: '+V('glu')+tag('glu'));else if(x>=C.glu.alertHi)al('alert','glu','Hiperglikemia: '+V('glu')+tag('glu'));if(x>=C.glu.alertHi){act('hyperG');miss('ket','ph','osm','k','na');}}
@@ -241,6 +258,16 @@ function analyze(text){var P=parse(text),R=P.res,C=CFG,out={alerts:[],actions:[]
  if((x=lv('inr'))!=null){if(x>=C.inr.crit)al('crit','inr','INR bardzo wysokie: '+V('inr'));else if(x>=C.inr.alert)al('alert','inr','INR wysokie: '+V('inr'));if(x>=C.inr.alert){act('inr');miss('hb','plt','aptt','fib','grupa');}}
  if((x=lv('plt'))!=null){if(x<C.plt.crit)al('crit','plt','Małopłytkowość ciężka: PLT '+V('plt'));else if(x<C.plt.alert)al('alert','plt','Małopłytkowość: PLT '+V('plt'));if(x<C.plt.alert){act('plt');miss('hb','inr','aptt','fib');}}
  if((x=lv('fib'))!=null&&x<C.fib.alert){al('alert','fib','Fibrynogen niski: '+V('fib'));act('fib');}
+ // D-dimery (STANDARD LOKALNY: < 500 µg/l FEU do 50 r.ż., powyżej 50 r.ż. wiek × 10; ciąża – osobne progi)
+ out.ddim=null;if(R.ddim){var DS=S('ddim');if(DS.length){var DC=C.ddim,age=+opt.age,pr=!!opt.preg,tri=+opt.tri||0,cut,cs,ctag;
+  if(pr){cut=tri===1?DC.preg.t1:tri===2?DC.preg.t2:tri===3?DC.preg.t3:DC.preg.unknown;cs=tri?'ciąża, '+tri+'. trymestr – górna granica zakresu referencyjnego '+fmt(cut)+' µg/l FEU':'ciąża, trymestr nieznany – próg '+fmt(cut)+' µg/l FEU (pregnancy-adapted YEARS przy ≥ 1 kryterium)';ctag=DC.preg.status;}
+  else if(isFinite(age)&&age>DC.ageFrom){cut=age*DC.perYear;cs='próg skorygowany wiekiem: '+age+' × 10 = '+fmt(cut)+' µg/l FEU';ctag=DC.status;}
+  else{cut=DC.base;cs=isFinite(age)&&opt.age!==''&&opt.age!=null?'wiek '+age+' (≤ '+DC.ageFrom+') – próg '+DC.base+' µg/l FEU':'wiek nieznany – próg '+DC.base+' µg/l FEU (podaj wiek: > 50 r.ż. próg = wiek × 10)';ctag=DC.status;}
+  var dl2=DS[DS.length-1];DS.forEach(function(p){if(p.unitOk){var f1=factor('ddim',p.unit)||1;p.hi=cut/f1;p.lo=null;p.hiLocal=true;}});
+  out.ddim={cut:cut,text:cs,tag:ctag,preg:pr,src:pr?DC.preg.src:'',unitOk:dl2.unitOk};
+  if(!dl2.unitOk){al('warn','ddim','D-dimery: jednostka nierozpoznana ('+(dl2.unit||'brak')+') – sprawdź, czy FEU; próg '+fmt(cut)+' µg/l FEU');}
+  else if(dl2.v>cut){al('warn','ddim','D-dimery powyżej progu: '+V('ddim')+' ('+cs+')');act('ddim');if(pr)act('ddimP');}
+  else if(pr)act('ddimP');}}
  // wątroba/trzustka
  if((x=lv('lip'))!=null){p1=last('lip');var ul=p1.hi!=null?p1.hi:C.lip.ulnDefault;if(x>=ul*C.lip.alertX){al('alert','lip','Lipaza ≥ '+C.lip.alertX+'× norma: '+V('lip'));act('lip');miss('alt','bil','ca','crea');}}
  if((x=lv('bil'))!=null&&x>=C.bil.alert){al('warn','bil','Bilirubina wysoka: '+V('bil')+tag('bil'));act('bil');}

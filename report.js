@@ -74,19 +74,27 @@
   function fluidHtml(){var p=root.SKS&&root.SKS.P?root.SKS.P():null;return root.SORFluid?root.SORFluid.reportHtml(Date.now(),p&&p.w):'';}
   function modulesHtml(ids){var all=snaps(),keys=Object.keys(all).filter(function(k){return !ids||ids.indexOf(k)>=0;});
     return keys.map(function(k){var s=all[k];return '<h3>'+esc(s.name)+' <span class="sub">(stan z '+hm(s.ts)+')</span></h3><div class="rp-text">'+esc(s.text)+'</div>';}).join('');}
-  var TITLES={doc:'Dokumentacja',done:'Co rzeczywiście wykonano',pumps:'Pompy – zapisane nastawy',fluid:'Bilans płynów',modules:'Moduły użyte u pacjenta'};
+  function pwHtml(){var m=root.SKS&&root.SKS.pwMem;if(!m||!m.report)return '';var R=m.report;function ul(t,a){return a&&a.length?'<h3>'+esc(t)+'</h3><ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>':'';}return ul('Nie przeocz',R.alerts)+ul('Co zrobić teraz',R.actions)+ul('Czego brakuje',R.missing)+(R.algo&&R.algo.length?ul('Algorytmy',R.algo):'');}
+  var TITLES={pw:'Przegląd wyników – czujnik bezpieczeństwa',doc:'Dokumentacja',done:'Co rzeczywiście wykonano',pumps:'Pompy – zapisane nastawy',fluid:'Bilans płynów',modules:'Moduły użyte u pacjenta'};
   function build(parts){
     parts=parts&&parts.length?parts:['doc','done','pumps','fluid','modules'];var out='',any=false;
     var mids=[];parts.forEach(function(p){if(p==='modules')mids=mids.concat(Object.keys(snaps()));else if(p&&p.module)mids.push(p.module);else if(p==='pumps')mids.push('pompy');else if(p==='fluid')mids.push('fluid');});
     parts.forEach(function(p){var h='';
-      if(p==='doc')h=docHtml();else if(p==='done')h=doneHtml();else if(p==='pumps')h=pumpsHtml();else if(p==='fluid')h=fluidHtml();else if(p==='modules')h=modulesHtml();
+      if(p==='doc')h=docHtml();else if(p==='done')h=doneHtml();else if(p==='pw')h=pwHtml();else if(p==='pumps')h=pumpsHtml();else if(p==='fluid')h=fluidHtml();else if(p==='modules')h=modulesHtml();
       else if(p&&p.module)h=modulesHtml([p.module]);
       if(h){any=true;out+=section(p&&p.module?'Moduł':TITLES[p],h);}});
     if(!any)out='<p><b>Brak danych do wydruku w wybranym zakresie.</b> Wypełnij moduł lub dodaj wpisy.</p>';
     var title=parts.length>=4?'Raport zbiorczy – Asystent lekarza SOR':'Wydruk – Asystent lekarza SOR';
     return '<h1>'+title+'</h1><div class="sub">Wydruk: '+esc(now())+' (Europe/Warsaw) · Narzędzie pomocnicze – niecertyfikowane</div>'+section('Dane pacjenta',patientHtml())+out+(any&&root.SORSources?root.SORSources.footerHtml(mids):'')+
       '<div class="sig"><div>Lekarz: .......................................</div><div>Podpis i pieczątka<br><br>.......................................</div></div><div class="foot">Asystent lekarza SOR – narzędzie pomocnicze, niecertyfikowane. Wartości i dawki weryfikuje lekarz; wydruk nie zastępuje dokumentacji medycznej szpitala.</div>';}
-  function fill(parts){var a=document.getElementById('printArea');if(!a){a=document.createElement('div');a.id='printArea';document.body.appendChild(a);}a.innerHTML=build(parts);return a;}
+  var HOSP='Podhalański Szpital Specjalistyczny im. Jana Pawła II w Nowym Targu',SOR='Szpitalny Oddział Ratunkowy',LOGO='img/pszs-logo.svg';
+  var FOOT='Dokument wygenerowany pomocniczo poza systemem szpitalnym – zatwierdzam: ............................................ (pieczątka i podpis lekarza)';
+  try{if(typeof Image!=='undefined'){var _pre=new Image();_pre.src=LOGO;}}catch(e){}
+  function brandHead(){return '<div class="brand-h"><img src="'+LOGO+'" alt="Logo PSZS"><div><b>'+esc(HOSP)+'</b><span>'+esc(SOR)+'</span></div><div class="bt">Data i godzina wydruku:<br><b>'+esc(now())+'</b></div></div>';}
+  function brandFoot(){return '<div class="brand-f">'+esc(FOOT)+'</div>';}
+  function brand(a){if(!a)return a;a.querySelectorAll('.brand-h,.brand-f').forEach(function(x){x.remove();});a.insertAdjacentHTML('afterbegin',brandHead());a.insertAdjacentHTML('beforeend',brandFoot());return a;}
+  if(typeof window!=='undefined'&&window.addEventListener)window.addEventListener('beforeprint',function(){brand(document.getElementById('printArea'));});
+  function fill(parts){var a=document.getElementById('printArea');if(!a){a=document.createElement('div');a.id='printArea';document.body.appendChild(a);}a.innerHTML=build(parts);brand(a);return a;}
   function print(parts){var cur=root.SKS&&root.SKS.active?root.SKS.active():null;if(cur)capture(cur);fill(parts);root.print();}
-  return{esc:esc,pumpList:pumpList,addPump:addPump,clearPumps:clearPumps,snapText:snapText,capture:capture,snaps:snaps,clearSnaps:clearSnaps,build:build,fill:fill,print:print,SKIP:SKIP};
+  return{brand:brand,brandHead:brandHead,brandFoot:brandFoot,HOSP:HOSP,FOOT:FOOT,esc:esc,pumpList:pumpList,addPump:addPump,clearPumps:clearPumps,snapText:snapText,capture:capture,snaps:snaps,clearSnaps:clearSnaps,build:build,fill:fill,print:print,SKIP:SKIP};
 });

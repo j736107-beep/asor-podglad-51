@@ -106,7 +106,7 @@ var AFX={
   if(!o.ok)H=bx('orange','Brak wyniku',esc(o.msg||'Uzupełnij dane.'));else H=bx(o.lvl,rich(o.title),ul(o.reasons)+(o.actions.length?'<b>Działania:</b>'+ul(o.actions):'')+srcl(o.src));
   H+=bx('','Antykoagulacja',go('acoag','Moduł Antykoagulacja i odwracanie (heparyna, enoksaparyna, NOAC)')+'<div class="mut">Włączenie antykoagulacji jak najszybciej przy kardiowersji nieplanowanej: ESC 2024 (IIa, B). Oblicz CHA₂DS₂-VA w zakładce „CHA₂DS₂-VA”.</div>');
   return{H:H,lvl:o.ok&&o.lvl==='red'&&s.unstable===true?'red':'ok'};},
- ec:function(g,P){var rh=g('o_rh');var pl=E.ecPlan({rhythm:rh});var H=cvBox();
+ ec:function(g,P){var rh=g('o_rh');var pl=E.ecPlan({rhythm:rh});var H=cvBox();H+='<p><button type="button" class="tg" id="goPropofol" onclick="SKS.openPropofol()">→ Propofol – bolus do sedacji (Pompy SOR)</button></p>';
   if(!pl.ok)H+=bx('orange','Energia – brak wyniku','Wybierz rytm: migotanie / trzepotanie.');
   else{H+=bx('red','Kardiowersja elektryczna – energia: <span class="b2res">'+pl.seq.join(' → ')+' J</span>',rich(pl.energy)+ul(pl.steps)+srcl(pl.src));}
   var sp=E.sedationPlan(P.w);H+=bx('orange','Sedacja do kardiowersji – leki i dawki (ESC 2024: midazolam, propofol lub etomidat)',(sp.ok?'<div class="mut">Masa: '+F(P.w,0)+' kg</div>':'<div class="o">Podaj masę ciała w pasku – dawki mg/kg nie zostały wyliczone.</div>')+tbl(['Lek','Dawka','Rachunek wg masy','Źródło'],sp.drugs.map(function(d){return [ '<b>'+esc(d.drug)+'</b>',esc(d.dose),esc(d.calc||'—'),esc(d.src)];}))+ul(sp.notes)+srcl(sp.src));

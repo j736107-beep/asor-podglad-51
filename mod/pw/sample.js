@@ -30,6 +30,7 @@
 'PCT: 4,8 ng/ml (<0,5) H',
 'hs-TnT: 38 ng/l (<14) H',
 'INR: 1,4 (0,8-1,2) H',
+'D-dimery: 1240 ng/ml FEU (<500) H',
 'APTT: 36 s (26-36)',
 'Glukoza: 142 mg/dl (70-99) H',
 'Gazometria krwi żylnej',

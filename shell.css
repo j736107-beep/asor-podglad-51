@@ -52,5 +52,13 @@ select{font:inherit;padding:5px 7px;border:2px solid #cfc3e8;border-radius:8px;b
 .np{background:#fff4d6}
 .pl{font-weight:400;font-size:.82em;color:#6b5a86}
 
-#skBack{display:block;margin:0 0 10px;z-index:5;position:relative;font:800 20px/1.2 system-ui,sans-serif;background:#111;color:#fff;border:2px solid #fff;border-radius:12px;padding:10px 22px;min-height:50px;box-shadow:0 3px 12px rgba(0,0,0,.35);cursor:pointer}#skBack span{font-weight:600;font-size:16px;opacity:.9}#skBack[hidden]{display:none}
-#main.fr #skBack{margin:10px 12px}
+#skBack{display:inline-block;margin:0;z-index:5;position:relative;font:800 20px/1.2 system-ui,sans-serif;background:#111;color:#fff;border:2px solid #fff;border-radius:12px;padding:10px 22px;min-height:50px;box-shadow:0 3px 12px rgba(0,0,0,.35);cursor:pointer}#skBack span{font-weight:600;font-size:16px;opacity:.9}#skBack[hidden]{display:none}
+#skBack[hidden],#skHome[hidden]{display:none!important}
+
+.sk-nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 10px;position:relative;z-index:5}#main.fr .sk-nav{margin:10px 12px}.sk-nav.bot{margin:18px 0 8px;justify-content:flex-start}#main.fr .sk-nav.bot{margin:8px 12px}
+#skHome{font:800 20px/1.2 system-ui,sans-serif;background:#fff;color:#111;border:2.5px solid #111;border-radius:12px;padding:10px 20px;min-height:50px;cursor:pointer}#skHome:hover{background:#111;color:#fff}
+#skClear{font:800 18px/1.2 system-ui,sans-serif;background:#fff;color:#b00000;border:2.5px solid #b00000;border-radius:12px;padding:10px 18px;min-height:48px;cursor:pointer}#skClear:hover{background:#b00000;color:#fff}
+#main.fr iframe{height:calc(100% - 150px)}#main #skBack{margin:0}
+@media print{.sk-nav{display:none!important}}
+
+@media print{#printArea .brand-h{display:flex;align-items:center;gap:5mm;border-bottom:1.5pt solid #b0161e;padding-bottom:3mm;margin-bottom:4mm}#printArea .brand-h img{height:16mm;width:auto}#printArea .brand-h b{display:block;font-size:11.5pt}#printArea .brand-h span{font-size:10.5pt}#printArea .brand-h .bt{margin-left:auto;text-align:right;font-size:9pt;white-space:nowrap}#printArea .brand-h .bt b{font-size:10pt}#printArea .brand-f{margin-top:10mm;border-top:1pt solid #000;padding-top:2mm;font-size:9.5pt}}

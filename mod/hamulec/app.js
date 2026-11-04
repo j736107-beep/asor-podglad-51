@@ -1,0 +1,17 @@
+(function(){'use strict';var $=function(s){return document.querySelector(s);},ta=$('#paste'),out=$('#out'),cnt=$('#cnt');
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function P(){try{return window.parent!==window?window.parent:window;}catch(e){return window;}}
+function ul(c,t,a){return a.length?'<section class="sec hb-'+c+'"><h2>'+t+'</h2><ul class="list">'+a.map(function(x){return'<li><span class="t">'+esc(x)+'</span></li>';}).join('')+'</ul></section>':'';}
+function vit(v){var L=[['sbp','RR skurcz.','mmHg'],['dbp','RR rozkurcz.','mmHg'],['hr','Tętno','/min'],['spo2','SpO₂','%'],['rr','Oddechy','/min'],['temp','Temp.','°C'],['gcs','GCS','']];return'<div class="hb-vit">'+L.map(function(l){return'<span>'+l[1]+': <b>'+(v[l[0]]!=null?String(v[l[0]]).replace('.',','):'—')+'</b> '+l[2]+'</span>';}).join('')+'</div>';}
+function run(){var t=ta.value;upd();if(!t.trim()){out.innerHTML='';store(null);return;}var o=HB.analyze(t);
+ var h='<div class="hb-verdict hb-'+o.verdict+'" id="verdict">'+esc(o.verdictText)+'</div>'+vit(o.vit)+'<p class="hb-meta">NEWS2: <b>'+(o.news!=null?o.news:'nie do policzenia (brak parametrów)')+'</b> · wiek: <b>'+(o.age||'—')+'</b> · ciąża: <b>'+(o.preg.p?'tak'+(o.preg.tri?' ('+o.preg.tri+'. trymestr)':''):'nie wykryto')+'</b></p>';
+ h+=ul('crit','NIE WOLNO WYPISAĆ – przyczyny',o.crit)+ul('warn','UWAGA – sprawdź',o.warn)+ul('miss','Czego brakuje przed wypisem',o.miss);
+ var neg=Object.keys(o.hits).map(function(k){return o.hits[k];}).filter(function(x){return x.neg.length&&!x.pos.length;});if(neg.length)h+='<section class="sec"><h2>Zaprzeczone w dokumentacji (sprawdź)</h2><ul class="list">'+neg.map(function(x){return'<li><span class="t">'+esc(x.label)+' – „'+esc(x.neg[0].slice(0,120))+'”</span></li>';}).join('')+'</ul></section>';
+ out.innerHTML=h;store({text:t,verdict:o.verdict,crit:o.crit});
+ if(o.verdict==='crit'){try{var W=P();if(W.SORWypis)W.SORWypis.trigger(o.crit);else if(window.SORWypis)SORWypis.trigger(o.crit);}catch(e){}}}
+function store(v){try{var W=P();if(W.SKS)W.SKS.hbMem=v;}catch(e){}}
+function upd(){var n=ta.value.length;cnt.textContent=n.toLocaleString('pl-PL')+' / 50 000 znaków';cnt.className=n>50000?'cnt over':'cnt';}
+ta.addEventListener('input',function(){upd();});$('#go').onclick=run;$('#exC').onclick=function(){ta.value=HB_SAMPLE_CRIT;run();};$('#exO').onclick=function(){ta.value=HB_SAMPLE_OK;run();};$('#clr').onclick=function(){ta.value='';out.innerHTML='';upd();store(null);};
+var R=HB.RU;$('#rl').innerHTML='<p><b>Status: '+esc(R.status)+'</b></p><h3>Parametry życiowe</h3><ul>'+R.vit.map(function(r){return'<li>'+esc(r[4])+' → '+(r[3]==='crit'?'NIE WOLNO WYPISAĆ':'UWAGA')+'</li>';}).join('')+'<li>NEWS2 ≥ '+R.news.crit+' → NIE WOLNO WYPISAĆ; ≥ '+R.news.warn+' → UWAGA (RCP 2017)</li></ul><h3>Wywiad / badanie (z rozpoznawaniem zaprzeczeń)</h3><ul>'+R.kw.filter(function(k){return k[2]!=='info';}).map(function(k){return'<li>'+esc(k[1])+' → '+(k[2]==='crit'?'NIE WOLNO WYPISAĆ':'UWAGA')+'</li>';}).join('')+'</ul><h3>Kombinacje</h3><ul>'+R.combo.map(function(c){return'<li>'+esc(c[1])+' → NIE WOLNO WYPISAĆ</li>';}).join('')+'</ul><h3>Braki</h3><ul>'+R.miss.map(function(m){return'<li>'+esc(m[2])+'</li>';}).join('')+'</ul><h3>Wyniki</h3><p>'+esc(R.pw)+'</p>';
+var M=null;try{M=P().SKS&&P().SKS.hbMem;}catch(e){}if(M&&M.text){ta.value=M.text;run();}upd();window.HBApp={run:run};
+})();

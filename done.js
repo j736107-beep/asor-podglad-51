@@ -20,6 +20,30 @@
     {id:'digo',name:'Digoxin',var:[{l:'1 amp. i.v.',t:'Digoxin 1 amp. i.v.'},{l:'½ amp. i.v.',t:'Digoxin ½ amp. i.v.'}]},
     {id:'cord',name:'Cordaron (kroplówka)',var:[{l:'dawka do wpisania',ask:[{k:'single',l:'dawka pojedyncza [mg]'},{k:'total',l:'dawka łączna [mg]'}],tpl:function(v){return 'Cordaron w kroplówce i.v.'+(v.single?', dawka pojedyncza '+v.single+' mg':'')+(v.total?', dawka łączna '+v.total+' mg':'');}}]}
   ];
+  // ---- karta zleceń z Optimedu (tylko w pamięci sesji, bez zapisu na urządzeniu) ----
+  var RX_T=/(?:(\d{1,2})[.\/-](\d{1,2})(?:[.\/-](\d{2,4}))?[ ,T]+)?(?:godz\.?\s*)?\b([01]?\d|2[0-3])[:.]([0-5]\d)\b/;
+  var RX_DOSE=/(\d+(?:[.,]\d+)?\s*(?:-\s*\d+(?:[.,]\d+)?\s*)?(?:mg\/kg\/h|mg\/h|µg\/kg\/min|ug\/kg\/min|mcg|µg|ug|mg|g|ml\/h|ml|j\.?m\.?|j\.|IU|mmol|amp\.?|tabl?\.?|kropl?\.?)(?![a-ząęółśżźćń]))/i;
+  var RX_ROUTE=/(?:^|[\s,;(])(i\.?v\.?|p\.?o\.?|s\.?c\.?|i\.?m\.?|p\.?r\.?|s\.?l\.?|doustnie|dożylnie|domięśniowo|podskórnie|wziewnie|nebulizacja|we wlewie|wlew(?: ciągły)?|pompa|bolus|doodbytniczo|podjęzykowo)(?=$|[\s,;)])/i;
+  var RX_FREQ=/(?:co\s*\d+\s*h|\d\s*x\s*\d+|\d+\s*x\s*dziennie|jednorazowo|doraźnie|w razie potrzeby|prn)/i;
+  var RX_BAD=/\b(morfologi|crp|prokalcyt|pct|troponin|d-?dimer|elektrolit|jonogram|kreatynin|mocznik|glukoz|glikemi|gazometri|mleczan|inr|aptt|koagulogram|lipaz|amylaz|alt|ast|bilirubin|bnp|ck\b|posiew|badanie|bad\.|oznaczeni|kontrol|grupa krwi|próba krzyżowa|rtg|tk\b|angio|usg|ekg|echo|rezonans|mr\b|moczu|mocz\b|test|wymaz|toksykolog|alkohol)/i;
+  var RX_PROC=/\b(cewnik|wkłuci|kaniul|intubac|kardiowersj|defibryl|sond[aęy]|opatrun|szyci|unieruchom|gips|drenaż|nakłuci|punkcj|tlenoterap|tlen\b|niv\b|monitorowan|konsultacj|transfuzj|toaleta|płukani|ułożeni|izolac|pomiar|rr co|diureza)/i;
+  function parseOrders(text){var rows=[],lines=String(text||'').replace(/\r/g,'').split('\n'),lastT='',seq=0;
+    lines.forEach(function(raw){var l=raw.replace(/\u00a0/g,' ').replace(/\t+/g,'  ').replace(/\s+$/,'').trim();if(!l||l.length<3)return;
+      if(/^karta zleceń/i.test(l))return;if(/^(karta zleceń|zlecenia|lp\.?|data|godz|nazwa|pacjent|pesel|oddział|lekarz)\b[^0-9]*$/i.test(l))return;
+      var tm=l.match(RX_T),time='',date='';if(tm){time=(tm[4].length<2?'0':'')+tm[4]+':'+tm[5];if(tm[1])date=('0'+tm[1]).slice(-2)+'.'+('0'+tm[2]).slice(-2);l=(l.slice(0,tm.index)+' '+l.slice(tm.index+tm[0].length)).trim();}
+      if(!/[a-ząęółśżźćń]{3}/i.test(l)){if(time)lastT=time;return;}
+      var dm=l.match(RX_DOSE);if(dm&&/\d+\s*G$/.test(dm[1])&&/wkłuci|kaniul|venflon/i.test(l))dm=null;var rm=l.match(RX_ROUTE),fm=l.match(RX_FREQ);
+      var type=RX_BAD.test(l)&&!dm?'badanie':RX_PROC.test(l)&&!rm?'procedura':(dm||rm)?'lek':RX_BAD.test(l)?'badanie':RX_PROC.test(l)?'procedura':'inne';
+      var item=l;[dm,rm,fm].forEach(function(m){if(m)item=item.replace(m[0].trim(),' ');});item=item.replace(/^\s*\d{1,3}[.)]\s+/,'').replace(/^[\s\-–:;,|]+/,'').replace(/[\s\-–:;,|]+$/,'').replace(/\s{2,}/g,' ').trim();
+      if(!item)item=l;
+      rows.push({seq:seq++,date:date,time:time||lastT,timeGiven:!!time,type:type,item:item.slice(0,160),dose:dm?dm[1].replace(/\s+/g,' ').trim():'',route:rm?rm[1].trim():'',freq:fm?fm[0].trim():'',raw:raw.trim().slice(0,300)});if(time)lastT=time;});
+    rows.sort(function(a,b){var ka=(a.date?a.date.split('.').reverse().join(''):'')+(a.time||'99:99'),kb=(b.date?b.date.split('.').reverse().join(''):'')+(b.time||'99:99');return ka<kb?-1:ka>kb?1:a.seq-b.seq;});return rows;}
+  var SAMPLE_ORD=['KARTA ZLECEŃ – FIKCYJNY PRZYKŁAD (nie dotyczy żadnego pacjenta)','04.11.2026 18:42\tMorfologia, CRP, prokalcytonina, elektrolity, kreatynina','04.11.2026 18:42\tTroponina hs – 0 h','18:45\tEKG 12-odprowadzeniowe','18:50\t0,9% NaCl 500 ml i.v. wlew','18:50\tPyralgina 1 g i.v.','18:55\tWkłucie obwodowe 18G – założenie','19:05\tRTG klatki piersiowej PA','19:10\tKetonal 100 mg i.v. w 100 ml NaCl','19:42\tTroponina hs – kontrola 1 h','19:45\tPosiew krwi × 2','20:00\tCeftriakson 2 g i.v. jednorazowo','20:05\tTlenoterapia 2 l/min przez wąsy','21:42\tTroponina hs – kontrola 3 h'].join('\n');
+  function ordMem(){try{return(window.SKS&&window.SKS.ordMem)||null;}catch(e){return null;}}
+  function setOrd(v){try{if(window.SKS)window.SKS.ordMem=v;}catch(e){}}
+  var TYPL={lek:'lek',badanie:'badanie',procedura:'procedura',inne:'inne'};
+  function ordTable(rows,editable){if(!rows||!rows.length)return'';return '<table class="dn-ord"><thead><tr><th style="width:11%">Godz.</th><th style="width:13%">Rodzaj</th><th>Zlecenie</th><th style="width:16%">Dawka</th><th style="width:14%">Droga / częstość</th></tr></thead><tbody>'+rows.map(function(r){return '<tr class="t-'+r.type+'"><td>'+(r.date?esc(r.date)+' ':'')+esc(r.time||'—')+(r.time&&!r.timeGiven?' <small>(jak wyżej)</small>':'')+'</td><td><span class="dn-ty">'+esc(TYPL[r.type])+'</span></td><td>'+esc(r.item)+'</td><td>'+esc(r.dose)+'</td><td>'+esc([r.route,r.freq].filter(Boolean).join(', '))+'</td></tr>';}).join('')+'</tbody></table>';}
+  function ordersReportHtml(){var m=ordMem();return m&&m.rows&&m.rows.length?ordTable(m.rows):'';}
   function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
   function hm(ts){return new Date(ts).toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Warsaw'});}
   function empty(){return[];}
@@ -35,7 +59,7 @@
   function save(l){try{localStorage.setItem(KEY,JSON.stringify(l));}catch(e){}document.dispatchEvent(new CustomEvent('sor-done-changed'));}
   function clear(){try{localStorage.removeItem(KEY);}catch(e){}}
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
-  function reportHtml(){var l=sorted(load());if(!l.length)return '';return '<table><tr><th style="width:14%">Godz.</th><th>Wykonano / podano</th></tr>'+l.map(function(x){return '<tr><td>'+hm(x.ts)+'</td><td>'+esc(x.text)+'</td></tr>';}).join('')+'</table>';}
+  function reportHtml(){var l=sorted(load()),o=ordersReportHtml();if(!l.length&&!o)return '';return (o?'<h3>Karta zleceń (z Optimedu)</h3>'+o:'')+(!l.length?'':'<h3>Wykonane</h3>'+'<table><tr><th style="width:14%">Godz.</th><th>Wykonano / podano</th></tr>'+l.map(function(x){return '<tr><td>'+hm(x.ts)+'</td><td>'+esc(x.text)+'</td></tr>';}).join('')+'</table>');}
   // ---------------- interfejs ----------------
   function render(el){
     var list=load(),nowMode=true,icdSeq=0;
@@ -44,6 +68,7 @@
      '<section class="dn-card"><h4>1. Procedura z ICD-9 (np. „kardiowersja”, „intubacja”, „EKG”)</h4><input id="dn-q" class="icd-q" type="search" autocomplete="off" spellcheck="false" placeholder="Szukaj procedury lub kodu ICD-9…" aria-label="Szukaj procedury ICD-9"><div id="dn-icd" class="dn-icd" aria-live="polite"></div></section>'+
      '<section class="dn-card"><h4>2. Leki i płyny – kafelki</h4><div class="dn-tiles">'+TILES.map(function(t){return '<div class="dn-tile" data-tile="'+t.id+'"><b>'+esc(t.name)+'</b><div class="dn-vars">'+t.var.map(function(v,i){return '<button type="button" class="dn-v" data-tile="'+t.id+'" data-i="'+i+'">'+esc(v.l)+'</button>';}).join('')+'</div><div class="dn-ask" hidden></div></div>';}).join('')+'</div></section>'+
      '<section class="dn-card"><h4>3. Wolny wpis</h4><div class="dn-free"><input id="dn-free" placeholder="np. założono wkłucie, ułożenie, konsultacja…" aria-label="Wolny wpis"><button type="button" class="tg" id="dn-add">Dodaj</button></div></section>'+
+     '<section class="dn-card" id="dn-ordc"><h4>4. Karta zleceń z Optimedu – leki, badania, procedury z godzinami</h4><p class="mut">Skopiuj kartę zleceń z Optimedu i wklej. Program ułoży zlecenia w tabeli według godziny. Dane są tylko w pamięci tej sesji (bez zapisu na urządzeniu).</p><textarea id="dn-ord" rows="6" spellcheck="false" autocomplete="off" placeholder="Wklej kartę zleceń…"></textarea><div class="row"><button type="button" class="tg" id="dn-ord-go">Ułóż zlecenia</button> <button type="button" class="tg" id="dn-ord-ex">Wczytaj przykład</button> <button type="button" class="tg" id="dn-ord-clr">Wyczyść kartę</button> <button type="button" class="tg" id="dn-print2">🖨 Drukuj kartę zleceń + wykonane (A4)</button></div><div id="dn-ord-out"></div></section>'+
      '<div id="dn-err" class="r" role="alert"></div><h4>Wykonane (kolejność czasowa)</h4><div id="dn-list"></div><div class="row"><button type="button" class="tg" id="dn-print">🖨 Drukuj wykonane</button></div>';
     function when(){var c=el.querySelector('#dn-now').checked,t=el.querySelector('#dn-t').value;return c||!t?Date.now():withTime(Date.now(),t);}
     function draw(){var l=sorted(list);el.querySelector('#dn-list').innerHTML=l.length?'<table class="dn-table"><tbody>'+l.map(function(x){return '<tr data-id="'+esc(x.id)+'"><td><input type="time" class="dn-et" value="'+hm(x.ts)+'" aria-label="Godzina"></td><td><input class="dn-etxt" value="'+esc(x.text)+'" aria-label="Opis (można edytować dawkę)"></td><td><button type="button" class="tg" data-del="'+esc(x.id)+'" aria-label="Usuń">✕</button></td></tr>';}).join('')+'</tbody></table>':'<p class="mut">Nic jeszcze nie wpisano.</p>';}
@@ -77,8 +102,13 @@
     el.querySelector('#dn-list').onchange=function(e){var tr=e.target.closest('tr');if(!tr)return;var id=tr.dataset.id;
       if(e.target.classList.contains('dn-et')){var x=list.find(function(y){return y.id===id;});if(x)commit(edit(list,id,{ts:withTime(x.ts,e.target.value)}));}
       else if(e.target.classList.contains('dn-etxt')){commit(edit(list,id,{text:e.target.value}));}};
+    var ot=el.querySelector('#dn-ord'),oo=el.querySelector('#dn-ord-out');
+    function ordRun(){var rows=parseOrders(ot.value);setOrd(ot.value.trim()?{text:ot.value,rows:rows}:null);oo.innerHTML=rows.length?ordTable(rows)+'<p class="mut">'+rows.length+' zleceń: '+['lek','badanie','procedura','inne'].map(function(t){var n=rows.filter(function(r){return r.type===t;}).length;return n?n+' × '+t:'';}).filter(Boolean).join(', ')+'. Sprawdź z oryginałem – rozpoznawanie jest pomocnicze.</p>':(ot.value.trim()?'<p class="mut">Nie rozpoznano zleceń.</p>':'');try{document.dispatchEvent(new CustomEvent('sor-done-changed'));}catch(e){}}
+    el.querySelector('#dn-ord-go').onclick=ordRun;el.querySelector('#dn-ord-ex').onclick=function(){ot.value=SAMPLE_ORD;ordRun();};el.querySelector('#dn-ord-clr').onclick=function(){ot.value='';ordRun();};
+    el.querySelector('#dn-print2').onclick=function(){if(window.SORReport)SORReport.print(['done']);};
+    var om=ordMem();if(om&&om.text){ot.value=om.text;ordRun();}
     el.querySelector('#dn-print').onclick=function(){if(window.SORReport)SORReport.print(['done']);};
     draw();
   }
-  return{KEY:KEY,TILES:TILES,empty:empty,validate:validate,add:add,remove:remove,edit:edit,withTime:withTime,sorted:sorted,toText:toText,load:load,save:save,clear:clear,reportHtml:reportHtml,render:render,hm:hm};
+  return{parseOrders:parseOrders,ordTable:ordTable,ordersReportHtml:ordersReportHtml,SAMPLE_ORD:SAMPLE_ORD,KEY:KEY,TILES:TILES,empty:empty,validate:validate,add:add,remove:remove,edit:edit,withTime:withTime,sorted:sorted,toText:toText,load:load,save:save,clear:clear,reportHtml:reportHtml,render:render,hm:hm};
 });

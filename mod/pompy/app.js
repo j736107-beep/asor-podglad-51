@@ -44,7 +44,7 @@ function drug(d){$('#title').textContent=d.name;$('#back').hidden=false;
  '<div class="row"><label>lub przepływ [ml/h]</label><input id="ml" inputmode="decimal"></div>'+
  '<div class="out" id="o"></div>'+
  '<details class="card" id="adj"><summary><b>Korekta przepływu</b></summary><div class="row"><label>Zmień</label><select id="am"><option value="abs">dawkę o (± '+esc(UL(s.unit))+')</option><option value="pct">dawkę o (± %)</option><option value="mlh">przepływ o (± ml/h)</option></select></div><div class="row"><label>Wartość zmiany</label><input id="ax" inputmode="decimal" placeholder="np. 0,05 lub -10"></div><div id="ao" class="conc"></div></details>'+
- (d.bp?'<div class="bp" id="bp"><b>Ciśnienie – monitorowanie i cel</b><br>'+esc(d.bp)+'<br><small>Źródła: '+srcs(['SSC','ICS'])+'</small></div>':'')+(d.heparin?hepHtml(d):'')+(d.glyc?'<div class="warn" id="glyc">'+esc(d.glyc)+'</div>':'')+(d.bolus?'<p class="src">Bolus/nasycenie: '+esc(d.bolus)+'</p>':'')+
+ (d.bp?'<div class="bp" id="bp"><b>Ciśnienie – monitorowanie i cel</b><br>'+esc(d.bp)+'<br><small>Źródła: '+srcs(['SSC','ICS'])+'</small></div>':'')+(d.heparin?hepHtml(d):'')+(d.id==='propofol'&&window.PROPO?PROPO.html():'')+(d.glyc?'<div class="warn" id="glyc">'+esc(d.glyc)+'</div>':'')+(d.bolus?'<p class="src">Bolus/nasycenie: '+esc(d.bolus)+'</p>':'')+
  '<div class="src">Dostęp: '+esc(d.access)+' Monitorowanie: '+esc(d.monitor)+'<br>Status: '+esc(d.why)+'</div>'+
  '<p class="src">Źródła: '+srcs(d.src)+'</p>'+
  '<button id="recordCalc" class="pbtn">Przenieś do rejestru leczenia</button><p id="recordStatus" role="status"></p><div class="row"><button id="savePump" class="sbtn">Zapisz nastawę do raportu</button> <button id="printPump" class="sbtn">🖨 Drukuj nastawy</button></div><p id="saveStatus" role="status"></p>';
@@ -91,6 +91,7 @@ function drug(d){$('#title').textContent=d.name;$('#back').hidden=false;
    if(dir>0){i=SL.findIndex(function(v){return v>c+1e-9});if(i<0)i=SL.length-1;}else{i=-1;for(var j=SL.length-1;j>=0;j--)if(SL[j]<c-1e-9){i=j;break;}if(i<0)i=0;}setD(SL[i]);};
   $('#dm').onclick=function(){stepTo(-1)};$('#dp').onclick=function(){stepTo(1)};}$('#ml').oninput=function(){s.mlh=this.value;s.last='ml';upd();};
  $('#ax').oninput=adjUpd;$('#am').onchange=adjUpd;
+ if(d.id==='propofol'&&window.PROPO)PROPO.bind($,parentW);
  if(d.heparin){if(!$('#hw').value)$('#hw').value=s.w||parentW();['#hw','#hbk','#hik','#hap'].forEach(function(k){$(k).oninput=hepUpd;});$('#hb').onchange=function(){var bo=d.heparin.bolusOpts.find(function(x){return x.k===$('#hb').value});$('#hbk').value=String(bo.v).replace('.',',');hepUpd();};}
  upd();
  function vgate(){if(!approved(d))throw Error(DB.localLabel+': najpierw zatwierdź recepturę w ustawieniach modułu.');if(d.id==='amiodaron'&&/NaCl/.test(s.dil))throw Error('Amiodaron – wyłącznie glukoza 5%.');if(d.diluted&&d.diluents.indexOf(s.dil)<0)throw Error('Wybierz rozcieńczalnik.');
