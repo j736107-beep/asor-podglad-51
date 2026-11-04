@@ -10,6 +10,6 @@ function trigger(reasons){list=(reasons||[]).slice(0,40);active=true;draw();play
  if(!window._waGuard){window._waGuard=setInterval(function(){if(active){if(!ov||!document.body.contains(ov))draw();if(audio&&audio.paused)play();}},1000);
   document.addEventListener('keydown',function(e){if(active){e.stopPropagation();if(e.key==='Escape')e.preventDefault();}},true);
   window.addEventListener('beforeunload',function(e){if(active){e.preventDefault();e.returnValue='';}});}}
-if(window.SKM&&SKM.list)SKM.list.push({id:'hamulec',icon:'🛑',name:'Ostateczny hamulec – kontrola przed wypisem',frame:'mod/hamulec/index.html'});
+if(window.SKM&&SKM.list)(function(L){var i=L.findIndex(function(m){return m&&m.id==='telefony';});L.splice(i<0?L.length:i,0,{id:'hamulec',icon:'🛑',name:'Ostateczny hamulec – kontrola przed wypisem',frame:'mod/hamulec/index.html'});})(SKM.list);
 window.SORWypis={trigger:trigger,get active(){return active;},reasons:function(){return list.slice();}};
 })();

@@ -151,7 +151,7 @@ var RECON='<div class="mut">Rekonstytucja Actilyse: 50 mg proszku + 50 ml wody d
 function altCalc(kind,g,P){var H='',lvl='ok',v=ciRead(kind,g);
  if(kind==='stemi'){var o=A.stemi({w:P.w,age:P.age,hours:g('hrs'),delayMin:g('dly'),sbp:g('sbp'),crcl:P.crcl,v:v});
   if(!o)return{H:box('orange','','Podaj czas od początku objawów (h) i przewidywany czas do PPCI (min). Brak wyniku bez danych.')+ciHeadsUp(),lvl:'ok'};
-  lvl=o.lvl;H+=box(o.lvl==='ok'&&o.decision==='lysis'?'ok':o.lvl,o.decision==='lysis'?'FIBRYNOLIZA':o.decision==='pci'?'PPCI – bez fibrynolizy':o.decision==='transfer'?'Transport na PCI – bez fibrynolizy':'Poza oknem',h(o.txt)+srcl(A.SRC.ESCACS));
+  lvl=o.lvl;H+=box(o.lvl==='ok'&&o.decision==='lysis'?'ok':o.lvl,o.decision==='lysis'?'FIBRYNOLIZA':o.decision==='pci'?'PPCI – bez fibrynolizy':o.decision==='transfer'?'Transport na PCI – bez fibrynolizy':'Poza oknem',h(o.txt)+srcl(A.SRC.ESCACS)+(o.decision==='transfer'?(window.SORTel&&SORTel.kprHtml?SORTel.kprHtml():''):''));
   H+=ciBox(o);
   if(o.decision==='lysis'){
    if(!(P.w>0))H+=box('orange','','Podaj masę ciała w pasku pacjenta – dawki alteplazy zależą od masy (próg 65 kg).');

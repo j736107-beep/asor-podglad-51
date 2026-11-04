@@ -1,10 +1,81 @@
 {
- "wersja": "2026-11-04",
- "zrodlo": "Wydrukowana lista telefonów (zdjęcia od lekarza, 04.11.2026) + poprawki lekarza",
- "uwagi": "Numery 4-cyfrowe = wewnętrzne naszego szpitala (wew.). Numery 9-cyfrowe = pełne/komórkowe. Numery wew. innych szpitali mają pole „centrala” (link dzwoni na centralę i dopisuje numer wew.). Plik edytowalny: dist/data/telefony.json (po zmianie uruchom: node tools/telefony_build.cjs).",
+ "wersja": "2026-11-04 pw9",
+ "zrodlo": "Lista z wydruku i dyktowania lekarza (04.11.2026), porównana z oficjalnymi stronami placówek (linki „Strona placówki” / „Źródło”).",
+ "uwagi": "Numery 4-cyfrowe = wewnętrzne naszego szpitala (wew.). Numery 9-cyfrowe = pełne/komórkowe. Numery wew. innych szpitali mają pole „centrala” (link dzwoni na centralę i dopisuje numer wew.). Plik edytowalny: dist/data/telefony.json (po zmianie uruchom: node tools/telefony_build.cjs). Oznaczenia: ✓ zgodny ze stroną; ⚠ rozbieżność – do decyzji lekarza; ⚠ sprawdź – brak na stronie.",
  "grupy": [
   {
-   "nazwa": "Diagnostyka i pracownie",
+   "id": "najwazniejsze",
+   "nazwa": "NAJWAŻNIEJSZE",
+   "pozycje": [
+    {
+     "nazwa": "Transport KPR z lekarzem (Krakowskie Pogotowie Ratunkowe) – całodobowo",
+     "info": "Gdy transport wymaga lekarza – transport KPR z lekarzem. Rodzaje transportu: T, RT, RT z lekarzem.",
+     "www": "https://www.kpr.med.pl",
+     "zrodlo": "https://www.kpr.med.pl/artykul/29,transport-medyczny",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "124222999",
+       "opis": "zamawianie transportu (24 h)",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "124244272",
+       "opis": "sekretariat KPR",
+       "st": "ok"
+      }
+     ]
+    },
+    {
+     "nazwa": "Wojewódzki Lekarz Koordynator Ratownictwa Medycznego – Kraków",
+     "email": "krm@malopolska.uw.gov.pl",
+     "www": "http://lkrm.pl",
+     "zrodlo": "http://lkrm.pl/contact.php",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "123921909",
+       "opis": "lekarz koordynator",
+       "st": "ok"
+      }
+     ],
+     "info": "Fax 12 422 72 08."
+    },
+    {
+     "nazwa": "Dyspozytornia medyczna – Kraków",
+     "info": "Bezpośredniego numeru dyspozytorni medycznej nie ma na oficjalnych stronach – sprawdź (Nowy Targ może podlegać innej dyspozytorni – sprawdź). Numer WPR to sekretariat wydziału, nie linia dyspozytora.",
+     "www": "https://malopolska.uw.gov.pl",
+     "zrodlo": "https://malopolska.uw.gov.pl/default.aspx?page=WPR",
+     "numery": [
+      {
+       "typ": "alarm",
+       "nr": "999",
+       "opis": "numer alarmowy ratownictwa medycznego"
+      },
+      {
+       "typ": "alarm",
+       "nr": "112",
+       "opis": "numer alarmowy"
+      },
+      {
+       "typ": "tel",
+       "nr": "123921997",
+       "opis": "Wydział Powiadamiania Ratunkowego MUW – sekretariat",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "123921569",
+       "opis": "Oddział Ratownictwa Medycznego MUW",
+       "uwaga": "źródło: ogłoszenie naboru (nabory.kprm.gov.pl) – sprawdź"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nazwa": "Nasz szpital (PSZS Nowy Targ) – diagnostyka i pracownie",
    "pozycje": [
     {
      "nazwa": "Zakład Diagnostyki Obrazowej (radiologia)",
@@ -35,7 +106,7 @@
      ]
     },
     {
-     "nazwa": "Serologia",
+     "nazwa": "Pracownia Serologii Transfuzjologicznej",
      "numery": [
       {
        "typ": "wew",
@@ -44,7 +115,7 @@
      ]
     },
     {
-     "nazwa": "Mikrobiologia – dr Anna Ślemp",
+     "nazwa": "Pracownia Mikrobiologii – dr Anna Ślemp",
      "numery": [
       {
        "typ": "tel",
@@ -58,7 +129,7 @@
      ]
     },
     {
-     "nazwa": "Gastroskopia",
+     "nazwa": "Pracownia Endoskopii (gastroskopia)",
      "numery": [
       {
        "typ": "wew",
@@ -77,14 +148,19 @@
        "nr": "513347113"
       }
      ]
+    },
+    {
+     "nazwa": "Sekcje – Wiesław Frasik",
+     "info": "Brak numeru – do uzupełnienia.",
+     "numery": []
     }
    ]
   },
   {
-   "nazwa": "Oddziały",
+   "nazwa": "Nasz szpital (PSZS Nowy Targ) – oddziały",
    "pozycje": [
     {
-     "nazwa": "Kardiologia",
+     "nazwa": "Oddział Kardiologiczny",
      "numery": [
       {
        "typ": "tel",
@@ -93,7 +169,7 @@
      ]
     },
     {
-     "nazwa": "Chirurgia",
+     "nazwa": "Oddział Chirurgiczny",
      "numery": [
       {
        "typ": "tel",
@@ -102,15 +178,11 @@
       {
        "typ": "wew",
        "nr": "3368"
-      },
-      {
-       "typ": "wew",
-       "nr": "3931"
       }
      ]
     },
     {
-     "nazwa": "Kardiologia / Chirurgia – pielęgniarki",
+     "nazwa": "Oddział Kardiologiczny / Chirurgiczny – pielęgniarki",
      "numery": [
       {
        "typ": "tel",
@@ -135,16 +207,11 @@
        "typ": "wew",
        "nr": "3836",
        "opis": "pielęgniarki"
-      },
-      {
-       "typ": "wew",
-       "nr": "3931",
-       "opis": "sala COVID"
       }
      ]
     },
     {
-     "nazwa": "Neurochirurgia",
+     "nazwa": "Oddział Neurochirurgiczny",
      "numery": [
       {
        "typ": "tel",
@@ -153,7 +220,7 @@
      ]
     },
     {
-     "nazwa": "Ortopedia",
+     "nazwa": "Oddział Ortopedii i Traumatologii",
      "numery": [
       {
        "typ": "wew",
@@ -162,7 +229,7 @@
      ]
     },
     {
-     "nazwa": "Ginekologia",
+     "nazwa": "Oddział Ginekologiczno-Położniczy",
      "numery": [
       {
        "typ": "tel",
@@ -175,7 +242,7 @@
      ]
     },
     {
-     "nazwa": "Detoks",
+     "nazwa": "Oddział Detoksykacyjny",
      "numery": [
       {
        "typ": "tel",
@@ -189,7 +256,7 @@
      ]
     },
     {
-     "nazwa": "Oddział paliatywny – ordynator dr Sosnowski",
+     "nazwa": "Oddział Medycyny Paliatywnej – ordynator dr Sosnowski",
      "numery": [
       {
        "typ": "wew",
@@ -208,7 +275,7 @@
      ]
     },
     {
-     "nazwa": "ZOL",
+     "nazwa": "Zakład Opiekuńczo-Leczniczy (ZOL)",
      "numery": [
       {
        "typ": "tel",
@@ -225,10 +292,10 @@
    ]
   },
   {
-   "nazwa": "Poradnie",
+   "nazwa": "Nasz szpital (PSZS Nowy Targ) – poradnie",
    "pozycje": [
     {
-     "nazwa": "Okulistyka",
+     "nazwa": "Poradnia Okulistyczna",
      "numery": [
       {
        "typ": "wew",
@@ -241,7 +308,7 @@
      ]
     },
     {
-     "nazwa": "Laryngolog",
+     "nazwa": "Poradnia Otolaryngologiczna",
      "numery": [
       {
        "typ": "wew",
@@ -254,18 +321,34 @@
      ]
     },
     {
-     "nazwa": "Poradnia reumatologiczna (dr Jancalewicz, czwartki)",
+     "nazwa": "Poradnia Reumatologiczna (dr Jancalewicz, czwartki)",
      "numery": [
       {
        "typ": "wew",
        "nr": "3726"
       }
      ]
+    },
+    {
+     "nazwa": "Poradnia Dermatologiczna",
+     "adres": "Blok C, poziom -1",
+     "email": "rejestracja@pszs.eu",
+     "godziny": "Listopad 2026: pon 08:00–17:30, wt nieczynna, śr 08:00–13:00, czw 08:00–16:30, pt 08:00–14:30. Lek. Magdalena Podbielska: pon 12–18, czw 10–17, pt 9:30–15. Wymagane skierowanie.",
+     "www": "https://www.pszs.eu",
+     "zrodlo": "https://www.pszs.eu/poradnia/poradnia-dermatologiczna",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "182633728",
+       "opis": "rejestracja",
+       "st": "ok"
+      }
+     ]
     }
    ]
   },
   {
-   "nazwa": "Dializy",
+   "nazwa": "Nasz szpital (PSZS Nowy Targ) – dializy",
    "pozycje": [
     {
      "nazwa": "Stacja dializ",
@@ -290,7 +373,7 @@
      ]
     },
     {
-     "nazwa": "dr Truczka (dializy)",
+     "nazwa": "dr Truczka (Stacja Dializ)",
      "numery": [
       {
        "typ": "tel",
@@ -310,10 +393,10 @@
    ]
   },
   {
-   "nazwa": "Administracja i IT",
+   "nazwa": "Nasz szpital (PSZS Nowy Targ) – administracja i IT",
    "pozycje": [
     {
-     "nazwa": "Informatycy",
+     "nazwa": "Dział Informatyki (informatycy)",
      "email": "informatyka@pszs.eu",
      "emailOpis": "preferowany – zgłoszenie problemu e-mailem",
      "numery": [
@@ -334,7 +417,7 @@
      ]
     },
     {
-     "nazwa": "Księgowość",
+     "nazwa": "Dział Księgowości",
      "numery": [
       {
        "typ": "wew",
@@ -347,18 +430,32 @@
      ]
     },
     {
-     "nazwa": "Dział prawny",
+     "nazwa": "Dział Prawny",
      "numery": [
       {
        "typ": "wew",
        "nr": "3010"
       }
      ]
+    },
+    {
+     "nazwa": "Centrala szpitala PSZS",
+     "www": "https://www.pszs.eu",
+     "zrodlo": "https://www.pszs.eu",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "182633000",
+       "opis": "centrala",
+       "st": "ok"
+      }
+     ]
     }
    ]
   },
   {
-   "nazwa": "Apteki",
+   "id": "apteki",
+   "nazwa": "Apteki Nowy Targ",
    "pozycje": [
     {
      "nazwa": "Apteka szpitalna",
@@ -409,169 +506,674 @@
   },
   {
    "id": "zakazne",
-   "nazwa": "Oddziały zakaźne w Małopolsce",
-   "uwagi": "Podyktowane głosowo przez lekarza (04.11.2026). Numer wew. wybierz po połączeniu z centralą (link dzwoni na centralę i dopisuje numer wew.).",
+   "nazwa": "Małopolska – oddziały zakaźne",
+   "uwagi": "Numery podyktowane przez lekarza porównane z oficjalnymi stronami (04.11.2026). „wg strony” = numer z oficjalnej strony placówki.",
    "pozycje": [
     {
-     "nazwa": "Klinika Chorób Zakaźnych (Szpital Uniwersytecki), ul. Jakubowskiego 2, Kraków",
+     "nazwa": "Szpital Uniwersytecki – Oddział Kliniczny Chorób Zakaźnych, ul. Jakubowskiego 2, Kraków",
+     "www": "https://www.su.krakow.pl",
+     "zrodlo": "https://www.su.krakow.pl/jednostki/oddzialy-kliniczne/oddzial-kliniczny-chorob-zakaznych",
      "numery": [
       {
        "typ": "tel",
        "nr": "124002045",
-       "uwaga": "sprawdź"
+       "opis": "podyktowany",
+       "uwaga": "rozbieżność – do decyzji lekarza: numeru brak na stronie (sekretariat 12 400 20 00, ruch chorych 12 400 20 13)",
+       "st": "rozb"
+      },
+      {
+       "typ": "tel",
+       "nr": "124002000",
+       "opis": "sekretariat – wg strony",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "124002013",
+       "opis": "ruch chorych – wg strony",
+       "st": "ok"
       }
      ]
     },
     {
-     "nazwa": "Oddział zakaźny – Szpital im. Żeromskiego, Kraków",
+     "nazwa": "Szpital im. Żeromskiego – Oddział Obserwacyjno-Zakaźny, Kraków",
+     "www": "https://zeromski-szpital.pl",
+     "zrodlo": "https://zeromski-szpital.pl/oddzialy/oddzial-obserwacyjno-zakazny/",
      "numery": [
       {
        "typ": "tel",
-       "nr": "126229390"
+       "nr": "126229390",
+       "opis": "dyżurka lekarska",
+       "st": "ok"
       },
       {
        "typ": "tel",
        "nr": "126229353",
-       "opis": "pielęgniarki"
+       "opis": "dyżurka pielęgniarek",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "126229403",
+       "opis": "sekretariat – wg strony",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "126440144",
+       "opis": "centrala – wg strony",
+       "st": "ok"
       }
      ]
     },
     {
-     "nazwa": "Szpital Wojskowy, ul. Wrocławska, Kraków – oddział zakaźny",
+     "nazwa": "5 Wojskowy Szpital Kliniczny, ul. Wrocławska 1-3, Kraków – Oddział Chorób Wewnętrznych, Zakaźnych i Alergologii",
+     "www": "https://www.5wszk.com.pl",
+     "zrodlo": "https://www.5wszk.com.pl/strona/1076-kliniczny-oddzial-chorob-wewnetrznych-zakaznych-i-alergologii",
      "numery": [
       {
        "typ": "tel",
        "nr": "126308138",
-       "opis": "centrala",
-       "uwaga": "sprawdź"
+       "opis": "centrala (podyktowana)",
+       "uwaga": "nie potwierdzono na stronie – sprawdź"
       },
       {
        "typ": "wew",
        "nr": "147",
+       "opis": "pielęgniarki",
        "centrala": "126308138",
-       "opis": "pielęgniarki"
+       "uwaga": "rozbieżność – do decyzji lekarza: wg strony dyżurka pielęgniarska 12 630 82 47",
+       "st": "rozb"
       },
       {
        "typ": "wew",
        "nr": "245",
+       "opis": "lekarze",
        "centrala": "126308138",
-       "opis": "lekarze"
+       "st": "ok"
       },
       {
        "typ": "wew",
        "nr": "254",
+       "opis": "lekarze",
        "centrala": "126308138",
-       "opis": "lekarze"
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+      },
+      {
+       "typ": "tel",
+       "nr": "126308245",
+       "opis": "dyżurka lekarska – wg strony (bezpośredni)",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "126308247",
+       "opis": "dyżurka pielęgniarska – wg strony (bezpośredni)",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "126308250",
+       "opis": "sekretariat – wg strony",
+       "st": "ok"
       }
      ]
     },
     {
-     "nazwa": "Oddział zakaźny – Dąbrowa Tarnowska",
+     "nazwa": "Szpital w Dąbrowie Tarnowskiej – Oddział Obserwacyjno-Zakaźny",
+     "www": "https://zozdt.pl",
+     "zrodlo": "https://zozdt.pl/oddzial-obserwacyjno-zakazny.html",
      "numery": [
       {
        "typ": "tel",
        "nr": "146443328",
-       "opis": "centrala"
+       "opis": "centrala (podyktowana)",
+       "uwaga": "rozbieżność – do decyzji lekarza: wg strony centrala 14 644 32 20",
+       "st": "rozb"
       },
       {
        "typ": "wew",
        "nr": "246",
+       "opis": "dyżurka lekarska",
        "centrala": "146443328",
-       "opis": "dyżurka lekarska"
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
       },
       {
        "typ": "wew",
        "nr": "261",
+       "opis": "dyżurka lekarska",
        "centrala": "146443328",
-       "opis": "dyżurka lekarska"
+       "uwaga": "wg strony 14 644 32 61 = kierownik oddziału",
+       "st": "ok"
       },
       {
        "typ": "wew",
        "nr": "284",
+       "opis": "pielęgniarki",
        "centrala": "146443328",
-       "opis": "pielęgniarki"
+       "uwaga": "rozbieżność – do decyzji lekarza: wg strony dyżurka pielęgniarska 14 644 32 86",
+       "st": "rozb"
+      },
+      {
+       "typ": "tel",
+       "nr": "146443288",
+       "opis": "dyżurka lekarska – wg strony",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "146443286",
+       "opis": "dyżurka pielęgniarska – wg strony",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "146443220",
+       "opis": "centrala – wg strony",
+       "st": "ok"
       }
      ]
     },
     {
-     "nazwa": "Oddział zakaźny – Proszowice",
+     "nazwa": "Szpital w Proszowicach – Oddział Obserwacyjno-Zakaźny",
+     "www": "https://spzoz.proszowice.pl",
+     "zrodlo": "https://spzoz.proszowice.pl/oddzial-obserwacyjno-zakazny/",
      "numery": [
       {
        "typ": "tel",
        "nr": "123865211",
-       "opis": "dyżurka lekarska (do południa)"
+       "opis": "dyżurka lekarska (do południa)",
+       "st": "ok"
       },
       {
        "typ": "tel",
        "nr": "123865162",
-       "opis": "lub – dyżurka lekarska (do południa)"
+       "opis": "lub – dyżurka lekarska (do południa)",
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
       },
       {
        "typ": "wew",
        "nr": "198",
+       "opis": "lekarz dyżurny",
        "centrala": "123865211",
-       "opis": "lekarz dyżurny"
+       "uwaga": "rozbieżność – do decyzji lekarza: na kartce przez 12 386 52 11 (to dyżurka lekarska); wg strony centrala 12 386 51 05",
+       "st": "rozb"
       },
       {
        "typ": "tel",
        "nr": "123865160",
-       "opis": "pielęgniarki"
+       "opis": "pielęgniarki",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "123865105",
+       "opis": "centrala – wg strony",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "123865210",
+       "opis": "sekretariat – wg strony",
+       "st": "ok"
       }
      ]
     },
     {
-     "nazwa": "Oddział zakaźny – Nowy Sącz",
+     "nazwa": "Szpital Specjalistyczny im. Śniadeckiego, Nowy Sącz – Oddział Chorób Zakaźnych",
+     "www": "https://www.szpitalnowysacz.pl",
+     "zrodlo": "https://www.szpitalnowysacz.pl/kontakt/ksiazka-telefoniczna/",
      "numery": [
       {
        "typ": "tel",
        "nr": "184432123",
-       "opis": "pielęgniarki – łączą z lekarzem dyżurnym"
+       "opis": "pielęgniarki – łączą z lekarzem dyżurnym",
+       "uwaga": "wg strony: numer ogólny oddziału",
+       "st": "ok"
       },
       {
        "typ": "tel",
-       "nr": "184425890"
+       "nr": "184425890",
+       "opis": "podyktowany",
+       "uwaga": "na stronie tylko wew. 890 (dyżurka lekarska) – numer bezpośredni sprawdź"
+      },
+      {
+       "typ": "wew",
+       "nr": "890",
+       "opis": "dyżurka lekarska – wg strony",
+       "centrala": "184438877",
+       "st": "ok"
+      },
+      {
+       "typ": "wew",
+       "nr": "889",
+       "opis": "dyżurka pielęgniarki oddziałowej – wg strony",
+       "centrala": "184438877",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "184438877",
+       "opis": "centrala – wg strony",
+       "st": "ok"
       }
      ]
     },
     {
-     "nazwa": "Oddział zakaźny – Miechów",
+     "nazwa": "Szpital św. Anny w Miechowie – Oddział Obserwacyjno-Zakaźny",
+     "www": "https://www.szpital.miechow.pl",
+     "zrodlo": "https://www.szpital.miechow.pl/komorki-medyczne/oddzialy/oddzial-obserwacyjno-zakazny/",
      "numery": [
       {
        "typ": "tel",
        "nr": "413820364",
-       "opis": "pielęgniarki"
+       "opis": "pielęgniarki",
+       "st": "ok"
       },
       {
        "typ": "wew",
        "nr": "299",
-       "uwaga": "brak numeru centrali – sprawdź"
+       "opis": "sekretariat / dyżurka lekarska",
+       "centrala": "413820100",
+       "st": "ok"
       },
       {
        "typ": "wew",
        "nr": "315",
-       "uwaga": "brak numeru centrali – sprawdź"
+       "centrala": "413820100",
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+      },
+      {
+       "typ": "tel",
+       "nr": "413820299",
+       "opis": "sekretariat / dyżurka lekarska – wg strony (bezpośredni)",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "413820100",
+       "opis": "centrala – wg strony",
+       "st": "ok"
       }
      ]
     },
     {
-     "nazwa": "Oddział zakaźny – Myślenice (możliwa likwidacja – sprawdź)",
+     "nazwa": "SPZOZ Myślenice – Oddział Zakaźny",
+     "info": "Na kartce: „możliwa likwidacja – sprawdź”. Oddział nadal widnieje na oficjalnej stronie (04.11.2026).",
+     "www": "https://szpitalmyslenice.pl",
+     "zrodlo": "https://szpitalmyslenice.pl/kontakt/spis-telefonow",
      "numery": [
       {
        "typ": "tel",
        "nr": "122730303",
-       "opis": "pielęgniarki"
+       "opis": "pielęgniarki",
+       "st": "ok"
       },
       {
        "typ": "wew",
        "nr": "354",
        "opis": "lekarze",
-       "uwaga": "brak numeru centrali – sprawdź"
+       "centrala": "122730355",
+       "uwaga": "wg strony dyżurka lekarska 12 273 03 54",
+       "st": "ok"
       },
       {
        "typ": "wew",
        "nr": "352",
        "opis": "lekarze (lub)",
-       "uwaga": "brak numeru centrali – sprawdź"
+       "centrala": "122730355",
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+      },
+      {
+       "typ": "tel",
+       "nr": "122730354",
+       "opis": "dyżurka lekarska – wg strony (bezpośredni)",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "122730350",
+       "opis": "sekretariat – wg strony",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "122730355",
+       "opis": "centrala – wg strony",
+       "st": "ok"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "toks",
+   "nazwa": "Małopolska – toksykologia",
+   "pozycje": [
+    {
+     "nazwa": "Szpital Uniwersytecki – Toksykologia (Oddział Kliniczny Gastroenterologii, Hepatologii, Toksykologii), ul. Jakubowskiego 2, Kraków",
+     "www": "https://www.su.krakow.pl",
+     "zrodlo": "https://www.su.krakow.pl/jednostki/oddzialy-kliniczne/oddzial-kliniczny-gastroenterologii-hepatologii-toksykologii-i-chorob-wewnetrznych",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "124119999",
+       "opis": "telefon alarmowy – informacja toksykologiczna 24 h (lekarz dyżurny)",
+       "uwaga": "źródło: oit.cm.uj.edu.pl/o-pracowni/informacje/",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "124002655",
+       "opis": "podyktowany",
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+      },
+      {
+       "typ": "tel",
+       "nr": "124002697",
+       "opis": "podyktowany",
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+      },
+      {
+       "typ": "tel",
+       "nr": "124002650",
+       "opis": "sekretariat / ruch chorych toksykologii – wg strony",
+       "st": "ok"
+      }
+     ]
+    },
+    {
+     "nazwa": "Pracownia Toksykologiczna (laboratorium) SU, ul. Jakubowskiego 2",
+     "www": "https://www.su.krakow.pl",
+     "zrodlo": "https://toksy-alergo.cm-uj.krakow.pl",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "124003649",
+       "opis": "dyżur całodobowy",
+       "st": "ok"
+      }
+     ]
+    },
+    {
+     "nazwa": "Szpital im. Rydygiera, Kraków – Oddział Toksykologii",
+     "www": "https://www.szpitalrydygier.pl",
+     "zrodlo": "https://www.szpitalrydygier.pl",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "126468550",
+       "opis": "„na ratunek”",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "126468404",
+       "opis": "sekretariat – wg strony",
+       "st": "ok"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "laryng",
+   "nazwa": "Małopolska – laryngologia",
+   "pozycje": [
+    {
+     "nazwa": "5 Wojskowy Szpital Kliniczny, ul. Wrocławska 1-3, Kraków – Oddział Otolaryngologii",
+     "www": "https://www.5wszk.com.pl",
+     "zrodlo": "https://www.5wszk.com.pl/strona/1068",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "126308181",
+       "opis": "dyżurka pielęgniarska",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "126308180",
+       "opis": "lekarz (wew. 180)",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "729317688",
+       "opis": "komórka (podyktowany)",
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+      },
+      {
+       "typ": "tel",
+       "nr": "126308183",
+       "opis": "sekretariat – wg strony",
+       "st": "ok"
+      }
+     ]
+    },
+    {
+     "nazwa": "Szpital Uniwersytecki – Oddział Kliniczny Otolaryngologii, ul. Jakubowskiego 2 (bud. I, p. 4)",
+     "www": "https://www.su.krakow.pl",
+     "zrodlo": "https://www.su.krakow.pl/jednostki/oddzialy-kliniczne/oddzial-kliniczny-otolaryngologii",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "124002797",
+       "opis": "podyktowany",
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+      },
+      {
+       "typ": "tel",
+       "nr": "124002760",
+       "opis": "wew. 2760 (podyktowany)",
+       "uwaga": "rozbieżność – do decyzji lekarza: wg strony sekretariat 12 400 27 50",
+       "st": "rozb"
+      },
+      {
+       "typ": "tel",
+       "nr": "124002750",
+       "opis": "sekretariat – wg strony",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "124002761",
+       "opis": "ruch chorych",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "124002762",
+       "opis": "dyżurka lekarska",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "124002755",
+       "opis": "punkt pielęgniarski",
+       "st": "ok"
+      }
+     ]
+    },
+    {
+     "nazwa": "Szpital im. Śniadeckiego, Nowy Sącz – Oddział Otolaryngologiczny",
+     "www": "https://www.szpitalnowysacz.pl",
+     "zrodlo": "https://www.szpitalnowysacz.pl/kontakt/ksiazka-telefoniczna/",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "602138924",
+       "opis": "dr Barbara Chojecka (kom., podyktowany)",
+       "uwaga": "numer prywatny – nie do sprawdzenia na stronie"
+      },
+      {
+       "typ": "wew",
+       "nr": "905",
+       "opis": "dyżurka lekarza kierującego / lekarska",
+       "centrala": "184438877",
+       "st": "ok"
+      },
+      {
+       "typ": "wew",
+       "nr": "824",
+       "opis": "dyżurka pielęgniarska",
+       "centrala": "184438877",
+       "st": "ok"
+      },
+      {
+       "typ": "wew",
+       "nr": "849",
+       "opis": "ambulatorium",
+       "centrala": "184438877",
+       "st": "ok"
+      },
+      {
+       "typ": "wew",
+       "nr": "805",
+       "opis": "sekretariat – wg strony",
+       "centrala": "184438877",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "184425824",
+       "opis": "pielęgniarki (podyktowany, bezpośredni)",
+       "uwaga": "na stronie tylko wew. 824 przez centralę – sprawdź"
+      },
+      {
+       "typ": "tel",
+       "nr": "184438877",
+       "opis": "centrala – wg strony",
+       "st": "ok"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "szczek",
+   "nazwa": "Małopolska – chirurgia szczękowo-twarzowa",
+   "pozycje": [
+    {
+     "nazwa": "Szpital im. Rydygiera, Kraków – Oddział Chirurgii Szczękowo-Twarzowej",
+     "www": "https://www.szpitalrydygier.pl",
+     "zrodlo": "https://www.szpitalrydygier.pl/kontakt/",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "126468800",
+       "opis": "centrala (podyktowana)",
+       "uwaga": "rozbieżność – do decyzji lekarza: wg strony centrala/infolinia 12 646 80 00",
+       "st": "rozb"
+      },
+      {
+       "typ": "tel",
+       "nr": "126468000",
+       "opis": "centrala – wg strony",
+       "st": "ok"
+      },
+      {
+       "typ": "wew",
+       "nr": "391",
+       "opis": "lekarz – dzień",
+       "centrala": "126468000",
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+      },
+      {
+       "typ": "wew",
+       "nr": "641",
+       "opis": "lekarz – noc",
+       "centrala": "126468000",
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+      },
+      {
+       "typ": "wew",
+       "nr": "591",
+       "opis": "pielęgniarki",
+       "centrala": "126468000",
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+      },
+      {
+       "typ": "tel",
+       "nr": "126468836",
+       "opis": "sekretariat – wg strony",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "126468341",
+       "opis": "oddział – wg strony",
+       "st": "ok"
+      }
+     ]
+    },
+    {
+     "nazwa": "Szpital Uniwersytecki – Oddział Kliniczny Chirurgii Szczękowo-Twarzowej",
+     "www": "https://www.su.krakow.pl",
+     "zrodlo": "https://www.su.krakow.pl/jednostki/oddzialy-kliniczne/oddzial-kliniczny-chirurgii-szczekowo-twarzowej",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "124002800",
+       "opis": "sekretariat (wg strony – to sekretariat, nie centrala)",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "124002805",
+       "opis": "podyktowany",
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+      },
+      {
+       "typ": "tel",
+       "nr": "124002847",
+       "opis": "podyktowany",
+       "uwaga": "nie znaleziono na stronie placówki – sprawdź"
+      },
+      {
+       "typ": "tel",
+       "nr": "124001000",
+       "opis": "centrala SU – wg strony",
+       "st": "ok"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "derm",
+   "nazwa": "Małopolska – dermatologia",
+   "pozycje": [
+    {
+     "nazwa": "Szpital Uniwersytecki – Oddział Kliniczny Dermatologii i Alergologii",
+     "adres": "Wg kontaktów: ul. Botaniczna 3 (w opisie oddziału wciąż ul. Kopernika 50) – rozbieżność – do decyzji lekarza",
+     "www": "https://www.su.krakow.pl",
+     "zrodlo": "https://www.su.krakow.pl/jednostki/oddzialy-kliniczne/oddzial-kliniczny-dermatologii",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "124248624",
+       "opis": "podyktowany",
+       "uwaga": "rozbieżność – do decyzji lekarza: wg strony sekretariat 12 424 86 62",
+       "st": "rozb"
+      },
+      {
+       "typ": "tel",
+       "nr": "124248662",
+       "opis": "sekretariat – wg strony",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "124248699",
+       "opis": "ruch chorych (wew. 8699)",
+       "st": "ok"
+      },
+      {
+       "typ": "tel",
+       "nr": "123516601",
+       "opis": "poradnia – wg strony",
+       "st": "ok"
       }
      ]
     }
