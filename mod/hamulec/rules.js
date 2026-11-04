@@ -1,5 +1,5 @@
-/* Ostateczny hamulec – LISTA REGUŁ (wszystkie: DO DECYZJI LEKARZA – do zatwierdzenia). Poziomy: crit = NIE WOLNO WYPISAĆ, warn = UWAGA. */
-(function(g){g.HB_RULES={status:'DO DECYZJI LEKARZA',
+/* Ostateczny hamulec – LISTA REGUŁ (STANDARD LOKALNY – zatwierdzony przez lekarza 04.11.2026). Poziomy: crit = NIE WOLNO WYPISAĆ, warn = UWAGA. */
+(function(g){g.HB_RULES={status:'STANDARD LOKALNY – zatwierdzony przez lekarza',
  vit:[['sbp','<',90,'crit','Ciśnienie skurczowe < 90 mmHg'],['hr','>',120,'crit','Tętno > 120/min'],['hr','<',40,'crit','Tętno < 40/min'],['spo2','<',90,'crit','SpO₂ < 90%'],['gcs','<',15,'crit','GCS < 15'],['rr','>',24,'warn','Oddechy > 24/min'],['rr','<',9,'crit','Oddechy < 9/min'],['temp','>=',39,'warn','Temperatura ≥ 39 °C'],['temp','<',35,'crit','Temperatura < 35 °C'],['sbp','>=',220,'warn','Ciśnienie skurczowe ≥ 220 mmHg']],
  news:{crit:7,warn:5},
  kw:[ // [id, etykieta, poziom, wzorzec]

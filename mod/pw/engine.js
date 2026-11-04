@@ -260,7 +260,7 @@ function analyze(text,opt){opt=opt||{};var P=parse(text),R=P.res,C=CFG,out={aler
  if((x=lv('fib'))!=null&&x<C.fib.alert){al('alert','fib','Fibrynogen niski: '+V('fib'));act('fib');}
  // D-dimery (STANDARD LOKALNY: < 500 µg/l FEU do 50 r.ż., powyżej 50 r.ż. wiek × 10; ciąża – osobne progi)
  out.ddim=null;if(R.ddim){var DS=S('ddim');if(DS.length){var DC=C.ddim,age=+opt.age,pr=!!opt.preg,tri=+opt.tri||0,cut,cs,ctag;
-  if(pr){cut=tri===1?DC.preg.t1:tri===2?DC.preg.t2:tri===3?DC.preg.t3:DC.preg.unknown;cs=tri?'ciąża, '+tri+'. trymestr – górna granica zakresu referencyjnego '+fmt(cut)+' µg/l FEU':'ciąża, trymestr nieznany – próg '+fmt(cut)+' µg/l FEU (pregnancy-adapted YEARS przy ≥ 1 kryterium)';ctag=DC.preg.status;}
+  if(pr){var yc=opt.years;cut=yc==='0'?1000:500;var trn=tri?' Zakres referencyjny '+tri+'. trymestru (tylko informacyjnie): do '+fmt(tri===1?DC.preg.t1:tri===2?DC.preg.t2:DC.preg.t3)+' µg/l FEU.':'';cs='ciąża – pregnancy-adapted YEARS (van der Pol, NEJM 2019): '+(yc==='0'?'0 kryteriów YEARS → próg 1000 µg/l FEU':yc==='1'?'≥ 1 kryterium YEARS → próg 500 µg/l FEU':'kryteria YEARS nieokreślone → próg 500 µg/l FEU (zaznacz kryteria)')+'. Objawy ZŻG → najpierw USG uciskowe.'+trn;ctag=DC.preg.status;}
   else if(isFinite(age)&&age>DC.ageFrom){cut=age*DC.perYear;cs='próg skorygowany wiekiem: '+age+' × 10 = '+fmt(cut)+' µg/l FEU';ctag=DC.status;}
   else{cut=DC.base;cs=isFinite(age)&&opt.age!==''&&opt.age!=null?'wiek '+age+' (≤ '+DC.ageFrom+') – próg '+DC.base+' µg/l FEU':'wiek nieznany – próg '+DC.base+' µg/l FEU (podaj wiek: > 50 r.ż. próg = wiek × 10)';ctag=DC.status;}
   var dl2=DS[DS.length-1];DS.forEach(function(p){if(p.unitOk){var f1=factor('ddim',p.unit)||1;p.hi=cut/f1;p.lo=null;p.hiLocal=true;}});
