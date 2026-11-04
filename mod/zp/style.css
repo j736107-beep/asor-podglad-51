@@ -62,3 +62,5 @@ textarea#copyOut{width:100%;min-height:120px;font-size:12.5px;border-radius:10px
 .lst{margin:4px 0 4px 16px;padding:0;font-size:13px}.lst li{margin:3px 0}
 .hdf{font-size:12px;background:var(--vio2);color:var(--vio);border-radius:8px;padding:4px 8px;margin:4px 0;font-weight:800}
 .reg.prop{border-left-color:#6a1b9a;background:#faf5ff}
+.step.yel{background:#fff8d6;border-left:4px solid #e0b400}
+.quick{background:#e8f7ee;border:2px solid #2e7d32;border-radius:12px;padding:10px 12px;margin:0 0 10px;font-size:14px;line-height:1.45}.quick .qw{background:#fff8d6;border-radius:8px;padding:4px 8px;margin:6px 0;font-size:13px}.quick a{font-size:13px}

@@ -14,6 +14,7 @@ function bar(){try{var S=window.parent&&window.parent!==window&&window.parent.SK
  if(p.sex&&!st.sex){st.sex=(p.sex==='k'||p.sex==='f')?'f':'m';fromBar['płeć']=1;}if(isFinite(p.crMg)&&!isFinite(st.crea)){st.crea=Math.round(p.crMg*100)/100;st.creaU='mgdl';fromBar.kreatynina=1;}
  if(p.co&&p.co.preg&&st.o.preg===undefined){st.o.preg=true;fromBar['ciąża']=1;}}catch(e){}
  var h=handoff();if(h&&h.ts!==st.hts){st.hts=h.ts;[['rr','rr'],['sbp','sbp'],['dbp','dbp'],['spo2','spo2']].forEach(function(a){if(okn(h[a[0]])){st[a[1]]=h[a[0]];fromBar[{rr:'oddechy',sbp:'SBP',dbp:'DBP',spo2:'SpO₂'}[a[1]]+' (Skale)']=1;}});if(okn(h.urea)){st.urea=h.urea;st.ureaU='mmol';fromBar['mocznik (Skale)']=1;}if(h.confusion===true||h.confusion===false){st.conf=h.confusion;}if(h.vent)st.o.vent=true;if(h.vaso)st.o.vaso=true;if(h.psi)st.psi=h.psi;if(okn(h.minor))st.minor=h.minor;if(h.oral===false)st.o.noOral=true;save();}}
+function sync(f){try{var S=window.parent&&window.parent!==window&&window.parent.SKS;if(!S||!S.setP)return;var x=st[f];if(f==='age')S.setP({age:isFinite(x)?x:''});else if(f==='w')S.setP({w:isFinite(x)?x:''});else if(f==='crea'){S.setP({crMg:isFinite(x)?Math.round((st.creaU==='umol'?x/88.42:x)*1000)/1000:''});}}catch(e){}}
 function okn(x){return typeof x==='number'&&isFinite(x);}
 function handoff(){try{var h=JSON.parse(localStorage.getItem('zp_handoff')||'null');if(!h||Date.now()-h.ts>12*3600e3)return null;return h;}catch(e){return null;}}
 var OPT=[['comorb','Choroby współistniejące (serce, płuca, wątroba, nerki, cukrzyca, alkohol, nowotwór, asplenia)'],['mrsa','MRSA w drogach oddechowych w wywiadzie (kolonizacja / zakażenie, 1 rok)'],['pseudo','Pseudomonas w drogach oddechowych w wywiadzie (1 rok)'],['recent','Hospitalizacja + antybiotyk i.v. w ostatnich 90 dniach'],
@@ -21,8 +22,8 @@ var OPT=[['comorb','Choroby współistniejące (serce, płuca, wątroba, nerki, 
 var IXO=[['statin','Statyna'],['vka','Warfaryna / acenokumarol'],['doac','DOAC'],['ssri','SSRI / SNRI / IMAO'],['steroid','GKS przewlekle'],['colch','Kolchicyna']];
 function inp(id,l,val,extra){return '<label>'+esc(l)+'<input id="'+id+'" data-f="'+id+'" inputmode="decimal" autocomplete="off" value="'+v(val)+'">'+(extra||'')+'</label>';}
 function tg(k,l,on,attr){return '<button class="tg'+(on?' on':'')+'" '+(attr||'data-o')+'="'+k+'">'+esc(l)+'</button>';}
-function form(){var h='';
- h+='<div class="sec"><h2>Pacjent (dorosły)</h2><div class="lab">'+inp('w','Masa [kg]',st.w)+inp('age','Wiek [lata]',st.age)+'<label>Płeć<span class="u">'+['m','f'].map(function(s){return '<button data-sex="'+s+'" class="'+(st.sex===s?'on':'')+'">'+(s==='m'?'M':'K')+'</button>'}).join('')+'</span></label>'+
+function form(){var h='<div id="quick"></div>';
+ h+='<div class="sec"><h2>Pacjent (dorosły) <span class="mut" style="font-weight:400;font-size:12px">– pola synchronizowane z paskiem pacjenta; puste nie blokują schematu</span></h2><div class="lab">'+inp('w','Masa [kg]',st.w)+inp('age','Wiek [lata]',st.age)+'<label>Płeć<span class="u">'+['m','f'].map(function(s){return '<button data-sex="'+s+'" class="'+(st.sex===s?'on':'')+'">'+(s==='m'?'M':'K')+'</button>'}).join('')+'</span></label>'+
   inp('crea','Kreatynina',st.crea,'<span class="u">'+[['mgdl','mg/dl'],['umol','µmol/l']].map(function(u){return '<button data-cu="'+u[0]+'" class="'+(st.creaU===u[0]?'on':'')+'">'+u[1]+'</button>'}).join('')+'</span>')+inp('crclManual','lub CrCl / eGFR [ml/min]',st.crclManual)+'</div><div id="barInfo"></div></div>';
  h+='<div class="sec"><h2>CURB-65 i ciężkość</h2><div class="opt">'+'<b style="align-self:center;font-size:13px">Nowe splątanie:</b>'+tg('1','Tak',st.conf===true,'data-cf')+tg('0','Nie',st.conf===false,'data-cf')+'</div><div class="lab">'+inp('urea','Mocznik',st.urea,'<span class="u">'+[['mmol','mmol/l'],['mgdl','mg/dl']].map(function(u){return '<button data-uu="'+u[0]+'" class="'+(st.ureaU===u[0]?'on':'')+'">'+u[1]+'</button>'}).join('')+'</span>')+inp('rr','Oddechy [/min]',st.rr)+inp('sbp','SBP',st.sbp)+inp('dbp','DBP',st.dbp)+inp('spo2','SpO₂ [%]',st.spo2)+'</div>'+
   '<div class="opt">'+tg('vent','Wentylacja mechaniczna',st.o.vent)+tg('vaso','Wazopresor (wstrząs)',st.o.vaso)+tg('noOral','Nie toleruje leków p.o.',st.o.noOral)+'</div><div class="lab">'+inp('minor','Małe kryteria ATS/IDSA (0–9)',st.minor)+'<label>PSI (opcjonalnie)<span class="u">'+['','I','II','III','IV','V'].map(function(c){return '<button data-psi="'+c+'" class="'+(st.psi===c?'on':'')+'">'+(c||'–')+'</button>'}).join('')+'</span></label></div><div id="curbOut"></div></div>';
@@ -41,9 +42,10 @@ function result(){var i=input(),o=Z.plan(i);last=o;var c=Z.curb65(i),pl=o.place;
  $('#curbOut').innerHTML='<div class="curb"><div class="big">'+(c.complete?'':'≥')+c.score+'<small>/5</small></div><div><b>CURB-65</b>'+(c.complete?'':' – brak: '+esc(c.missing.join(', ')))+'<br><span class="mut">'+esc((pl.why||[]).join('; '))+'</span></div></div>';
  var bi=Object.keys(fromBar);$('#barInfo').innerHTML=bi.length?'<div class="hdf">Z paska pacjenta: '+bi.join(', ')+'</div>':'';
  var hd=handoff();var h='';if(hd&&hd.txt)h+='<div class="hdf">Z zakładki „Skale i hospitalizacja”: '+esc(hd.txt)+'</div>';
- if(o.need.length){$('#res').innerHTML=h+'<div class="sev orange">Uzupełnij: '+esc(o.need.join('; '))+'</div>';fit();return;}
+ if(o.need.length){if($('#quick'))$('#quick').innerHTML='';$('#res').innerHTML=h+'<div class="sev orange">Uzupełnij: '+esc(o.need.join('; '))+'</div>';fit();return;}
+ if(o.warn&&o.warn.length)h+='<div class="step yel" id="zpWarn"><h3>⚠️ Uwaga – niepełne dane</h3><ul class="lst">'+o.warn.map(function(x){return '<li>'+rich(x)+'</li>'}).join('')+'</ul></div>';
  var lv=o.p==='icu'?'red':o.p==='ward'?'orange':'ok';var pn={home:'Leczenie domowe',ward:'Leczenie na oddziale',icu:'Ciężkie PZP – OIT / intensywny nadzór'}[o.p];
- h+='<div class="sev '+lv+'">'+pn+(st.place?' (wybrane ręcznie)':' (wg skali)')+'</div>';
+ h+='<div class="sev '+lv+'">'+pn+(st.place?' (wybrane ręcznie)':o.pDef?' (domyślnie – CURB-65 niepełny, wybierz ręcznie)':' (wg skali)')+'</div>';
  h+='<div class="frm">CrCl: <b>'+(isFinite(o.crcl.v)?o.crcl.v+' ml/min':'–')+'</b> ('+esc(o.crcl.src)+')</div>';
  if(o.avoid.length)h+='<div class="step red"><h3>Wykluczone / unikać</h3><ul class="lst">'+o.avoid.map(function(x){return '<li>'+rich(x)+'</li>'}).join('')+'</ul></div>';
  o.regs.forEach(function(r,ix){h+='<div class="reg '+(r.tier==='alt'?'alt':r.tier==='prop'?'prop':'')+'" data-reg="'+ix+'"><h3>'+(r.tier==='pref'?'✅ ':r.tier==='prop'?'🟣 ':'↔️ ')+rich(r.t).replace('PROPOZYCJA – DO AKCEPTACJI LEKARZA','<span class="dw" style="background:#6a1b9a">PROPOZYCJA – DO AKCEPTACJI LEKARZA</span>')+'</h3>'+r.items.map(drug).join('')+'<div class="why">'+rich(r.why)+'</div>'+(r.dur?'<div class="dur">⏱ Czas: '+rich(r.dur)+'</div>':'')+'<div class="st">Źródła: '+r.src.map(function(k){return '<a href="'+Z.S[k].url+'" target="_blank" rel="noopener">'+esc(Z.S[k].n.split(' – ')[0])+'</a>'}).join(', ')+'</div><button class="cp" data-cp="'+ix+'">📋 Kopiuj do zaleceń wypisowych</button></div>';});
@@ -53,7 +55,9 @@ function result(){var i=input(),o=Z.plan(i);last=o;var c=Z.curb65(i),pl=o.place;
  if(o.notes.length)h+='<div class="step"><h3>Uwagi</h3><ul class="lst">'+o.notes.map(function(x){return '<li>'+rich(x)+'</li>'}).join('')+'</ul></div>';
  h+='<div class="step"><h3>Czas leczenia – źródła</h3><p>'+rich(o.dur)+'</p><p>Zmiana i.v. → p.o. po stabilizacji (temperatura, HR <100, RR <24, SBP >90, SpO₂ prawidłowa; NPOA 2016).</p></div>';
  h+='<div id="cpBox" hidden><b>Tekst do zaleceń (skopiowany):</b><textarea id="copyOut" readonly></textarea></div>';
- $('#res').innerHTML=h;fit();}
+ $('#res').innerHTML=h;quick(o);fit();}
+function quick(o){var q=$('#quick');if(!q)return;var pr=o.regs.filter(function(r){return r.tier!=='alt'});if(!pr.length){q.innerHTML='';return;}var pn={home:'Dom',ward:'Oddział',icu:'Ciężkie PZP / OIT'}[o.p];
+ q.innerHTML='<div class="quick"><b>💊 Proponowane ('+pn+(o.pDef?', domyślnie':'')+'):</b> '+pr.map(function(r){return r.items.filter(Boolean).map(function(x){return '<b>'+esc(x.n)+'</b> '+esc(x.dose)+' '+esc(x.route)+' '+esc(x.q)}).join(' lub ')}).join(' <b>+</b> ')+(o.warn&&o.warn.length?'<div class="qw">⚠️ '+o.warn.map(function(w){return esc(w.split(' (')[0])}).join(' · ')+'</div>':'')+' <a href="#res" onclick="document.getElementById(\'res\').scrollIntoView();return false">Szczegóły, dawki nerkowe, źródła ↓</a></div>';}
 function fit(){try{var fr=window.frameElement;if(fr&&fr.dataset.auto)fr.style.height=(document.documentElement.scrollHeight+20)+'px';}catch(e){}}
 function copy(ix){var t=Z.discharge(last,ix);var b=$('#cpBox'),ta=$('#copyOut');b.hidden=false;ta.value=t;
  var done=function(){var x=document.querySelector('[data-cp="'+ix+'"]');if(x){x.textContent='✔ Skopiowano';setTimeout(function(){x.textContent='📋 Kopiuj do zaleceń wypisowych';},2000);}};
@@ -62,7 +66,7 @@ function info(){var h='<button class="rs" id="ix" style="float:right">✕</butto
  var b=$('#infoBox');b.innerHTML=h;b.hidden=false;$('#ix').onclick=function(){b.hidden=true;};}
 bar();form();result();
 $('#info').onclick=info;
-$('#app').addEventListener('input',function(e){var t=e.target;if(t.dataset.f){st[t.dataset.f]=num(t.value);save();result();}});
+$('#app').addEventListener('input',function(e){var t=e.target;if(t.dataset.f){st[t.dataset.f]=num(t.value);save();sync(t.dataset.f);result();}});
 $('#app').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var d=b.dataset;
  if(d.cp!==undefined){copy(+d.cp);return;}
  if(d.o){st.o[d.o]=!st.o[d.o];}else if(d.cf!==undefined){var nv=d.cf==='1';st.conf=st.conf===nv?undefined:nv;}else if(d.sex)st.sex=st.sex===d.sex?'':d.sex;else if(d.cu){if(d.cu!==st.creaU&&isFinite(st.crea))st.crea=Math.round((d.cu==='umol'?st.crea*88.42:st.crea/88.42)*100)/100;st.creaU=d.cu;}

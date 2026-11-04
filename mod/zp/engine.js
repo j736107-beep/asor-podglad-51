@@ -121,12 +121,12 @@ function item(k,ctx,over){var d=D[k],o={k:k,n:d.n,brand:CH[d.ch][1],url:chUrl(d.
 function txtItem(o){return o.n+' ('+o.brand+') '+o.dose+' '+o.route+' '+o.q;}
 // ---------- dobór ----------
 function plan(i){i=i||{};var out={ok:false,need:[],regs:[],avoid:[],dec:[],notes:[],ix:[],dur:'',src:['npoa','ats','ers','nice']};
- var age=num(i.age);if(!(age>=18&&age<=110))out.need.push(isFinite(age)?'moduł tylko dla dorosłych (18–110 lat)':'wiek');
- var pl=place(i);out.place=pl;var P=i.place||pl.p;out.p=P;if(!P)out.need.push('miejsce leczenia (lub pełny CURB-65)');
- if(!['none','late','imm'].includes(i.allergy))out.need.push('alergia na penicyliny (brak / nienatychmiastowa / natychmiastowa)');
+ out.warn=[];var age=num(i.age);if(isFinite(age)&&!(age>=18&&age<=110))out.need.push('moduł tylko dla dorosłych (18–110 lat)');if(!isFinite(age))out.warn.push('brak wieku – założono pacjenta dorosłego (CURB-65 bez kryterium wieku)');
+ var pl=place(i);out.place=pl;var P=i.place||pl.p;if(!P){P='ward';out.pDef=true;out.warn.push('CURB-65 niepełny – pokazano schemat dla oddziału; wybierz miejsce leczenia ręcznie (Dom / Oddział / OIT)');}out.p=P;
+ if(!['none','late','imm'].includes(i.allergy)){i=Object.assign({},i,{allergy:'none'});out.alDef=true;out.warn.push('alergia na penicyliny nieustalona – schemat zakłada BRAK alergii; potwierdź wywiad');}
  if(out.need.length)return out;
  var c=crcl(i);out.crcl=c;var ctx={crcl:c.v,hd:i.hd===true,w:num(i.w),preg:i.preg===true};
- if(!isFinite(c.v)&&!ctx.hd)out.notes.push('Brak CrCl – dawki pokazano bez korekty nerkowej; uzupełnij kreatyninę w pasku pacjenta lub wpisz CrCl/eGFR.');
+ if(!isFinite(c.v)&&!ctx.hd)out.warn.push('brak kreatyniny – korekta nerkowa nieoceniona (dawki standardowe dla dorosłego; uzupełnij kreatyninę lub CrCl/eGFR)');
  var imm=i.allergy==='imm',late=i.allergy==='late',pen=!imm&&!late;var preg=i.preg===true,qt=i.qt===true,liver=i.liver===true;
  var noMac=qt,noFq=qt||preg,noDoxy=preg;
  var sev=P==='icu';var recent=i.recent===true;var mrsa=i.mrsa===true||(recent&&sev);var pseudo=i.pseudo===true||(recent&&sev);
@@ -208,9 +208,11 @@ function plan(i){i=i||{};var out={ok:false,need:[],regs:[],avoid:[],dec:[],notes
  if(usesMac||usesFq)out.ix.push(IX.qt);
  if(i.statin&&usesMac)out.ix.push(IX.statin);if(i.vka&&(usesMac||usesFq))out.ix.push(IX.vka);if(i.doac&&usesMac)out.ix.push(IX.doac);if(i.ssri&&mrsa)out.ix.push(IX.ssri);if(i.steroid&&usesFq)out.ix.push(IX.steroid);if(i.colch&&usesMac)out.ix.push(IX.colch);
  if(out.regs.some(function(r){return r.items.some(function(x){return x.k==='doxy'||x.route.indexOf('p.o.')>=0&&x.cls==='fq';});}))out.ix.push(IX.cation);
+ if(!isFinite(ctx.w)&&out.regs.some(function(r){return r.items.some(function(x){return x.k==='vanco'})}))out.warn.push('brak masy – wankomycyny nie policzono (dawka mg/kg wymaga masy ciała)');
  out.ok=out.regs.length>0||out.dec.length>0;return out;}
 // tekst do zaleceń wypisowych (wybrany schemat)
 function discharge(o,idx){var r=o.regs[idx];if(!r)return '';var c=o.place&&o.place.c;var L=['Rozpoznanie: pozaszpitalne zapalenie płuc'+(c&&c.complete?' (CURB-65 '+c.score+'/5)':'')+'.','Antybiotykoterapia:'];
+ (o.warn||[]).forEach(function(w){L.push('UWAGA: '+w+'.');});
  if(r.tier==='prop')L.push('UWAGA: '+PROP+'.');
  r.items.forEach(function(x){L.push('- '+txtItem(x)+(x.rmod?' [korekta nerkowa: '+x.renal+']':'')+'.');});
  L.push('Czas leczenia: '+(r.dur||o.dur)+'.');

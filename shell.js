@@ -79,7 +79,7 @@ $('#printAll').onclick=function(){SORReport.print();};
 window.SKS.setUnits=function(u){u=u==='si'?'si':'conv';if(S.units===u)return;S.units=u;saveS();applyS();pcShow();patBar();
  var y=window.scrollY;show();window.scrollTo(0,y);document.dispatchEvent(new CustomEvent('sk-units',{detail:u}));};
 $('#pcu').onclick=function(){SKS.setUnits(S.units==='si'?'conv':'si');};
-window.SKS.setP=function(o){var ch=false;if(o.age!=null&&String(PT.age)!==String(o.age)){PT.age=String(o.age);$('#pa').value=PT.age;ch=true}if(o.sex&&PT.sex!==o.sex){PT.sex=o.sex;ch=true}if(ch){saveP();patBar();setTimeout(refresh,0);}};
+window.SKS.setP=function(o){var ch=false;if(o.age!=null&&String(PT.age)!==String(o.age)){PT.age=String(o.age);$('#pa').value=PT.age;ch=true}if(o.sex&&PT.sex!==o.sex){PT.sex=o.sex;ch=true}if(o.w!=null&&String(PT.w)!==String(o.w)){PT.w=String(o.w);$('#pw').value=PT.w;ch=true}if(o.crMg!=null&&String(PT.crMg)!==String(o.crMg)){PT.crMg=o.crMg;pcShow();ch=true}if(ch){saveP();patBar();setTimeout(refresh,0);}};
 window.SKS.nextPatient=function(){if(!confirm('Następny pacjent: wyczyścić dane pacjenta i wszystkie moduły, również tekst dokumentacji i trendy? (ustawienia i ulubione zostają)'))return;window.SORClinicalUI?.reset();
  if(window.SORClearCase)window.SORClearCase();
  Object.keys(localStorage).forEach(function(k){if(k==='sk_settings'||k==='omdl_settings'||k==='sk_mod'||k==='sor_favorites')return;if(k.indexOf('sk_')===0||k.indexOf('omdl_')===0||k.indexOf('se4state:')===0)localStorage.removeItem(k)});location.reload();};
