@@ -88,6 +88,7 @@ function sync(f,m){var d;try{d=f.contentWindow.document}catch(e){return}if(!d||!
 // ---------- start ----------
 applyS();patBar();show();
 window.SKS.show=function(id){go(id);};
+window.SKS.openPompa=function(id){go('pompy');var f=$('#main iframe');if(!f)return;var set=function(){try{f.contentWindow.location.hash='d/'+id;}catch(e){}};f.addEventListener('load',set);set();};
 window.SKS.openPropofol=function(){go('pompy');var f=$('#main iframe');if(!f)return;var set=function(){try{f.contentWindow.location.hash='d/propofol';}catch(e){}};f.addEventListener('load',set);set();};
 window.SKS.active=function(){return active};
 // migawki modułów do raportu: po zmianie danych (z opóźnieniem) i przy wyjściu z modułu
