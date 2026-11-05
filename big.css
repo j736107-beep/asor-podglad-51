@@ -1,0 +1,16 @@
+/* 5.1 pw19: większe, czytelne czcionki (min. ~15–16 px) – ładowane na końcu */
+.eyebrow,.hero-tile span,.hero-tile p,.hero-tile b,.module-tile small,.section-title span,.notice,.disc{font-size:16px!important}
+.module-tile small{color:#000!important;font-weight:700}
+.tl small,.tl .tl-ok,.tl .tl-src,.tl .tl-src a,.tl .tl-cnt,.tl .tl-chk{font-size:16px!important}
+.tabs button,.wb-tabs button,.clinical-tabs button{font-size:16px!important}
+.clinical-field,.clinical-field small,.clinical-result,.clinical-result p,.clinical-sources,.clinical-sources summary,.clinical-sources p,.clinical-sources a,.clinical-out th,.clinical-out td{font-size:16px!important}
+.b2cont td,.b2cont td a,.b2cont .mut,.b2cont h3 .mut,.b2cont span{font-size:16px!important}
+.mut,.pl,.b1src,.b1src .pl,.gcs-h,.gcs-b,.gcs-b b,.box th,.box td,main th,main td{font-size:15px!important}
+.mut{color:#222!important}
+header .tg,header small,.brand small,label,.pill,.seg button,.tgs .tg{font-size:15px!important}
+.module-tile b{font-size:17px!important}
+/* pw19: nagłówek szpitala – tekst wyżej (obok logo), nieco mniejszy */
+.hosp-card{flex-direction:row!important;align-items:center!important;gap:12px!important}
+.hosp-card img{max-width:150px!important;width:42%!important;flex:0 0 auto}
+.hc-t b{font-size:15px!important;line-height:1.25!important}
+.hc-t span{font-size:14px!important}
