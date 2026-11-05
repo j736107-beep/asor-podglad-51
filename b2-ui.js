@@ -70,17 +70,53 @@ function capTab(H){var number=H.number,select=H.select,group=H.group,tri=H.tri,c
    var severeAlarm=inpt.setting==='icu'||inpt.rrt==='crrt';
    return{html:h,alarm:false};}};}
 // ============================================================ SEPSA ============================================================
-function sepFiO2(g){var f=g('fio2');if(!nz(f)||f<=0)return NaN;if(f>1)f=f/100;return f>=0.21&&f<=1?f:NaN;}
+/* FiO₂ – przybliżenia kliniczne (nie nastawa respiratora):
+ * air: 21 %
+ * nc (wąsy): 21 + 4×L/min (klasyka; literatura też 3–4 %/L; >~6 l/min rzadko / niedokładne)
+ * mask (prosta): 21 + 4×L, maks. 60 %; zwykle 5–10 l/min (przy L<5 ostrzeżenie)
+ * nrb (maska z rezerwuarem): 60 + 2×(L−10), zakres typowy 10–15 l/min → ≈60–90 %; wysokie, niedokładne; L<10 ostrzeżenie
+ */
+function sepEstFiO2Pct(mode,L){
+ if(mode==='air'||!mode)return 21;
+ if(!nz(L)||L<1)L=NaN;
+ if(mode==='nc'){if(!nz(L))return NaN;return Math.min(21+4*L,85);}
+ if(mode==='mask'){if(!nz(L))return NaN;return Math.min(21+4*L,60);}
+ if(mode==='nrb'){if(!nz(L))return NaN;var x=60+2*(L-10);return Math.max(40,Math.min(x,95));}
+ return NaN;}
+function sepFio2Warn(mode,L){
+ if(mode==='nc'&&nz(L)&&L>6)return 'wąsy: powyżej ~6 l/min rzadko / niedokładne';
+ if(mode==='mask'&&nz(L)&&L<5)return 'maska prosta: zwykle ≥5 l/min';
+ if(mode==='nrb'&&nz(L)&&L<10)return 'NRB: typowo 10–15 l/min (przy <10 szacunek bardzo niedokładny)';
+ if(mode==='nrb')return 'wysokie FiO₂, niedokładne';
+ return '';}
+function sepFiO2(g){
+ var man=g('fio2');
+ if(nz(man)&&man>0){var f=man>1?man/100:man;return f>=0.21&&f<=1?f:NaN;}
+ var pct=sepEstFiO2Pct(g('o2mode'),g('o2flow'));
+ if(!nz(pct)||pct<=0)return NaN;return pct/100;}
 function sepPF(g){var p=g('pao2'),f=sepFiO2(g);return nz(p)&&p>0&&nz(f)?p/f:NaN;}
 function sepMAP(s,d){return nz(s)&&nz(d)&&s>0&&d>0&&s>d?d+(s-d)/3:NaN;}
+/* Diureza na Ocenie: tylko ml/kg/h; do SOFA cicho: × masa × 24 → ml/dobę (progi <500 / <200). Bez masy = brak diurezy w SOFA (zostaje kreatynina). */
+function sepUoDay(g,P){
+ var h=g('uoh'),w=P&&P.w;if(nz(h)&&h>=0&&nz(w)&&w>0)return h*w*24;
+ return NaN;}
 function sepInputs(g,P){var map=(nz(g('sbp'))&&nz(g('dbp')))?(g('sbp')+2*g('dbp'))/3:NaN;var bili=nz(g('bili'))?g('bili')/17.104:NaN;var gc=g('gcs');
  var aw=g('aw'),altered=aw==='alt'?true:aw==='ok'?false:undefined,o2=g('o2s')==='o2'?true:g('o2s')==='air'?false:undefined;
  return{infection:g('inf')===true,rr:g('rr'),sbp:g('sbp'),altered:altered,cvpu:altered,spo2:g('spo2'),o2:o2,scale2:g('sc2')===true,hr:g('hr'),temp:g('temp'),
-  pf:sepPF(g),vent:g('vent')===true,plt:g('plt'),bili:bili,map:map,dobu:g('dobu')===true,gcs:gc,crMg:P.crMg,uo:g('uo'),lac:g('lac'),vasopressor:g('vaso')===true,hypotension:nz(map)?map<65:undefined};}
+  pf:sepPF(g),vent:g('vent')===true,plt:g('plt'),bili:bili,map:map,dobu:g('dobu')===true,gcs:gc,crMg:P.crMg,uo:sepUoDay(g,P),lac:g('lac'),vasopressor:g('vaso')===true,hypotension:nz(map)?map<65:undefined};}
 function sepForm(t){
  if(t==='a')return '<div class="b1full">'+chk('inf','<b>Podejrzenie / rozpoznanie zakażenia</b> (warunek oceny sepsy)')+'</div>'+
-  '<div class="b2h">qSOFA / NEWS2 – parametry życiowe</div>'+inp('rr','Oddechy','/min')+inp('sbp','SBP','mmHg')+inp('dbp','DBP','mmHg')+'<div class="b1full b2maplive" id="sepMapBox"><b>MAP (auto):</b> <span id="sepMapVal">—</span> mmHg <span class="mut">= DBP + (SBP−DBP)/3 · liczy się przy wpisywaniu</span></div>'+inp('hr','Tętno','/min')+inp('temp','Temperatura','°C')+inp('spo2','SpO₂','%')+'<label>Tlen <select id="o2s"><option value="">— nie oceniono —</option><option value="air">powietrze</option><option value="o2">tlenoterapia</option></select></label>'+chk('sc2','SpO₂ skala 2 (docelowo 88–92%, hiperkapnia – tylko decyzją lekarza)')+'<label>Świadomość (ACVPU) <select id="aw"><option value="">— nie oceniono —</option><option value="ok">A – przytomny, bez nowego splątania</option><option value="alt">nowe splątanie lub C/V/P/U</option></select></label>'+
-  '<div class="b2h">SOFA (opcjonalnie – brakujące elementy nie są liczone jako 0)</div>'+inp('pao2','PaO₂ (gazometria tętnicza)','mmHg')+inp('fio2','FiO₂ (21–100 % lub 0,21–1,0)','')+'<div class="mut b1full">PaO₂ z gazometrii tętniczej (ABG). FiO₂: powietrze 21 %; przy tlenoterapii przybliżenie (wąsy ≈ 21 % + 3–4 % na każdy l/min; maska z rezerwuarem – wysokie, niedokładne). Stosunek P/F liczony automatycznie.</div>'+chk('vent','wspomaganie wentylacji')+inp('plt','Płytki','G/l')+inp('bili','Bilirubina','@bili')+inp('uo','Diureza','ml/dobę')+SKGCS.field(false)+
+  '<div class="b2h">qSOFA / NEWS2 – parametry życiowe</div>'+inp('rr','Oddechy','/min')+inp('sbp','SBP','mmHg')+inp('dbp','DBP','mmHg')+'<div class="b1full b2maplive" id="sepMapBox"><b>MAP (auto):</b> <span id="sepMapVal">—</span> mmHg <span class="mut">= DBP + (SBP−DBP)/3 · liczy się przy wpisywaniu</span></div>'+inp('hr','Tętno','/min')+inp('temp','Temperatura','°C')+inp('spo2','SpO₂','%')+'<label>Tlen (NEWS2) <select id="o2s"><option value="">— nie oceniono —</option><option value="air">powietrze</option><option value="o2">tlenoterapia</option></select></label>'+chk('sc2','SpO₂ skala 2 (docelowo 88–92%, hiperkapnia – tylko decyzją lekarza)')+'<label>Świadomość (ACVPU) <select id="aw"><option value="">— nie oceniono —</option><option value="ok">A – przytomny, bez nowego splątania</option><option value="alt">nowe splątanie lub C/V/P/U</option></select></label>'+
+  '<div class="b2h">SOFA (opcjonalnie – brakujące elementy nie są liczone jako 0)</div>'+inp('pao2','PaO₂ (gazometria tętnicza)','mmHg')+
+  '<label class="b1full">Tlenoterapia (do FiO₂) <select id="o2mode"><option value="">— nie ustalono —</option><option value="air">powietrze atmosferyczne</option><option value="nc">tlenoterapia – wąsy (kanula nosowa)</option><option value="mask">maska (prosta)</option><option value="nrb">maska z rezerwuarem (NRB)</option></select></label>'+
+  '<label id="o2flowWrap">Przepływ O₂ <input type="number" id="o2flow" min="1" max="15" step="1" inputmode="numeric" placeholder="1–15"> l/min</label>'+
+  '<div class="b1full b2maplive" id="sepFio2Box"><b>FiO₂ (szacunek):</b> <span id="sepFio2Val">—</span> % <span class="mut" id="sepFio2Note"></span></div>'+
+  inp('fio2','FiO₂ ręczne – nadpisuje szacunek (21–100 % lub 0,21–1,0)','')+
+  '<div class="mut b1full">PaO₂ z gazometrii tętniczej (ABG). FiO₂ to <b>przybliżenie</b> (nie nastawa respiratora): powietrze 21 %; wąsy ≈ 21 %+4×l/min (także podawane 3–4 %/l; &gt;~6 l/min rzadko/niedokładne); maska prosta ≈ 21 %+4×l/min, maks. ~60 % (zwykle 5–10 l/min); NRB ≈ 60 %+2×(l−10) przy 10–15 l/min (~60–90 %) – wysokie, niedokładne. Puste „FiO₂ ręczne” = użyj szacunku. Stosunek P/F = PaO₂/FiO₂ (ułamek) liczony automatycznie.</div>'+
+  chk('vent','wspomaganie wentylacji')+inp('plt','Płytki','G/l')+inp('bili','Bilirubina','@bili')+
+  inp('uoh','Diureza godzinowa','ml/kg/h')+
+  '<div class="b1full mut" id="sepUoBox">Cel resuscytacji ≥0,5 ml/kg/h (SSC). Do SOFA przeliczane w tle: ml/kg/h × masa × 24 → ml/dobę (gdy masa w pasku); bez masy – SOFA nerki tylko z kreatyniny. <span class="mut">SOFA (auto): <span id="sepUoDayVal">—</span> ml/dobę</span></div>'+
+  SKGCS.field(false)+
   '<div class="b2h">Perfuzja</div>'+inp('lac','Mleczany','mmol/l')+chk('vaso','wazopresor już stosowany (opcjonalnie – przy ponownej ocenie, po płynach)')+'<div class="mut b1full">Ocena wstępna nie wymaga noradrenaliny. Wazopresor = kolejny etap przy MAP &lt;65 mmHg mimo płynów (zakładka „Ponowna ocena”).</div>';
  if(t==='b')return inp('t0','Godzina rozpoznania (hh:mm) – opcjonalnie','')+'<p class="mut">Pola poniżej to lista kontrolna; zaznacz wykonane.</p>'+
   chk('d_lac','Mleczany oznaczone')+chk('d_cult','Posiewy krwi ≥2 zestawy pobrane PRZED antybiotykiem (bez istotnego opóźnienia antybiotyku)')+chk('d_abx','Antybiotyk empiryczny podany')+chk('d_fluid','Płyny krystaloidy rozpoczęte')+chk('d_map','MAP ≥65 mmHg osiągnięte')+chk('d_ne','Noradrenalina włączona (gdy hipotensja po płynach)')+chk('d_src','Ognisko zakażenia zidentyfikowane / kontrola ogniska zaplanowana')+
@@ -101,8 +137,31 @@ function sepLocal(src,alg,r2){var cns=src==='cns'||src==='mening';var all=alg===
  return bx(all?'red':'ok','Ścieżka lokalna SOR PSZS Nowy Targ',h);}
 var sepHeavyTimer=null,sepHeavyRun=false,sepLastRest='',sepLastLvl='ok';
 function sepPaintMap(mp,id,boxId){var el=document.getElementById(id||'sepMapVal');if(el)el.textContent=nz(mp)?F(mp,0):'—';var box=document.getElementById(boxId||'sepMapBox');if(box){box.style.borderColor=nz(mp)&&mp<65?'#C62828':'';box.style.background=nz(mp)&&mp<65?'#FCEBEA':'';}}
-function sepLiveBox(mp,pf,g){return bx(nz(mp)&&mp<65?'red':nz(mp)?'ok':'','Wyliczone','<b>MAP: '+(nz(mp)?F(mp,0)+' mmHg':'— (podaj SBP i DBP)')+'</b>'+(nz(mp)&&mp<65?' <b class="r">&lt;65 – hipotensja: płyny 30 ml/kg, ponowna ocena</b>':'')+' · <b>PaO₂/FiO₂: '+(nz(pf)?F(pf,0)+' mmHg':'— (PaO₂ + FiO₂)')+'</b>'+(nz(g('fio2'))&&!nz(sepFiO2(g))?' <span class="o">FiO₂ poza zakresem 21–100 %</span>':'')+'<div class="mut">MAP = DBP + (SBP − DBP)/3. Liczy się natychmiast przy wpisywaniu ciśnień.</div>');}
-function sepCalcHeavyA(g,P){var i=sepInputs(g,P);var r=A.sepsisAssess(i);var mp=sepMAP(g('sbp'),g('dbp')),pf=sepPF(g);var live=sepLiveBox(mp,pf,g);sepPaintMap(mp);var rest='';
+function sepPaintFio2(g){
+ var modeEl=document.getElementById('o2mode'),flowEl=document.getElementById('o2flow'),wrap=document.getElementById('o2flowWrap');
+ var mode=modeEl?modeEl.value:(g?g('o2mode'):'');
+ var L=flowEl?parseFloat(String(flowEl.value).replace(',','.')):NaN;if(!isFinite(L))L=g?g('o2flow'):NaN;
+ if(wrap){var hide=!mode||mode==='air';wrap.style.display=hide?'none':'';if(flowEl)flowEl.disabled=!!hide;}
+ var manEl=document.getElementById('fio2'),manRaw=manEl?manEl.value:'';
+ var manN=N(manRaw),hasMan=nz(manN)&&manN>0;
+ var pct=hasMan?(manN>1?manN:manN*100):sepEstFiO2Pct(mode,L);
+ var val=document.getElementById('sepFio2Val');if(val)val.textContent=nz(pct)?F(pct,0):'—';
+ var note=document.getElementById('sepFio2Note');
+ if(note){var w=sepFio2Warn(mode,L);note.textContent=hasMan?'(ręczne – nadpisuje szacunek)':(w?('· '+w):(nz(pct)?'· przybliżenie':''));}
+ var o2s=document.getElementById('o2s');
+ if(o2s&&mode){var want=mode==='air'?'air':'o2';if(o2s.value!==want)o2s.value=want;}
+ return pct;}
+function sepPaintUo(g,P){
+ var el=document.getElementById('sepUoDayVal');if(!el)return;
+ P=P||(window.SKS&&SKS.P?SKS.P():{});
+ var gg=g||function(id){var e=document.getElementById(id);if(!e)return NaN;return N(e.value);};
+ var day=sepUoDay(gg,P),h=gg('uoh');
+ if(nz(day))el.textContent=F(day,0);
+ else if(nz(h)&&h>=0&&!(nz(P.w)&&P.w>0))el.textContent='— (brak masy)';
+ else el.textContent='—';}
+function sepLiveBox(mp,pf,g){var fio=sepFiO2(g),pct=nz(fio)?fio*100:NaN;var src=nz(g('fio2'))?'ręczne':(g('o2mode')?'szacunek':'');
+ return bx(nz(mp)&&mp<65?'red':nz(mp)?'ok':'','Wyliczone','<b>MAP: '+(nz(mp)?F(mp,0)+' mmHg':'— (podaj SBP i DBP)')+'</b>'+(nz(mp)&&mp<65?' <b class="r">&lt;65 – hipotensja: płyny 30 ml/kg, ponowna ocena</b>':'')+' · <b>FiO₂: '+(nz(pct)?F(pct,0)+' %':'—')+'</b>'+(src?' <span class="mut">('+src+')</span>':'')+' · <b>PaO₂/FiO₂: '+(nz(pf)?F(pf,0)+' mmHg':'— (PaO₂ + FiO₂)')+'</b>'+(nz(g('fio2'))&&!nz(fio)?' <span class="o">FiO₂ poza zakresem 21–100 %</span>':'')+'<div class="mut">MAP = DBP + (SBP − DBP)/3. FiO₂ i P/F aktualizują się przy trybie O₂ / przepływie / PaO₂.</div>');}
+function sepCalcHeavyA(g,P){var i=sepInputs(g,P);var r=A.sepsisAssess(i);var mp=sepMAP(g('sbp'),g('dbp')),pf=sepPF(g);var live=sepLiveBox(mp,pf,g);sepPaintMap(mp);sepPaintFio2(g);sepPaintUo(g,P);var rest='';
  if(!r.ok){rest=bx('orange','Sepsa – ocena'+dw(),rich(r.msg)+'<div class="mut">Wprowadź parametry; brak danych = brak wyniku.</div>')+srcl(esc(A.SRC.ssc21));sepLastRest=rest;sepLastLvl='ok';return{H:live+rest,lvl:'ok'};}
  var q=r.q,s=r.s,n=r.n;
  rest+=bx(r.shock?'red':r.suspected?'orange':'ok',esc(r.msg),(r.shockPossible?'<div class="o">Wazopresor bez mleczanów: nie można potwierdzić wstrząsu septycznego (wymagane mleczany >2 mmol/l).</div>':'')+'<div class="mut">Rozpoznanie wg NPOA 2020/Sepsis-3: podejrzenie zakażenia + SOFA ≥2 pkt LUB qSOFA ≥2/3. SSC 2021 nie zaleca qSOFA jako jedynego narzędzia przesiewowego – dlatego pokazano też NEWS2.</div>');
@@ -116,7 +175,7 @@ function sepCalcHeavyA(g,P){var i=sepInputs(g,P);var r=A.sepsisAssess(i);var mp=
  var lvl=(r.shock||n.cls==='emergency')?'red':'ok';sepLastRest=rest;sepLastLvl=lvl;return{H:live+rest,lvl:lvl};}
 function sepCalc(t,g,P){
  if(t==='a'){var mp=sepMAP(g('sbp'),g('dbp')),pf=sepPF(g);
-  sepPaintMap(mp);
+  sepPaintMap(mp);sepPaintFio2(g);sepPaintUo(g,P);
   var live=sepLiveBox(mp,pf,g);
   if(sepHeavyRun)return sepCalcHeavyA(g,P);
   if(sepHeavyTimer)clearTimeout(sepHeavyTimer);
@@ -163,7 +222,7 @@ function sepCalc(t,g,P){
  return{H:'',lvl:'ok'};}
 function sepReport(P){
  var sa=store('sepsis_a').get(),sb=store('sepsis_b').get(),sc=store('sepsis_c').get(),sd=store('sepsis_d').get();
- var gA=function(id){var v=sa[id];if(v===undefined||v===''||v===null)return id==='aw'||id==='o2s'?'':NaN;if(typeof v==='boolean')return v;if(id==='aw'||id==='o2s')return v;var x=N(v);return isFinite(x)?x:NaN;};
+ var gA=function(id){var v=sa[id];if(v===undefined||v===''||v===null)return id==='aw'||id==='o2s'||id==='o2mode'?'':NaN;if(typeof v==='boolean')return v;if(id==='aw'||id==='o2s'||id==='o2mode')return v;var x=N(v);return isFinite(x)?x:NaN;};
  var i=sepInputs(gA,P);var as=A.sepsisAssess(i);
  var H='<div class="b2pr"><h2>Sepsa – raport końcowy (do druku)</h2>';
  var pt=window.SKS&&SKS.P?SKS.P():P;H+='<p><b>Pacjent:</b> wiek '+(nz(pt.age)?F(pt.age,0):'—')+', płeć '+({m:'M',f:'K'}[pt.sex]||'—')+', masa '+(nz(pt.w)?F(pt.w,0)+' kg':'—')+', kreatynina '+creaTxt(pt.crMg)+', CrCl (pasek) '+(nz(pt.crcl)?F(pt.crcl,0)+' ml/min':'—')+'.</p>';
@@ -267,10 +326,19 @@ repl(SEP);
 window.SORB2={capTab:capTab,mushTabs:mushTabs,contactsPanel:contactsPanel,dementiaForm:dementiaForm,dementiaCalc:dementiaCalc,speciesCard:speciesCard,sepReport:sepReport,printHtml:printHtml,rich:rich};
 })();
 
-/* pw34: MAP natychmiast na kazdy klawisz; ciezkie przeliczenie Sepsy debounce 120 ms */
+/* pw35: MAP + FiO2/P/F + diureza – natychmiastowy paint; ciezkie SOFA debounce 120 ms */
 (function(){var T=null,M={sbp:['sbp','dbp','sepMapVal','sepMapBox'],dbp:['sbp','dbp','sepMapVal','sepMapBox'],rsbp:['rsbp','rdbp','sepMapVal2','sepMapBox2'],rdbp:['rsbp','rdbp','sepMapVal2','sepMapBox2']};
+var FIO=['o2mode','o2flow','pao2','fio2'],UO=['uoh'];
 function n(id){var e=document.getElementById(id);if(!e)return NaN;var x=parseFloat(String(e.value).replace(',','.'));return isFinite(x)&&x>0?x:NaN;}
-document.addEventListener('input',function(e){var t=e.target,k=t&&t.id&&M[t.id];if(!k)return;var v=document.getElementById(k[2]);if(!v)return;
- var s=n(k[0]),d=n(k[1]),m=isFinite(s)&&isFinite(d)?(s+2*d)/3:NaN;v.textContent=isFinite(m)?String(Math.round(m)):'—';var b=document.getElementById(k[3]);if(b){b.style.borderColor=isFinite(m)&&m<65?'#C62828':'';b.style.background=isFinite(m)&&m<65?'#FCEBEA':'';}
- if(typeof t.oninput==='function'&&!e.__sepLate){e.stopImmediatePropagation();clearTimeout(T);T=setTimeout(function(){var ev=new Event('input',{bubbles:true});ev.__sepLate=true;t.oninput.call(t,ev);try{if(window.SKS&&SKS.capSoon)SKS.capSoon();}catch(_){}},120);}
-},true);})();
+function paintFioLive(){if(typeof sepPaintFio2==='function')try{sepPaintFio2(function(id){var e=document.getElementById(id);if(!e)return id==='o2mode'?'':NaN;if(e.tagName==='SELECT')return e.value;var x=parseFloat(String(e.value).replace(',','.'));return isFinite(x)?x:NaN;});}catch(_){}}
+function paintUoLive(){if(typeof sepPaintUo==='function')try{sepPaintUo(null,window.SKS&&SKS.P?SKS.P():{});}catch(_){}}
+function onSepQuick(e){var t=e.target,id=t&&t.id;if(!id)return;
+ if(M[id]){var k=M[id],v=document.getElementById(k[2]);if(v){var s=n(k[0]),d=n(k[1]),m=isFinite(s)&&isFinite(d)?(s+2*d)/3:NaN;v.textContent=isFinite(m)?String(Math.round(m)):'—';var b=document.getElementById(k[3]);if(b){b.style.borderColor=isFinite(m)&&m<65?'#C62828':'';b.style.background=isFinite(m)&&m<65?'#FCEBEA':'';}}
+  if(typeof t.oninput==='function'&&!e.__sepLate){e.stopImmediatePropagation();clearTimeout(T);T=setTimeout(function(){var ev=new Event('input',{bubbles:true});ev.__sepLate=true;t.oninput.call(t,ev);try{if(window.SKS&&SKS.capSoon)SKS.capSoon();}catch(_){}},120);}
+  return;}
+ if(FIO.indexOf(id)>=0){paintFioLive();return;}
+ if(UO.indexOf(id)>=0){paintUoLive();return;}
+}
+document.addEventListener('input',onSepQuick,true);
+document.addEventListener('change',function(e){var id=e.target&&e.target.id;if(id==='o2mode'||id==='o2flow')paintFioLive();},true);
+})();
