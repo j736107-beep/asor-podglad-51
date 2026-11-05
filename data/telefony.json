@@ -71,6 +71,17 @@
        "uwaga": "źródło: ogłoszenie naboru (nabory.kprm.gov.pl) – sprawdź"
       }
      ]
+    },
+    {
+     "nazwa": "Transport medyczny NFZ – Jordanów",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "123784908",
+       "st": "lok"
+      }
+     ],
+     "lista": true
     }
    ],
    "modul": "ksiazka"
@@ -540,6 +551,23 @@
        "st": "lok"
       }
      ]
+    }
+   ],
+   "modul": "szpital"
+  },
+  {
+   "nazwa": "Nasz szpital (PSZS Nowy Targ) – transport medyczny",
+   "pozycje": [
+    {
+     "nazwa": "Transport medyczny NFZ – Jordanów",
+     "numery": [
+      {
+       "typ": "tel",
+       "nr": "123784908",
+       "st": "lok"
+      }
+     ],
+     "lista": true
     }
    ],
    "modul": "szpital"
