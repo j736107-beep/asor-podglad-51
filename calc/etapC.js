@@ -103,26 +103,31 @@ function renalFor(id,doseTxt,stdTxt,crcl,rrt){var rr=AB.renal(id,crcl,rrt||'none
  else if(diff&&rr.mod)t=t+' (to korekta ChPL dla dawki standardowej; dawka w ZOMR jest wyższa – '+DEC+')';
  return{name:rr.name,status:rr.status,text:t,std:stdTxt,dose:doseTxt,mod:!!rr.mod,avoid:!!rr.avoid,tdm:!!rr.tdm};}
 function neuroTreat(i){i=i||{};var age=num(i.age),w=num(i.w);var res={ok:false,needs:[],drugs:[],decisions:[],warnings:[],notes:[],steroid:null,src:[SRC.escmid16,SRC.idsa04,SRC.koroun]};
- if(!(age>=18&&age<=110))res.needs.push(nz(age)?'wiek poza zakresem 18–110 lat (moduł dla dorosłych)':'wiek (pasek pacjenta)');
- if(!(w>=30&&w<=350))res.needs.push(nz(w)?'masa ciała poza zakresem 30–350 kg':'masa ciała (pasek pacjenta)');
- if(i.pregnancy===undefined)res.needs.push('ciąża / karmienie (tak/nie)');
- if(i.betaAllergy===undefined)res.needs.push('alergia na β-laktamy (tak/nie)');
+ // Empiria ZOMR musi być widoczna od razu (SOR) – brak wieku/ciąży/alergii NIE blokuje schematu, tylko ostrzega.
+ if(nz(age)&&!(age>=18&&age<=110))res.needs.push('wiek poza zakresem 18–110 lat (moduł dla dorosłych)');
+ if(nz(w)&&!(w>=30&&w<=350))res.needs.push('masa ciała poza zakresem 30–350 kg');
  if(res.needs.length)return res;
- var c=AB.cg({age:age,sex:i.sex,w:w,h:i.h,crMg:i.crMg});var crcl=c.ok?c.crcl:NaN;res.crcl=c;var rrt=i.rrt||'none';
+ if(!nz(age))res.warnings.push('Brak wieku w pasku pacjenta: schemat dorosły bez automatycznej ampicyliny na Listerię (dodawana przy wieku >50 lat lub zaznaczonym czynniku ryzyka). Uzupełnij wiek.');
+ if(!nz(w))res.warnings.push('Brak masy w pasku: dawki stałe (ceftriakson, ampicylina, deksametazon) OK; wankomycyna i acyklowir – wzór mg/kg bez wyliczenia mg do czasu podania masy.');
+ if(i.pregnancy===undefined){i.pregnancy=false;res.warnings.push('Ciąża/karmienie nieustalone – założono brak. Jeśli ciąża: '+DEC+'.');}
+ if(i.betaAllergy===undefined){i.betaAllergy=false;res.warnings.push('Alergia na β-laktamy nieustalona – założono brak. Jeśli alergia: wybierz „tak” (brak ceftriaksonu, schemat alternatywny – '+DEC+').');}
+ var c=AB.cg({age:nz(age)?age:40,sex:i.sex,w:nz(w)?w:70,h:i.h,crMg:i.crMg});var crcl=c.ok?c.crcl:NaN;res.crcl=c;var rrt=i.rrt||'none';
+ // CrCl tylko gdy realne dane – nie udawaj CrCl z podstawionymi 40 lat / 70 kg
+ if(!nz(age)||!nz(w)||!i.sex||!nz(num(i.crMg))){c={ok:false,missing:[]};if(!nz(age))c.missing.push('wiek');if(!i.sex)c.missing.push('płeć');if(!nz(w))c.missing.push('masa');if(!nz(num(i.crMg)))c.missing.push('kreatynina');crcl=NaN;res.crcl=c;}
  if(!c.ok&&rrt==='none')res.warnings.push('Nie obliczono CrCl – brakuje: '+c.missing.join(', ')+'. Dawki podano jako pełne, BEZ korekty nerkowej – '+DEC+'. Pierwsza dawka zawsze pełna.');
- var listeria=age>50||i.listeriaRisk===true;res.listeria=listeria;
+ var listeria=(nz(age)&&age>50)||i.listeriaRisk===true;res.listeria=listeria;
  if(i.betaAllergy===true){res.decisions.push('Alergia na β-laktamy: ESCMID 2016 podaje chloramfenikol / meropenem / moxifloksacynę jako alternatywy (część na podstawie opisów przypadków) – brak zweryfikowanego schematu w aplikacji: '+DEC+'. Konsultacja zakaźnicza.');}
  var D=[];
  if(i.betaAllergy!==true){
   D.push(Object.assign({role:'cefalosporyna III gen. (wybierz JEDNĄ)',drug:'Ceftriakson'},renalFor('cftx','2 g co 12 h i.v. (lub 4 g co 24 h) – ESCMID 2016 / IDSA 2004','2 g co 24 h i.v.',crcl,rrt)));
   D.push(Object.assign({role:'alternatywa (zamiast ceftriaksonu)',drug:'Cefotaksym'},renalFor('cfx','2 g co 4–6 h i.v. – ESCMID 2016','2 g co 8 h i.v.',crcl,rrt)));}
- D.push({role:'pokrycie opornego pneumokoka (ESCMID: wankomycyna LUB ryfampicyna 300 mg co 12 h)',drug:'Wankomycyna',dose:'ESCMID 2016: 10–20 mg/kg co 8–12 h i.v. (stężenie minimalne docelowo 15–20 µg/ml)',std:'dawka nasycająca 25–30 mg/kg (NPOA 2020, silnik abxB2)',status:'tdm',text:'Dawka nasycająca 25–30 mg/kg = '+r1(25*w)+'–'+r1(30*w)+' mg (masa '+w+' kg); dawkowanie podtrzymujące WYŁĄCZNIE wg stężeń (TDM), bez korekty wg CrCl – '+DEC+'.',mod:false,avoid:false,tdm:true});
+ D.push({role:'pokrycie opornego pneumokoka (ESCMID: wankomycyna LUB ryfampicyna 300 mg co 12 h)',drug:'Wankomycyna',dose:'ESCMID 2016: 10–20 mg/kg co 8–12 h i.v. (stężenie minimalne docelowo 15–20 µg/ml)',std:'dawka nasycająca 25–30 mg/kg (NPOA 2020, silnik abxB2)',status:'tdm',text:nz(w)?'Dawka nasycająca 25–30 mg/kg = '+r1(25*w)+'–'+r1(30*w)+' mg (masa '+w+' kg); dawkowanie podtrzymujące WYŁĄCZNIE wg stężeń (TDM), bez korekty wg CrCl – '+DEC+'.':'Dawka nasycająca 25–30 mg/kg i.v. (podaj masę w pasku, aby wyliczyć mg); podtrzymanie WYŁĄCZNIE wg TDM – '+DEC+'.',mod:false,avoid:false,tdm:true});
  if(listeria){var rl=renalFor('amp_q4','2 g co 4 h i.v. – ESCMID 2016','2 g co 4 h i.v.',crcl,rrt);D.push(Object.assign({role:'Listeria: wiek >50 lat lub czynnik ryzyka (immunosupresja, nowotwór, cukrzyca)',drug:'Ampicylina'},rl));}
  var hsv=(i.encephalitis===true);
- if(hsv){var ra=AB.renal('acv',crcl,rrt);var mg=10*w;D.push({role:'zapalenie mózgu – NIE czekaj na PCR',drug:'Acyklowir',dose:'10 mg/kg co 8 h i.v. = '+r1(mg)+' mg/dawkę (masa '+w+' kg; przy otyłości: masa należna/skorygowana – '+DEC+')',std:'10 mg/kg co 8 h (HSV – zapalenie mózgu)',status:ra.status,text:ra.text,mod:!!ra.mod,avoid:false,tdm:false,name:'Acyklowir'});}
+ if(hsv){var ra=AB.renal('acv',crcl,rrt);var mg=nz(w)?10*w:NaN;D.push({role:'zapalenie mózgu – NIE czekaj na PCR',drug:'Acyklowir',dose:nz(w)?'10 mg/kg co 8 h i.v. = '+r1(mg)+' mg/dawkę (masa '+w+' kg; przy otyłości: masa należna/skorygowana – '+DEC+')':'10 mg/kg co 8 h i.v. (podaj masę w pasku, aby wyliczyć mg; przy otyłości: masa należna/skorygowana – '+DEC+')',std:'10 mg/kg co 8 h (HSV – zapalenie mózgu)',status:ra.status,text:ra.text,mod:!!ra.mod,avoid:false,tdm:false,name:'Acyklowir'});}
  res.drugs=D;
  // deksametazon
- var dx={dose:'10 mg i.v. co 6 h przez 4 dni (dorośli; ESCMID 2016, A; IDSA 2004: 0,15 mg/kg co 6 h przez 2–4 dni – '+(w>0?r1(0.15*w)+' mg':'')+')',
+ var dx={dose:'10 mg i.v. co 6 h przez 4 dni (dorośli; ESCMID 2016, A; IDSA 2004: 0,15 mg/kg co 6 h przez 2–4 dni – '+(nz(w)?r1(0.15*w)+' mg':'podaj masę')+')',
   when:['ESCMID 2016: razem z pierwszą dawką antybiotyku (A); jeśli antybiotyk już podano – nadal do 4 h od jego początku (C).','IDSA 2004: 10–20 min PRZED lub równocześnie z pierwszą dawką antybiotyku; zalecane przy (podejrzeniu) PNEUMOKOKOWYM ZOMR (A-I); nie powinna być podawana chorym, którym antybiotyk już podano.','KOROUN 2026: przed antybiotykiem; najpóźniej do 12 h od jego rozpoczęcia – rozbieżność z ESCMID (4 h) – '+DEC+'.','Przerwij, gdy rozpoznanie inne niż bakteryjne ZOMR lub patogen ≠ pneumokok / H. influenzae (ESCMID B; niektórzy eksperci kontynuują).','Listeria: KOROUN odradza deksametazon przy Listeria – przy czynniku ryzyka listeriozy '+DEC+'.']};
  res.steroid=dx;if(listeria)res.decisions.push('Czynnik ryzyka Listeria (>50 lat / immunosupresja): deksametazon wg KOROUN odradzany przy listeriozie, wg ESCMID/IDSA – standardowo dla ZOMR – '+DEC+'.');
  if(i.immuno===true)res.decisions.push('Obniżona odporność: spektrum patogenów szersze (ESCMID 2016) – zakres empiryczny uzgodnij z zakaźnikiem: '+DEC+'.');
