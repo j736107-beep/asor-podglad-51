@@ -109,11 +109,11 @@ function sepForm(t){
   '<div class="b2h">SOFA (opcjonalnie – brakujące elementy nie są liczone jako 0)</div>'+inp('pao2','PaO₂ (gazometria tętnicza)','mmHg')+
   '<label class="b1full">Tlenoterapia (do FiO₂) <select id="o2mode"><option value="">— nie ustalono —</option><option value="air">powietrze atmosferyczne</option><option value="nc">tlenoterapia – wąsy (kanula nosowa)</option><option value="mask">maska (prosta)</option><option value="nrb">maska z rezerwuarem (NRB)</option></select></label>'+
   '<label id="o2flowWrap">Przepływ O₂ <input type="number" id="o2flow" min="1" max="15" step="1" inputmode="numeric" placeholder="1–15"> l/min</label>'+
-  '<div class="b1full b2maplive" id="sepFio2Box"><b>FiO₂ (auto):</b> <span id="sepFio2Val">—</span> % <span class="mut" id="sepFio2Note"></span></div>'+
-  '<div class="mut b1full">Po wyborze tlenoterapii i przepływu FiO₂ liczy się automatycznie (przybliżenie, nie nastawa respiratora). P/F = PaO₂/FiO₂.</div>'+
+  '<div class="b1full b2maplive" id="sepFio2Box"><b>FiO₂ (auto):</b> <span id="sepFio2Val">—</span> % · <b>P/F:</b> <span id="sepPfVal">—</span> <span class="mut" id="sepFio2Note"></span></div>'+
+  '<div class="mut b1full">Po wyborze tlenoterapii i przepływu FiO₂ i P/F liczą się automatycznie (przybliżenie, nie nastawa respiratora).</div>'+
   chk('vent','wspomaganie wentylacji')+inp('plt','Płytki','G/l')+inp('bili','Bilirubina','@bili')+
   inp('uoh','Diureza godzinowa','ml/kg/h')+
-  '<div class="b1full mut" id="sepUoBox">Cel resuscytacji ≥0,5 ml/kg/h (SSC). Do SOFA przeliczane w tle: ml/kg/h × masa × 24 → ml/dobę (gdy masa w pasku); bez masy – SOFA nerki tylko z kreatyniny. <span class="mut">SOFA (auto): <span id="sepUoDayVal">—</span> ml/dobę</span></div>'+
+  '<div class="b1full mut" id="sepUoBox">Cel ≥0,5 ml/kg/h (SSC). SOFA (auto z masy): <span id="sepUoDayVal">—</span> ml/dobę</div>'+
   SKGCS.field(false)+
   '<div class="b2h">Perfuzja</div>'+inp('lac','Mleczany','mmol/l')+chk('vaso','wazopresor już stosowany (opcjonalnie – przy ponownej ocenie, po płynach)')+'<div class="mut b1full">Ocena wstępna nie wymaga noradrenaliny. Wazopresor = kolejny etap przy MAP &lt;65 mmHg mimo płynów (zakładka „Ponowna ocena”).</div>';
  if(t==='b')return inp('t0','Godzina rozpoznania (hh:mm) – opcjonalnie','')+'<p class="mut">Pola poniżej to lista kontrolna; zaznacz wykonane.</p>'+
@@ -144,6 +144,9 @@ function sepPaintFio2(g){
  try{var st=store('sepsis_a').get();if(st&&Object.prototype.hasOwnProperty.call(st,'fio2')){delete st.fio2;store('sepsis_a').set(st);}}catch(_){}
  var pct=sepEstFiO2Pct(mode,L);
  var val=document.getElementById('sepFio2Val');if(val)val.textContent=nz(pct)?F(pct,0):'—';
+ var paEl=document.getElementById('pao2'),pa=paEl?parseFloat(String(paEl.value).replace(',','.')):NaN;if(!isFinite(pa)&&g)pa=g('pao2');
+ var pf=(nz(pa)&&pa>0&&nz(pct)&&pct>0)?pa/(pct/100):NaN;
+ var pfEl=document.getElementById('sepPfVal');if(pfEl)pfEl.textContent=nz(pf)?F(pf,0):'—';
  var note=document.getElementById('sepFio2Note');
  if(note){var w=sepFio2Warn(mode,L);note.textContent=w?('· '+w):(nz(pct)?'· przybliżenie':'');}
  var o2s=document.getElementById('o2s');
