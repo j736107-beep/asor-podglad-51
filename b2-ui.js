@@ -102,7 +102,7 @@ function sepLocal(src,alg,r2){var cns=src==='cns'||src==='mening';var all=alg===
 function sepCalc(t,g,P){
  if(t==='a'){var i=sepInputs(g,P);var r=A.sepsisAssess(i);var H='';
   var mp=sepMAP(g('sbp'),g('dbp')),pf=sepPF(g);
-  function paintMap(){var el=document.getElementById('sepMapVal');if(el){el.textContent=nz(mp)?F(mp,0):'—';var box=document.getElementById('sepMapBox');if(box){box.style.borderColor=nz(mp)&&mp<65?'#C62828':'';box.style.background=nz(mp)&&mp<65?'#FCEBEA':'';}} }setTimeout(paintMap,0);
+  function paintMap(){var el=document.getElementById('sepMapVal');if(el){el.textContent=nz(mp)?F(mp,0):'—';var box=document.getElementById('sepMapBox');if(box){box.style.borderColor=nz(mp)&&mp<65?'#C62828':'';box.style.background=nz(mp)&&mp<65?'#FCEBEA':'';}} }paintMap();
   var live=bx(nz(mp)&&mp<65?'red':nz(mp)?'ok':'','Wyliczone','<b>MAP: '+(nz(mp)?F(mp,0)+' mmHg':'— (podaj SBP i DBP)')+'</b>'+(nz(mp)&&mp<65?' <b class="r">&lt;65 – hipotensja: płyny 30 ml/kg, ponowna ocena</b>':'')+' · <b>PaO₂/FiO₂: '+(nz(pf)?F(pf,0)+' mmHg':'— (PaO₂ + FiO₂)')+'</b>'+(nz(g('fio2'))&&!nz(sepFiO2(g))?' <span class="o">FiO₂ poza zakresem 21–100 %</span>':'')+'<div class="mut">MAP = DBP + (SBP − DBP)/3. Liczy się od razu po wpisaniu ciśnień (bez zaznaczania zakażenia).</div>');
   if(!r.ok)return{H:live+bx('orange','Sepsa – ocena'+dw(),rich(r.msg)+'<div class="mut">Wprowadź parametry; brak danych = brak wyniku.</div>')+srcl(esc(A.SRC.ssc21)),lvl:'ok'};
   var q=r.q,s=r.s,n=r.n;
@@ -148,7 +148,7 @@ function sepCalc(t,g,P){
  if(t==='d'){var keys=['r_map','r_lac','r_crt','r_fl','r_uo','r_cult','r_deesc','r_dose','r_src','r_glu','r_hc','r_bic','r_dur'];var open=keys.filter(function(k){return !g(k);}).length;
   var labs={r_map:'MAP ≥65',r_lac:'mleczany',r_crt:'CRT',r_fl:'odpowiedź na płyny',r_uo:'diureza',r_cult:'posiewy',r_deesc:'deeskalacja',r_dose:'dawki antybiotyków',r_src:'kontrola ogniska',r_glu:'glikemia',r_hc:'hydrokortyzon',r_bic:'wodorowęglan',r_dur:'czas leczenia'};
   var rm=sepMAP(g('rsbp'),g('rdbp')),w=P.w,goal=w>0?30*w:NaN,given=g('rfl'),lo=nz(rm)&&rm<65,X2='';
-  setTimeout(function(){var el=document.getElementById('sepMapVal2');if(el)el.textContent=nz(rm)?F(rm,0):'—';},0);
+  (function(){var el=document.getElementById('sepMapVal2');if(el)el.textContent=nz(rm)?F(rm,0):'—';})();
   X2+=bx(lo?'red':nz(rm)?'ok':'','Hemodynamika po leczeniu','<b>MAP: '+(nz(rm)?F(rm,0)+' mmHg':'—')+'</b>'+(nz(g('ruo'))?' · diureza '+F(g('ruo'),1)+' ml/kg/h'+(g('ruo')<0.5?' <b class="r">&lt;0,5 – oliguria</b>':''):'')+(nz(g('rlac'))?' · mleczany '+F(g('rlac'),1)+(nz(g('rlac0'))?(g('rlac')<g('rlac0')?' (maleją)':' <b class="r">(nie maleją)</b>'):'')+(g('rlac')>2&&lo?' <b class="r">– kryteria wstrząsu septycznego przy wazopresorze</b>':''):''));
   if(lo){var rest=nz(goal)?Math.max(goal-(nz(given)?given:0),0):NaN;
    X2+=bx('red','MAP <65 – płyny i aminy','<p><b>Płyny:</b> krystaloid zbilansowany 30 ml/kg w ≤3 h'+(nz(goal)?' = <b>'+F(goal,0)+' ml</b>'+(nz(given)?'; pozostało <b>'+F(rest,0)+' ml</b>':'')+(nz(rest)&&rest>0?' (≈'+F(rest/3,0)+' ml/h przez 3 h lub bolusy 500 ml w 15–30 min z oceną odpowiedzi)':''):' – podaj masę w pasku pacjenta')+'. Kontrola MAP, osłuchiwanie, USG (VExUS/IVC) po każdym bolusie; ostrożnie przy niewydolności serca/nerek.</p>'+(nz(given)&&nz(goal)&&given>=goal||g('vaso2')?'<p><b>MAP &lt;65 mimo płynów → noradrenalina (pierwszy wybór, także obwodowo).</b></p>':'<p>Noradrenalina gdy MAP &lt;65 mimo płynów (lub wcześniej przy głębokiej hipotensji).</p>')+'<p><button type="button" class="tg" onclick="SKS.openPompa(\'noradrenalina_p\')">💉 Noradrenalina (Levonor) obwodowo</button> <button type="button" class="tg" onclick="SKS.openPompa(\'noradrenalina_c80\')">💉 Noradrenalina centralnie</button> <button type="button" class="tg" onclick="SKS.openPompa(\'dopamina\')">💉 Dopamina</button> <button type="button" class="tg" onclick="SKS.openPompa(\'dobutamina\')">💉 Dobutamina (dysfunkcja serca)</button> <button type="button" class="tg" onclick="SKS.show(\'fluid\')">💧 Bilans płynów</button></p><div class="mut">Dawki i przeliczenia ml/h – w Pompach SOR (nie duplikowane tutaj). SSC 2021: noradrenalina 1. wybór; dopamina tylko wybrane przypadki; dobutamina przy dysfunkcji serca z hipoperfuzją.</div>');}
@@ -259,3 +259,11 @@ SEP.snapshot=function(){var any=['sepsis_a','sepsis_b','sepsis_c','sepsis_d'].so
 repl(SEP);
 window.SORB2={capTab:capTab,mushTabs:mushTabs,contactsPanel:contactsPanel,dementiaForm:dementiaForm,dementiaCalc:dementiaCalc,speciesCard:speciesCard,sepReport:sepReport,printHtml:printHtml,rich:rich};
 })();
+
+/* pw34: MAP natychmiast na kazdy klawisz; ciezkie przeliczenie Sepsy debounce 120 ms */
+(function(){var T=null,M={sbp:['sbp','dbp','sepMapVal','sepMapBox'],dbp:['sbp','dbp','sepMapVal','sepMapBox'],rsbp:['rsbp','rdbp','sepMapVal2','sepMapBox2'],rdbp:['rsbp','rdbp','sepMapVal2','sepMapBox2']};
+function n(id){var e=document.getElementById(id);if(!e)return NaN;var x=parseFloat(String(e.value).replace(',','.'));return isFinite(x)&&x>0?x:NaN;}
+document.addEventListener('input',function(e){var t=e.target,k=t&&t.id&&M[t.id];if(!k)return;var v=document.getElementById(k[2]);if(!v)return;
+ var s=n(k[0]),d=n(k[1]),m=isFinite(s)&&isFinite(d)?(s+2*d)/3:NaN;v.textContent=isFinite(m)?String(Math.round(m)):'—';var b=document.getElementById(k[3]);if(b){b.style.borderColor=isFinite(m)&&m<65?'#C62828':'';b.style.background=isFinite(m)&&m<65?'#FCEBEA':'';}
+ if(typeof t.oninput==='function'&&!e.__sepLate){e.stopImmediatePropagation();clearTimeout(T);T=setTimeout(function(){var ev=new Event('input',{bubbles:true});ev.__sepLate=true;t.oninput.call(t,ev);try{if(window.SKS&&SKS.capSoon)SKS.capSoon();}catch(_){}},120);}
+},true);})();
