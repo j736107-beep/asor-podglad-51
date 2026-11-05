@@ -3,10 +3,10 @@
 function algo(i){var c0=i.c0,c1=i.c1,c3=i.c3,oh=i.oh,U=i.url||14;
  if(c0==null)return{k:'none',txt:'Wpisz wynik 0 h.'};
  if(c0>=52)return{k:'in',txt:'RULE-IN (rozpoznanie wstępne): 0 h = '+c0+' ≥ 52 ng/l.'};
- if(c1==null){if(c0<5&&oh!=null&&oh>3)return{k:'out',txt:'RULE-OUT (wykluczenie) jednym oznaczeniem: 0 h = '+c0+' < 5 ng/l i początek bólu > 3 h ('+oh.toFixed(1)+' h) temu.'};
+ if(c1==null){if(c0<5&&oh!=null&&oh>3)return{k:'out',txt:'RULE-OUT (wykluczenie) jednym oznaczeniem: 0 h = '+c0+' < 5 ng/l i początek bólu > 3 h ('+oh.toFixed(1)+' h) temu. <span class="wer">DO WERYFIKACJI z kartą lab NT – nie = automatyczny wypis</span>'};
   return{k:'wait',txt:(oh!=null&&oh<=3?'Początek bólu ≤ 3 h – pojedynczy wynik nie wyklucza. ':'')+'Pobierz drugą próbkę po 1 h (lub 2 h).'}}
  var dt=i.dt!=null?i.dt:60,d=c1-c0,A=dt<=90?'1h':'2h',r,ad=Math.abs(d).toFixed(1);
- if(A==='1h'){if(c0<12&&Math.abs(d)<3)r={k:'out',txt:'RULE-OUT 0/1 h: 0 h '+c0+' < 12 i |Δ1h| '+ad+' < 3 ng/l.'};else if(d>=5)r={k:'in',txt:'RULE-IN 0/1 h: Δ1h = '+d.toFixed(1)+' ≥ 5 ng/l.'};else r={k:'obs',txt:'STREFA OBSERWACJI 0/1 h (0 h '+c0+', Δ1h '+d.toFixed(1)+' ng/l).'}}
+ if(A==='1h'){if(c0<12&&Math.abs(d)<3)r={k:'out',txt:'RULE-OUT 0/1 h: 0 h '+c0+' < 12 i |Δ1h| '+ad+' < 3 ng/l. <span class="wer">DO WERYFIKACJI z kartą lab NT – nie = automatyczny wypis</span>'};else if(d>=5)r={k:'in',txt:'RULE-IN 0/1 h: Δ1h = '+d.toFixed(1)+' ≥ 5 ng/l.'};else r={k:'obs',txt:'STREFA OBSERWACJI 0/1 h (0 h '+c0+', Δ1h '+d.toFixed(1)+' ng/l).'}}
  else{if(c0<6&&Math.abs(d)<4)r={k:'out',txt:'RULE-OUT 0/2 h: 0 h '+c0+' < 6 i |Δ2h| '+ad+' < 4 ng/l.'};else if(d>=10)r={k:'in',txt:'RULE-IN 0/2 h: Δ2h = '+d.toFixed(1)+' ≥ 10 ng/l.'};else r={k:'obs',txt:'STREFA OBSERWACJI 0/2 h (0 h '+c0+', Δ2h '+d.toFixed(1)+' ng/l).'};r.txt+=' <span class="wer">progi 0/2 h z ESC 2023, nie z karty lokalnej – DO WERYFIKACJI z laboratorium</span>'}
  r.A=A;r.dt=dt;if(dt>180||dt<30)r.txt+=' ⚠️ odstęp '+dt+' min – poza oknem algorytmu.';
  if(r.k==='obs'&&c3!=null){var d3=c3-c0;if(d3>=5&&c3>U)r={k:'in3',txt:'3 h: '+c3+' ng/l (> URL), Δ0–3h '+d3.toFixed(1)+' ≥ 5 → istotna dynamika, traktuj jak rule-in. <span class="wer">DO WERYFIKACJI</span>'};
@@ -26,10 +26,11 @@ function light(i,a){var e=i.e||{},v=i.v||{},why=[],L=null;var stemi=['stemi','po
  if(vhr){L='red';why.push('Cecha bardzo wysokiego ryzyka (natychmiastowa strategia inwazyjna &lt;2 h)')}
  if(e.avr||e.well){L='red';why.push(e.avr?'Uniesienie ST w aVR z rozlanymi obniżeniami':'Zespół Wellensa – nie wykonuj próby wysiłkowej')}
  if(a.k==='in'||a.k==='in3'){L='red';why.push('Troponina: rule-in (podejrzenie NSTEMI – zawał bez uniesienia ST)')}
- if(!L){if(a.k==='out'||a.k==='out3'){if(ongo||isch){L='yel';why.push(ongo?'Troponina wykluczająca, ale ból trwa/nawraca':'Troponina wykluczająca, ale niedokrwienne zmiany EKG')}else{L='grn';why.push('Troponina: wykluczenie NSTEMI wg algorytmu')}}
+ if(!L){if(a.k==='out'||a.k==='out3'){if(ongo||isch){L='yel';why.push(ongo?'Troponina wykluczająca, ale ból trwa/nawraca':'Troponina wykluczająca, ale niedokrwienne zmiany EKG')}else{L='grn';why.push('Troponina: rule-out wg algorytmu – WYPIS TYLKO PO WERYFIKACJI karty lab NT / kardiolog (progi DO WERYFIKACJI / DO DECYZJI LEKARZA)')}}
   else if(a.k==='obs'||a.k==='obs3'){L='yel';why.push('Strefa obserwacji algorytmu troponinowego')}else if(a.k==='wait'){L='yel';why.push('Algorytm niezakończony – czekamy na kolejną próbkę')}else L='gry'}
  if(L==='yel'&&isch)why.push('Niedokrwienne EKG (obniżenie ST / odwrócenie T) – wypis niemożliwy');
- return{L:L,why:why,stemi:stemi,vhr:vhr}}
+ if(L==='grn')why.push('Nie traktuj samego rule-out jako pewnego wypisu – potwierdź progi z kartą laboratorium PSZS NT i oceną kliniczną.');
+ return{L:L,why:why,stemi:stemi,vhr:vhr,dischargeGate:L==='grn'}}
 function referral(Hs,ed,r){return Hs.tot>=4||(r||{}).cad===1||(ed!=null&&ed>=16)}
 var X={algo:algo,heart:heart,edacs:edacs,light:light,referral:referral};
 if(typeof module!=='undefined')module.exports=X;else{R.SK=R.SK||{};R.SK.trop=X}})(typeof window!=='undefined'?window:this);

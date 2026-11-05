@@ -110,19 +110,30 @@ function neuroTreat(i){i=i||{};var age=num(i.age),w=num(i.w);var res={ok:false,n
  if(!nz(age))res.warnings.push('Brak wieku w pasku pacjenta: schemat dorosły bez automatycznej ampicyliny na Listerię (dodawana przy wieku >50 lat lub zaznaczonym czynniku ryzyka). Uzupełnij wiek.');
  if(!nz(w))res.warnings.push('Brak masy w pasku: dawki stałe (ceftriakson, ampicylina, deksametazon) OK; wankomycyna i acyklowir – wzór mg/kg bez wyliczenia mg do czasu podania masy.');
  if(i.pregnancy===undefined){i.pregnancy=false;res.warnings.push('Ciąża/karmienie nieustalone – założono brak. Jeśli ciąża: '+DEC+'.');}
- if(i.betaAllergy===undefined){i.betaAllergy=false;res.warnings.push('Alergia na β-laktamy nieustalona – założono brak. Jeśli alergia: wybierz „tak” (brak ceftriaksonu, schemat alternatywny – '+DEC+').');}
+ if(i.betaAllergy===undefined){i.betaAllergy=false;res.warnings.push('Alergia na β-laktamy nieustalona – założono brak. Jeśli alergia: wybierz „tak” → meropenem 2 g co 8 h + wankomycyna (± pokrycie Listerii bez ampicyliny) – '+DEC+'.');}
  var c=AB.cg({age:nz(age)?age:40,sex:i.sex,w:nz(w)?w:70,h:i.h,crMg:i.crMg});var crcl=c.ok?c.crcl:NaN;res.crcl=c;var rrt=i.rrt||'none';
  // CrCl tylko gdy realne dane – nie udawaj CrCl z podstawionymi 40 lat / 70 kg
  if(!nz(age)||!nz(w)||!i.sex||!nz(num(i.crMg))){c={ok:false,missing:[]};if(!nz(age))c.missing.push('wiek');if(!i.sex)c.missing.push('płeć');if(!nz(w))c.missing.push('masa');if(!nz(num(i.crMg)))c.missing.push('kreatynina');crcl=NaN;res.crcl=c;}
  if(!c.ok&&rrt==='none')res.warnings.push('Nie obliczono CrCl – brakuje: '+c.missing.join(', ')+'. Dawki podano jako pełne, BEZ korekty nerkowej – '+DEC+'. Pierwsza dawka zawsze pełna.');
  var listeria=(nz(age)&&age>50)||i.listeriaRisk===true;res.listeria=listeria;
- if(i.betaAllergy===true){res.decisions.push('Alergia na β-laktamy: ESCMID 2016 podaje chloramfenikol / meropenem / moxifloksacynę jako alternatywy (część na podstawie opisów przypadków) – brak zweryfikowanego schematu w aplikacji: '+DEC+'. Konsultacja zakaźnicza.');}
  var D=[];
- if(i.betaAllergy!==true){
-  D.push(Object.assign({role:'cefalosporyna III gen. (wybierz JEDNĄ)',drug:'Ceftriakson'},renalFor('cftx','2 g co 12 h i.v. (lub 4 g co 24 h) – ESCMID 2016 / IDSA 2004','2 g co 24 h i.v.',crcl,rrt)));
-  D.push(Object.assign({role:'alternatywa (zamiast ceftriaksonu)',drug:'Cefotaksym'},renalFor('cfx','2 g co 4–6 h i.v. – ESCMID 2016','2 g co 8 h i.v.',crcl,rrt)));}
+ if(i.betaAllergy===true){
+  res.decisions.push('Alergia na β-laktamy (ciężka): schemat alternatywny ESCMID 2016 – meropenem 2 g co 8 h i.v. + wankomycyna (TDM); część danych z opisów przypadków – '+DEC+'. Konsultacja zakaźnicza.');
+  D.push({role:'alternatywa przy ciężkiej alergii na β-laktamy (ESCMID 2016) – '+DEC,drug:'Meropenem',dose:'2 g co 8 h i.v. – ESCMID 2016 (ciężka alergia; dawka ZOMR)',std:'1 g co 8 h i.v. (silnik abx – poza ZOMR)',status:'ok',text:'Korekta nerkowa ChPL w aplikacji dotyczy dawki 1 g co 8 h; przy 2 g co 8 h (ZOMR) – '+DEC+'.',mod:false,avoid:false,tdm:false});
+ }else{
+  // std = dawka ZOMR (nie 2 g/24 h spoza ZOMR) – unikamy sprzeczności przy rzucie oka
+  D.push(Object.assign({role:'cefalosporyna III gen. (wybierz JEDNĄ)',drug:'Ceftriakson'},renalFor('cftx','2 g co 12 h i.v. (lub 4 g co 24 h) – ESCMID 2016 / IDSA 2004','2 g co 12 h i.v. (ZOMR)',crcl,rrt)));
+  D.push(Object.assign({role:'alternatywa (zamiast ceftriaksonu)',drug:'Cefotaksym'},renalFor('cfx','2 g co 4–6 h i.v. – ESCMID 2016','2 g co 4–6 h i.v. (ZOMR)',crcl,rrt)));
+ }
  D.push({role:'pokrycie opornego pneumokoka (ESCMID: wankomycyna LUB ryfampicyna 300 mg co 12 h)',drug:'Wankomycyna',dose:'ESCMID 2016: 10–20 mg/kg co 8–12 h i.v. (stężenie minimalne docelowo 15–20 µg/ml)',std:'dawka nasycająca 25–30 mg/kg (NPOA 2020, silnik abxB2)',status:'tdm',text:nz(w)?'Dawka nasycająca 25–30 mg/kg = '+r1(25*w)+'–'+r1(30*w)+' mg (masa '+w+' kg); dawkowanie podtrzymujące WYŁĄCZNIE wg stężeń (TDM), bez korekty wg CrCl – '+DEC+'.':'Dawka nasycająca 25–30 mg/kg i.v. (podaj masę w pasku, aby wyliczyć mg); podtrzymanie WYŁĄCZNIE wg TDM – '+DEC+'.',mod:false,avoid:false,tdm:true});
- if(listeria){var rl=renalFor('amp_q4','2 g co 4 h i.v. – ESCMID 2016','2 g co 4 h i.v.',crcl,rrt);D.push(Object.assign({role:'Listeria: wiek >50 lat lub czynnik ryzyka (immunosupresja, nowotwór, cukrzyca)',drug:'Ampicylina'},rl));}
+ if(listeria){
+  if(i.betaAllergy===true){
+   D.push({role:'Listeria: ampicylina odpada (β-laktam) przy ciężkiej alergii',drug:'Trimetoprim-sulfametoksazol (TMP-SMX)',dose:'Dawka i schemat wg ESCMID 2016 – liczb nie zweryfikowano w aplikacji: '+DEC+'. Konsultacja zakaźnicza.',std:'—',status:'dec',text:'Ampicylina jest β-laktamem – przy ciężkiej alergii NIE podawać. Pokrycie Listerii: TMP-SMX wg ESCMID / konsultacja – '+DEC+'.',mod:false,avoid:false,tdm:false});
+   res.decisions.push('Listeria + ciężka alergia β-laktamów: bez ampicyliny; TMP-SMX wg ESCMID 2016 (dawka nie w aplikacji) – '+DEC+'.');
+  }else{
+   var rl=renalFor('amp_q4','2 g co 4 h i.v. – ESCMID 2016','2 g co 4 h i.v.',crcl,rrt);D.push(Object.assign({role:'Listeria: wiek >50 lat lub czynnik ryzyka (immunosupresja, nowotwór, cukrzyca)',drug:'Ampicylina'},rl));
+  }
+ }
  var hsv=(i.encephalitis===true);
  if(hsv){var ra=AB.renal('acv',crcl,rrt);var mg=nz(w)?10*w:NaN;D.push({role:'zapalenie mózgu – NIE czekaj na PCR',drug:'Acyklowir',dose:nz(w)?'10 mg/kg co 8 h i.v. = '+r1(mg)+' mg/dawkę (masa '+w+' kg; przy otyłości: masa należna/skorygowana – '+DEC+')':'10 mg/kg co 8 h i.v. (podaj masę w pasku, aby wyliczyć mg; przy otyłości: masa należna/skorygowana – '+DEC+')',std:'10 mg/kg co 8 h (HSV – zapalenie mózgu)',status:ra.status,text:ra.text,mod:!!ra.mod,avoid:false,tdm:false,name:'Acyklowir'});}
  res.drugs=D;

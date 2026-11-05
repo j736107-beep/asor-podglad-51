@@ -6,8 +6,11 @@ function vit(v){var L=[['sbp','RR skurcz.','mmHg'],['dbp','RR rozkurcz.','mmHg']
 function run(){var t=ta.value;upd();if(!t.trim()){out.innerHTML='';store(null);return;}var o=HB.analyze(t);
  var h='<div class="hb-verdict hb-'+o.verdict+'" id="verdict">'+esc(o.verdictText)+'</div>'+vit(o.vit)+'<p class="hb-meta">NEWS2: <b>'+(o.news!=null?o.news:'nie do policzenia (brak parametrów)')+'</b> · wiek: <b>'+(o.age||'—')+'</b> · ciąża: <b>'+(o.preg.p?'tak'+(o.preg.tri?' ('+o.preg.tri+'. trymestr)':''):'nie wykryto')+'</b></p>';
  h+=ul('crit','NIE WOLNO WYPISAĆ – przyczyny',o.crit)+ul('warn','UWAGA – sprawdź',o.warn)+ul('miss','Czego brakuje przed wypisem',o.miss);
- var neg=Object.keys(o.hits).map(function(k){return o.hits[k];}).filter(function(x){return x.neg.length&&!x.pos.length;});if(neg.length)h+='<section class="sec"><h2>Zaprzeczone w dokumentacji (sprawdź)</h2><ul class="list">'+neg.map(function(x){return'<li><span class="t">'+esc(x.label)+' – „'+esc(x.neg[0].slice(0,120))+'”</span></li>';}).join('')+'</ul></section>';
+ var neg=Object.keys(o.hits).map(function(k){return o.hits[k];}).filter(function(x){return x.neg.length&&!x.pos.length;});
+ // mniej szumu: zaprzeczenia schowane (domyślnie zwinięte); nie konkurują z werdyktem na górze
+ if(neg.length)h+='<section class="sec hb-neg"><details><summary>Zaprzeczone w dokumentacji ('+neg.length+') – sprawdź, jeśli potrzeba</summary><ul class="list">'+neg.map(function(x){return'<li><span class="t">'+esc(x.label)+' – „'+esc(x.neg[0].slice(0,120))+'”</span></li>';}).join('')+'</ul></details></section>';
  out.innerHTML=h;store({text:t,verdict:o.verdict,crit:o.crit});
+ try{var v=$('#verdict');if(v&&o.verdict==='crit')v.scrollIntoView({block:'start'});}catch(e){}
  if(o.verdict==='crit'){try{var W=P();if(W.SORWypis)W.SORWypis.trigger(o.crit);else if(window.SORWypis)SORWypis.trigger(o.crit);}catch(e){}}}
 function store(v){try{var W=P();if(W.SKS)W.SKS.hbMem=v;}catch(e){}}
 function upd(){var n=ta.value.length;cnt.textContent=n.toLocaleString('pl-PL')+' / 50 000 znaków';cnt.className=n>50000?'cnt over':'cnt';}

@@ -67,9 +67,12 @@ var NS={
   var H='';if(!r.ok)return{H:bx('orange','Uzupełnij – brak propozycji leczenia','Brakuje: <b>'+esc(r.needs.join(', '))+'</b>. Nie wyliczono dawek.'),lvl:'ok'};
   H+=crclBox(r.crcl);if(r.warnings.length)H+=bx('orange','Uwagi',ul(r.warnings));
   if(enc&&!g('k_enc'))H+=bx('orange','Acyklowir dodany automatycznie','Gorączka + zaburzenia świadomości / drgawki / objawy ogniskowe → podejrzenie zapalenia mózgu (z karty „Objawy”).');
-  H+=bx('red','Antybiotykoterapia empiryczna – pierwsza dawka ≤1 h od przyjęcia'+(r.listeria?' · <span class="dw">+ Listeria (ampicylina)</span>':''),
-   tbl(['Lek / rola','Dawka w ZOMR (dorośli)','Korekta nerkowa wg CrCl','Dawka standardowa w silniku'],r.drugs.map(function(d){return {cls:d.mod?'warn':'',cells:['<b>'+esc(d.drug)+'</b><div class="mut">'+esc(d.role)+'</div>','<b>'+rich(d.dose)+'</b>',rich(d.text),esc(d.std)]};}))+
-   '<div class="mut">Pierwsza dawka zawsze pełna; korekta dotyczy kolejnych. Dawki w ZOMR różnią się od standardowych dawek aplikacji – tabela korekt dotyczy odstępów, nie podmienia dawki.</div>'+srcl(r.src.concat([E.SRC.escmid16])));
+  var listTag=r.listeria?(r.drugs.some(function(d){return d.drug==='Ampicylina';})?' · <span class="dw">+ Listeria (ampicylina)</span>':r.drugs.some(function(d){return /TMP-SMX|Trimetoprim/.test(d.drug);})?' · <span class="dw">+ Listeria (TMP-SMX – DO DECYZJI)</span>':''):'';
+  if(r.drugs.some(function(d){return d.drug==='Meropenem';}))listTag+=' · <span class="dw">alergia β-laktamów → meropenem</span>';
+  H+=bx('red','Antybiotykoterapia empiryczna – pierwsza dawka ≤1 h od przyjęcia'+listTag,
+   tbl(['Lek / rola','Dawka w ZOMR (dorośli)','Korekta nerkowa / uwagi'],r.drugs.map(function(d){return {cls:d.mod||d.status==='dec'?'warn':'',cells:['<b>'+esc(d.drug)+'</b><div class="mut">'+esc(d.role)+'</div>','<b>'+rich(d.dose)+'</b>',rich(d.text)]};}))+
+   '<div class="mut">Pierwsza dawka zawsze pełna; korekta dotyczy kolejnych. Kolumna „Dawka standardowa w silniku” usunięta – pokazywała sprzeczne 2 g/24 h obok ZOMR 2 g/12 h.</div>'+srcl(r.src.concat([E.SRC.escmid16])));
+  H+=bx('','Sepsa / pakiet 1 h',go('sepsis','Moduł Sepsa (pakiet 1 h, antybiotyki wg ogniska OUN)')+'<div class="mut">Przy ognisku OUN w Sepsa → tu; empiria ZOMR jest w tej zakładce.</div>');
   H+=bx('orange','Deksametazon – dawka i KIEDY',rich(r.steroid.dose)+ul(r.steroid.when)+srcl([E.SRC.escmid16,E.SRC.idsa04,E.SRC.koroun]));
   if(r.decisions.length)H+=bx('orange','DO DECYZJI LEKARZA',ul(r.decisions));
   H+=bx('',"Postępowanie towarzyszące",ul(r.notes));

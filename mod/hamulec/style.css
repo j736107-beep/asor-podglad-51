@@ -1,3 +1,9 @@
 .hb-verdict{font:900 28px/1.2 system-ui,sans-serif;padding:16px 18px;border-radius:12px;margin:14px 0 8px;border:3px solid #111}.hb-verdict.hb-crit{background:#c00000;color:#fff;border-color:#c00000}.hb-verdict.hb-warn{background:#fff7e6;color:#5a3b00;border-color:#a16207}.hb-verdict.hb-none{background:#eef7f0;color:#14532d;border-color:#1b7a3a}
 .hb-vit{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.hb-vit span{border:2px solid #111;border-radius:8px;padding:5px 10px;font-size:17px}.hb-meta{font-size:17px}
 .sec.hb-crit h2{color:#c00000}.sec.hb-crit li{border-left:6px solid #c00000}.sec.hb-warn li{border-left:6px solid #a16207}.rules{margin:16px 0;font-size:16px}.rules summary{font-weight:800;cursor:pointer;font-size:18px}
+
+.hb-verdict{position:sticky;top:0;z-index:6;box-shadow:0 4px 14px #0003}
+.hb-verdict.hb-crit{animation:hbPulse 1.2s ease-in-out 2}
+@keyframes hbPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.01)}}
+.hb-neg details{margin:8px 0;font-size:.95rem}
+.hb-neg summary{cursor:pointer;font-weight:700;color:#555}

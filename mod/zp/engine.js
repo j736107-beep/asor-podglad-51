@@ -122,7 +122,7 @@ function txtItem(o){return o.n+' ('+o.brand+') '+o.dose+' '+o.route+' '+o.q;}
 // ---------- dobór ----------
 function plan(i){i=i||{};var out={ok:false,need:[],regs:[],avoid:[],dec:[],notes:[],ix:[],dur:'',src:['npoa','ats','ers','nice']};
  out.warn=[];var age=num(i.age);if(isFinite(age)&&!(age>=18&&age<=110))out.need.push('moduł tylko dla dorosłych (18–110 lat)');if(!isFinite(age))out.warn.push('brak wieku – założono pacjenta dorosłego (CURB-65 bez kryterium wieku)');
- var pl=place(i);out.place=pl;var P=i.place||pl.p;if(!P){P='ward';out.pDef=true;out.warn.push('CURB-65 niepełny – pokazano schemat dla oddziału; wybierz miejsce leczenia ręcznie (Dom / Oddział / OIT)');}out.p=P;
+ var pl=place(i);out.place=pl;var P=i.place||pl.p;if(!P){P='ward';out.pDef=true;out.warn.push('CURB-65 niepełny – NIE traktuj schematu oddziałowego jako zatwierdzonego; wybierz miejsce leczenia ręcznie (Dom / Oddział / OIT) albo uzupełnij CURB');out.dec.push('CURB-65 niepełny: pełny schemat oddziałowy jest tylko PODGLĄDEM – '+DEC+'.');}out.p=P;
  if(!['none','late','imm'].includes(i.allergy)){i=Object.assign({},i,{allergy:'none'});out.alDef=true;out.warn.push('alergia na penicyliny nieustalona – schemat zakłada BRAK alergii; potwierdź wywiad');}
  if(out.need.length)return out;
  var c=crcl(i);out.crcl=c;var ctx={crcl:c.v,hd:i.hd===true,w:num(i.w),preg:i.preg===true};

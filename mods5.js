@@ -22,9 +22,9 @@ window.SKN={print:function(){if(!LAST){alert('Otwórz zakładkę „Algorytm: po
   '<h2>Uwagi lekarza</h2><div class="lines"></div><div class="sig"><div>Godzina: ..............</div><div>Podpis i pieczątka lekarza<br><br>.......................................</div></div><div class="foot">Asystent lekarza SOR – narzędzie pomocnicze, niecertyfikowane. Decyzję podejmuje lekarz.</div>';
  var a=document.getElementById('printArea');if(!a){a=document.createElement('div');a.id='printArea';document.body.appendChild(a);}a.innerHTML=h;if(window.SKG)SKG.run(a);window.print();}};
 var MOT={'5a':1,'5b':1,'6a':1,'6b':1,'7':1};
-var NEU=tabbed({id:'neuro',icon:'🧠',name:'Neurologia'},'Neurologia – udar',[['a','Algorytm: podejrzenie udaru'],['n','NIHSS'],['t','Tromboliza'],['i','Krwotok (ICH)'],['p','Rokowanie / TIA / GCS'],['d','Otępienie / majaczenie (4AT, szybki wpis)'],['d2','AMTS (pozycje)'],['d3','MoCA (pozycje)'],['d4','MMSE (pozycje)'],['d5','CDR (domeny)']],
+var NEU=tabbed({id:'neuro',icon:'🧠',name:'Neurologia'},'Neurologia – udar',[['a','Algorytm: podejrzenie udaru'],['n','NIHSS'],['t','Tromboliza'],['i','Krwotok (ICH)'],['p','Rokowanie / TIA / GCS'],['d','Majaczenie / 4AT (SOR)'],['d2','▸ AMTS (rozszerzone)'],['d3','▸ MoCA (nie SOR)'],['d4','▸ MMSE (nie SOR)'],['d5','▸ CDR (nie SOR)']],
  function(t){
-  if(t==='d2'||t==='d3'||t==='d4'||t==='d5')return window.SORB2?SORB2.dementiaForm(t):'';
+  if(t==='d2'||t==='d3'||t==='d4'||t==='d5'){var gate=(t==='d3'||t==='d4'||t==='d5')?'<div class="notice" style="border-color:#e98a00;background:#fff8e8"><b>Skala rozszerzona – nie typowa dla SOR</b> (MoCA / MMSE / CDR). Na dyżurze wystarczy 4AT / AMTS. Wynik nie zastępuje oceny majaczenia. <span class="dw">DO DECYZJI LEKARZA</span>.</div>':'<div class="notice"><b>AMTS</b> – skala rozszerzona; w SOR preferuj 4AT (zakładka „Majaczenie / 4AT”).</div>';return gate+(window.SORB2?SORB2.dementiaForm(t):'');}
   if(t==='a'){var G=function(h,x){return '<div style="width:100%"><b>'+h+'</b> '+x+'</div>'};
    var rs=function(id,lab,o){return sel(id,lab,[['','— auto']].concat(o))};
    return '<div style="width:100%"><button class="tg np" onclick="SKS.nextPatient()">🆕 Następny pacjent</button> <button class="tg" onclick="SKN.print()">🖨 Drukuj protokół udarowy</button></div>'+

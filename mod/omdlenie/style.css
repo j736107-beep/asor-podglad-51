@@ -80,3 +80,5 @@ select{width:100%;padding:10px;border-radius:10px;border:2px solid var(--vioL);f
 .stepH h2{font-size:clamp(17px,5vw,20px)}.stepH{gap:8px}
 .q .ql{overflow-wrap:anywhere}
 .mute{display:block;width:100%;border:0;border-radius:14px;padding:14px;margin-bottom:10px;font-size:17px;font-weight:800;background:#fff;color:var(--red);box-shadow:0 3px 10px rgba(239,59,79,.25)}
+
+.qmode{margin:8px 0}.qmode button{font-weight:800;border:2px solid #7b3fe4;background:#f3eefe;padding:8px 12px;border-radius:8px}.qmode button.on{background:#7b3fe4;color:#fff}

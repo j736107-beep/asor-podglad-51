@@ -43,6 +43,7 @@ function result(){var i=input(),o=Z.plan(i);last=o;var c=Z.curb65(i),pl=o.place;
  var bi=Object.keys(fromBar);$('#barInfo').innerHTML=bi.length?'<div class="hdf">Z paska pacjenta: '+bi.join(', ')+'</div>':'';
  var hd=handoff();var h='';if(hd&&hd.txt)h+='<div class="hdf">Z zakładki „Skale i hospitalizacja”: '+esc(hd.txt)+'</div>';
  if(o.need.length){if($('#quick'))$('#quick').innerHTML='';$('#res').innerHTML=h+'<div class="sev orange">Uzupełnij: '+esc(o.need.join('; '))+'</div>';fit();return;}
+ if(o.pDef)h+='<div class="step red" id="zpCurbGate"><h3>🛑 CURB-65 niepełny – schemat oddziałowy ZABLOKOWANY jako rekomendacja</h3><p>Uzupełnij CURB albo <b>wybierz ręcznie</b> miejsce leczenia (Dom / Oddział / OIT). Poniżej – tylko podgląd warunkowy. <span class="dw">DO DECYZJI LEKARZA</span>.</p></div>';
  if(o.warn&&o.warn.length)h+='<div class="step yel" id="zpWarn"><h3>⚠️ Uwaga – niepełne dane</h3><ul class="lst">'+o.warn.map(function(x){return '<li>'+rich(x)+'</li>'}).join('')+'</ul></div>';
  var lv=o.p==='icu'?'red':o.p==='ward'?'orange':'ok';var pn={home:'Leczenie domowe',ward:'Leczenie na oddziale',icu:'Ciężkie PZP – OIT / intensywny nadzór'}[o.p];
  h+='<div class="sev '+lv+'">'+pn+(st.place?' (wybrane ręcznie)':o.pDef?' (domyślnie – CURB-65 niepełny, wybierz ręcznie)':' (wg skali)')+'</div>';
@@ -56,7 +57,7 @@ function result(){var i=input(),o=Z.plan(i);last=o;var c=Z.curb65(i),pl=o.place;
  h+='<div class="step"><h3>Czas leczenia – źródła</h3><p>'+rich(o.dur)+'</p><p>Zmiana i.v. → p.o. po stabilizacji (temperatura, HR <100, RR <24, SBP >90, SpO₂ prawidłowa; NPOA 2016).</p></div>';
  h+='<div id="cpBox" hidden><b>Tekst do zaleceń (skopiowany):</b><textarea id="copyOut" readonly></textarea></div>';
  $('#res').innerHTML=h;quick(o);fit();}
-function quick(o){var q=$('#quick');if(!q)return;var pr=o.regs.filter(function(r){return r.tier!=='alt'});if(!pr.length){q.innerHTML='';return;}var pn={home:'Dom',ward:'Oddział',icu:'Ciężkie PZP / OIT'}[o.p];
+function quick(o){var q=$('#quick');if(!q)return;if(o.pDef&&!st.place){q.innerHTML='<div class="quick" style="border-color:#C62828;background:#FCEBEA"><b>🛑 Brak pełnego CURB</b> – nie pokazano skrótu schematu. Wybierz miejsce leczenia ręcznie lub uzupełnij CURB. <span class="dw">DO DECYZJI LEKARZA</span></div>';return;}var pr=o.regs.filter(function(r){return r.tier!=='alt'});if(!pr.length){q.innerHTML='';return;}var pn={home:'Dom',ward:'Oddział',icu:'Ciężkie PZP / OIT'}[o.p];
  q.innerHTML='<div class="quick"><b>💊 Proponowane ('+pn+(o.pDef?', domyślnie':'')+'):</b> '+pr.map(function(r){return r.items.filter(Boolean).map(function(x){return '<b>'+esc(x.n)+'</b> '+esc(x.dose)+' '+esc(x.route)+' '+esc(x.q)}).join(' lub ')}).join(' <b>+</b> ')+(o.warn&&o.warn.length?'<div class="qw">⚠️ '+o.warn.map(function(w){return esc(w.split(' (')[0])}).join(' · ')+'</div>':'')+' <a href="#res" onclick="document.getElementById(\'res\').scrollIntoView();return false">Szczegóły, dawki nerkowe, źródła ↓</a></div>';}
 function fit(){try{var fr=window.frameElement;if(fr&&fr.dataset.auto)fr.style.height=(document.documentElement.scrollHeight+20)+'px';}catch(e){}}
 function copy(ix){var t=Z.discharge(last,ix);var b=$('#cpBox'),ta=$('#copyOut');b.hidden=false;ta.value=t;

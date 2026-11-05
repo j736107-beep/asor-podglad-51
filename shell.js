@@ -39,7 +39,17 @@ document.querySelectorAll('#psex button').forEach(function(b){b.onclick=function
 document.querySelectorAll('.tg').forEach(function(b){b.onclick=function(){PT.co[b.dataset.c]=!PT.co[b.dataset.c];saveP();patBar();refresh();}});
 // ---------- nawigacja ----------
 // pw25: klasyczne Elektrolity (elyte) ukryte – jedna wersja: Elektrolity SOR (el)
-(function(L){for(var i=L.length-1;i>=0;i--)if(L[i]&&L[i].id==='elyte')L.splice(i,1);})(SKM.list);
+(function(L){
+ for(var i=L.length-1;i>=0;i--)if(L[i]&&L[i].id==='elyte')L.splice(i,1);
+ var phones=[],i;
+ for(i=L.length-1;i>=0;i--)if(L[i]&&(L[i].id==='telszp'||L[i].id==='telefony'))phones.unshift(L.splice(i,1)[0]);
+ if(phones.length){
+  var h=L.findIndex(function(m){return m&&m.id==='hamulec';});
+  if(h<0)h=L.findIndex(function(m){return m&&m.id==='trends';});
+  var at=h<0?Math.min(3,L.length):h+1;
+  for(i=0;i<phones.length;i++)L.splice(at+i,0,phones[i]);
+ }
+})(SKM.list);
 var MODS=SKM.list,active=null;
 function side(){$('#side').innerHTML=MODS.map(function(m){return m.sep?'<hr>':'<button data-id="'+m.id+'" class="'+(m.id===cur?'on ':'')+(m.soon?'soon':'')+'">'+m.icon+' '+m.name+'</button>'}).join('');}
 var navS=[];function go(id){if(id===cur){show();return;}navS.push(cur);try{history.pushState({sk:id},'')}catch(e){}cur=id;localStorage.setItem('sk_mod',cur);show();}

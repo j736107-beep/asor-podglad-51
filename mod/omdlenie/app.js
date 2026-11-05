@@ -3,7 +3,8 @@
 var R=window.RULES,E=window.SyncopeEngine,IDX=E.index(R),$=function(id){return document.getElementById(id)};
 var SAFETY='To narzędzie wspomaga decyzję lekarza i nie zastępuje oceny klinicznej. Sugerowany kolor wynika z kryteriów ESC 2018 i Canadian Syncope Risk Score i może nie uwzględniać wszystkich okoliczności. Ostateczną decyzję o hospitalizacji, obserwacji lub wypisie podejmuje lekarz prowadzący. Aplikacja nie jest certyfikowanym wyrobem medycznym. Nie wprowadzaj danych umożliwiających identyfikację pacjenta. Dane nie są zapisywane ani wysyłane. Nie stosować u chorych z poważną przyczyną rozpoznaną na SOR, po urazie głowy z utratą przytomności, z T-LOC >5 min, napadem padaczkowym lub intoksykacją.';
 var STEPS=R.groups.map(function(g){return{id:g.id,title:g.title}});
-var state,step=0,current,ov=null,settings=load();
+var QUICK_TYPES={excl:1,major:1}; // tryb Szybki: wyłączenia + cechy DUŻE ESC (~8–20 pytań kluczowych)
+var state,step=0,current,ov=null,settings=load(),quickMode=false;
 function load(){try{return Object.assign({},R.defaults,JSON.parse(localStorage.getItem('omdl_settings')||'{}'))}catch(e){return Object.assign({},R.defaults)}}
 function fresh(){state={answers:{},troponin:null,dx:null}}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -16,10 +17,11 @@ function qRow(it){var v=state.answers[it.code],opt=it.req==='opt';
  '<div class="yn"><button class="y'+(v==='yes'?' sel':'')+'" data-c="'+it.code+'" data-v="yes">TAK</button><button class="n'+(v==='no'?' sel':'')+'" data-c="'+it.code+'" data-v="no">NIE</button></div></div>'}
 function choice(key,code,title,opts){var v=state[key];return '<div class="q '+(v?'ans':'unans')+'" id="row-'+code+'"><div class="ql"><span class="code">'+code+'</span>'+esc(title)+'</div><div class="yn three">'+opts.map(function(o){return'<button class="c'+(v===o[0]?' sel':'')+'" data-k="'+key+'" data-v="'+o[0]+'">'+esc(o[1])+'</button>'}).join('')+'</div></div>'}
 function renderStep(){
- var g=R.groups[step],h='<div class="stepH"><h2>'+(step+1)+'. '+esc(g.title)+'</h2><button class="allno" id="allNo">Pozostałe: NIE</button></div>';
+ var g=R.groups[step],h='<div class="qmode"><button type="button" id="qmToggle" class="'+(quickMode?'on':'')+'">'+(quickMode?'⚡ Tryb Szybki (włączony) – tylko wyłączenia + cechy DUŻE ESC':'⚡ Włącz tryb Szybki (~kluczowe pytania)')+'</button>'+(quickMode?'<span class="note"> Pełny CSRS / cechy niskiego ryzyka – wyłącz Szybki. Silnik bez zmian.</span>':'')+'</div>';
+ h+='<div class="stepH"><h2>'+(step+1)+'. '+esc(g.title)+'</h2><button class="allno" id="allNo">Pozostałe: NIE</button></div>';
  if(g.id==='G')h+='<div class="note">Najpierw: czy EKG jest prawidłowe? <b>TAK</b> odpowiada NIE na wszystkie nieprawidłowości EKG (także oś, QRS i QTc w CSRS). <b>NIE</b> otwiera szczegółowe pytania.</div>';
  if(g.id==='K')h+='<div class="note">TAK przy K-2…K-7 lub NIE przy „Wiek ≥16 lat” = SZPITAL (nie jest to typowe omdlenie / poza zakresem). Zgłoszenie >24 h = tylko ostrzeżenie.</div>';
- g.items.forEach(function(it){if(visible(it))h+=qRow(it)});
+ g.items.forEach(function(it){if(!visible(it))return;if(quickMode&&!QUICK_TYPES[it.type]&&!(g.id==='K'&&it.type==='incl'))return;h+=qRow(it)});
  if(g.id==='L'){h=h.replace('<div class="stepH">','<div class="stepH">');
   h+=choice('troponin','C-4','Troponina (CSRS: podwyższona = +2 pkt)',[['pos','Podwyższona'],['neg','Prawidłowa'],['na','Nieoznaczona']]);
   h+=choice('dx','C-8/9','Rozpoznanie na SOR (CSRS)',[['vaso','Wazowagalne −2'],['cardiac','Kardiogenne +2'],['other','Inne / niejasne 0']]);}
@@ -38,6 +40,7 @@ function progress(){
  var c=E.csrsScore(R,input());$('sc').textContent=E.fmt(c.score);$('cat').textContent=c.complete?c.category:'niepełny';
 }
 $('form').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+ if(b.id==='qmToggle'){quickMode=!quickMode;renderStep();return;}
  if(b.id==='allNo'){R.groups[step].items.forEach(function(it){if(visible(it)&&!state.answers[it.code])state.answers[it.code]='no'});renderStep();return}
  if(b.dataset.c){var c=b.dataset.c;state.answers[c]===b.dataset.v?delete state.answers[c]:state.answers[c]=b.dataset.v;
   if(c==='G-L1'||/^G-M/.test(c)){var y=window.scrollY;renderStep();window.scrollTo(0,y);return}

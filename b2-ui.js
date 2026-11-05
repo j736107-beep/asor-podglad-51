@@ -126,6 +126,7 @@ function sepCalc(t,g,P){
   if(r2.decisions.length)H3+=bx('red','Do decyzji lekarza','<ul><li>'+r2.decisions.map(rich).join('</li><li>')+'</li></ul>');
   if(r2.warnings.length)H3+=bx('orange','Ostrzeżenia','<ul><li>'+r2.warnings.map(rich).join('</li><li>')+'</li></ul>');
   H3+=bx('','Uwagi','<ul><li>'+r2.notes.map(rich).join('</li><li>')+'</li></ul>');
+  if(src==='cns'||src==='mening')H3+=bx('','Neuroinfekcje / ZOMR','<button type="button" class="tg" onclick="SKS.show(\'neuroinf\')">→ Moduł Neuroinfekcje (empiria ZOMR, deksametazon, LP)</button><div class="mut">Przy ognisku OUN / meningokokach otwórz Neuroinfekcje – pełniejszy tor LP/TK/empirii. DO DECYZJI LEKARZA.</div>');
   H3+='<details class="clinical-sources"><summary>Źródła</summary><ul>'+r2.src.map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ul></details>';
   return{H:H3,lvl:'ok'};}
  if(t==='d'){var keys=['r_map','r_lac','r_crt','r_fl','r_uo','r_cult','r_deesc','r_dose','r_src','r_glu','r_hc','r_bic','r_dur'];var open=keys.filter(function(k){return !g(k);}).length;
