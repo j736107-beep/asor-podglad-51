@@ -99,23 +99,30 @@ function sepLocal(src,alg,r2){var cns=src==='cns'||src==='mening';var all=alg===
  if(src==='abd'||src==='bil')h+='<p class="o">Ognisko brzuszne/żółciowe: sam ceftriakson nie pokrywa beztlenowców – metronidazol/pip-taz z apteki.</p>';
  if(cns)h+='<p class="o">OUN: dołącz wankomycynę (± ampicylina) wg Neuroinfekcji – z apteki.</p>';
  return bx(all?'red':'ok','Ścieżka lokalna SOR PSZS Nowy Targ',h);}
+var sepHeavyTimer=null,sepHeavyRun=false,sepLastRest='',sepLastLvl='ok';
+function sepPaintMap(mp,id,boxId){var el=document.getElementById(id||'sepMapVal');if(el)el.textContent=nz(mp)?F(mp,0):'—';var box=document.getElementById(boxId||'sepMapBox');if(box){box.style.borderColor=nz(mp)&&mp<65?'#C62828':'';box.style.background=nz(mp)&&mp<65?'#FCEBEA':'';}}
+function sepLiveBox(mp,pf,g){return bx(nz(mp)&&mp<65?'red':nz(mp)?'ok':'','Wyliczone','<b>MAP: '+(nz(mp)?F(mp,0)+' mmHg':'— (podaj SBP i DBP)')+'</b>'+(nz(mp)&&mp<65?' <b class="r">&lt;65 – hipotensja: płyny 30 ml/kg, ponowna ocena</b>':'')+' · <b>PaO₂/FiO₂: '+(nz(pf)?F(pf,0)+' mmHg':'— (PaO₂ + FiO₂)')+'</b>'+(nz(g('fio2'))&&!nz(sepFiO2(g))?' <span class="o">FiO₂ poza zakresem 21–100 %</span>':'')+'<div class="mut">MAP = DBP + (SBP − DBP)/3. Liczy się natychmiast przy wpisywaniu ciśnień.</div>');}
+function sepCalcHeavyA(g,P){var i=sepInputs(g,P);var r=A.sepsisAssess(i);var mp=sepMAP(g('sbp'),g('dbp')),pf=sepPF(g);var live=sepLiveBox(mp,pf,g);sepPaintMap(mp);var rest='';
+ if(!r.ok){rest=bx('orange','Sepsa – ocena'+dw(),rich(r.msg)+'<div class="mut">Wprowadź parametry; brak danych = brak wyniku.</div>')+srcl(esc(A.SRC.ssc21));sepLastRest=rest;sepLastLvl='ok';return{H:live+rest,lvl:'ok'};}
+ var q=r.q,s=r.s,n=r.n;
+ rest+=bx(r.shock?'red':r.suspected?'orange':'ok',esc(r.msg),(r.shockPossible?'<div class="o">Wazopresor bez mleczanów: nie można potwierdzić wstrząsu septycznego (wymagane mleczany >2 mmol/l).</div>':'')+'<div class="mut">Rozpoznanie wg NPOA 2020/Sepsis-3: podejrzenie zakażenia + SOFA ≥2 pkt LUB qSOFA ≥2/3. SSC 2021 nie zaleca qSOFA jako jedynego narzędzia przesiewowego – dlatego pokazano też NEWS2.</div>');
+ rest+=tbl(['Skala','Wynik','Komentarz'],[
+  ['qSOFA (NPOA 2020: RR >22)',(q.complete?'':'co najmniej ')+q.score+'/3',(q.complete?(q.positive?'<b class="r">dodatni (≥2)</b>':'ujemny'):'brak: '+esc(q.missing.join(', ')))+(q.differs?'<div class="o">Sepsis-3 (RR ≥22, SBP ≤100): '+q.s3+'/3'+(q.positive3!==q.positive?' – '+(q.positive3?'DODATNI':'ujemny')+' – DO DECYZJI LEKARZA':'')+'</div>':'')],
+  ['NEWS2',(n.complete?'':'co najmniej ')+n.score,esc(n.txt)+(n.complete?'':' · brak: '+esc(n.missing.join(', ')))],
+  ['SOFA',(s.complete?'':'co najmniej ')+s.score+' (oceniono '+s.assessed+'/6 układów)',s.complete?'':'brak: '+esc(s.missing.join(', '))+' – nie liczono jako 0']]);
+ if(s.parts.length)rest+='<div class="mut">SOFA wg układów: '+s.parts.map(function(x){return esc(x[0])+' '+x[1];}).join(' · ')+'</div>';
+ if(r.shock||n.cls==='emergency')rest+=bx('red','[HOSPITALIZACJA BEZWZGLĘDNA] – OIT / monitorowanie','Wstrząs septyczny lub NEWS2 ≥7: pilna ocena zespołu intensywnej terapii, pakiet 1 h – zakładka „Pakiet 1 h”.');
+ rest+=srcl(esc(A.SRC.ssc21)+'; NPOA 2020 (13.1.4); '+esc(A.SRC.news2));
+ var lvl=(r.shock||n.cls==='emergency')?'red':'ok';sepLastRest=rest;sepLastLvl=lvl;return{H:live+rest,lvl:lvl};}
 function sepCalc(t,g,P){
- if(t==='a'){var i=sepInputs(g,P);var r=A.sepsisAssess(i);var H='';
-  var mp=sepMAP(g('sbp'),g('dbp')),pf=sepPF(g);
-  function paintMap(){var el=document.getElementById('sepMapVal');if(el){el.textContent=nz(mp)?F(mp,0):'—';var box=document.getElementById('sepMapBox');if(box){box.style.borderColor=nz(mp)&&mp<65?'#C62828':'';box.style.background=nz(mp)&&mp<65?'#FCEBEA':'';}} }paintMap();
-  var live=bx(nz(mp)&&mp<65?'red':nz(mp)?'ok':'','Wyliczone','<b>MAP: '+(nz(mp)?F(mp,0)+' mmHg':'— (podaj SBP i DBP)')+'</b>'+(nz(mp)&&mp<65?' <b class="r">&lt;65 – hipotensja: płyny 30 ml/kg, ponowna ocena</b>':'')+' · <b>PaO₂/FiO₂: '+(nz(pf)?F(pf,0)+' mmHg':'— (PaO₂ + FiO₂)')+'</b>'+(nz(g('fio2'))&&!nz(sepFiO2(g))?' <span class="o">FiO₂ poza zakresem 21–100 %</span>':'')+'<div class="mut">MAP = DBP + (SBP − DBP)/3. Liczy się od razu po wpisaniu ciśnień (bez zaznaczania zakażenia).</div>');
-  if(!r.ok)return{H:live+bx('orange','Sepsa – ocena'+dw(),rich(r.msg)+'<div class="mut">Wprowadź parametry; brak danych = brak wyniku.</div>')+srcl(esc(A.SRC.ssc21)),lvl:'ok'};
-  var q=r.q,s=r.s,n=r.n;
-  H+=live;
-  H+=bx(r.shock?'red':r.suspected?'orange':'ok',esc(r.msg),(r.shockPossible?'<div class="o">Wazopresor bez mleczanów: nie można potwierdzić wstrząsu septycznego (wymagane mleczany >2 mmol/l).</div>':'')+'<div class="mut">Rozpoznanie wg NPOA 2020/Sepsis-3: podejrzenie zakażenia + SOFA ≥2 pkt LUB qSOFA ≥2/3. SSC 2021 nie zaleca qSOFA jako jedynego narzędzia przesiewowego – dlatego pokazano też NEWS2.</div>');
-  H+=tbl(['Skala','Wynik','Komentarz'],[
-   ['qSOFA (NPOA 2020: RR >22)',(q.complete?'':'co najmniej ')+q.score+'/3',(q.complete?(q.positive?'<b class="r">dodatni (≥2)</b>':'ujemny'):'brak: '+esc(q.missing.join(', ')))+(q.differs?'<div class="o">Sepsis-3 (RR ≥22, SBP ≤100): '+q.s3+'/3'+(q.positive3!==q.positive?' – '+(q.positive3?'DODATNI':'ujemny')+' – DO DECYZJI LEKARZA':'')+'</div>':'')],
-   ['NEWS2',(n.complete?'':'co najmniej ')+n.score,esc(n.txt)+(n.complete?'':' · brak: '+esc(n.missing.join(', ')))],
-   ['SOFA',(s.complete?'':'co najmniej ')+s.score+' (oceniono '+s.assessed+'/6 układów)',s.complete?'':'brak: '+esc(s.missing.join(', '))+' – nie liczono jako 0']]);
-  if(s.parts.length)H+='<div class="mut">SOFA wg układów: '+s.parts.map(function(x){return esc(x[0])+' '+x[1];}).join(' · ')+'</div>';
-  if(r.shock||n.cls==='emergency')H+=bx('red','[HOSPITALIZACJA BEZWZGLĘDNA] – OIT / monitorowanie','Wstrząs septyczny lub NEWS2 ≥7: pilna ocena zespołu intensywnej terapii, pakiet 1 h – zakładka „Pakiet 1 h”.');
-  H+=srcl(esc(A.SRC.ssc21)+'; NPOA 2020 (13.1.4); '+esc(A.SRC.news2));
-  return{H:H,lvl:(r.shock||n.cls==='emergency')?'red':'ok'};}
+ if(t==='a'){var mp=sepMAP(g('sbp'),g('dbp')),pf=sepPF(g);
+  sepPaintMap(mp);
+  var live=sepLiveBox(mp,pf,g);
+  if(sepHeavyRun)return sepCalcHeavyA(g,P);
+  if(sepHeavyTimer)clearTimeout(sepHeavyTimer);
+  sepHeavyTimer=setTimeout(function(){sepHeavyRun=true;try{if(typeof SEP!=='undefined'&&SEP.update)SEP.update();}finally{sepHeavyRun=false;sepHeavyTimer=null;}},80);
+  if(sepLastRest)return{H:live+sepLastRest,lvl:sepLastLvl};
+  return{H:live+bx('orange','Sepsa – ocena'+dw(),'<div class="mut">Wprowadź parametry; brak danych = brak wyniku.</div>')+srcl(esc(A.SRC.ssc21)),lvl:'ok'};}
  if(t==='b'){var w=P.w;var b=A.bundle({w:w,bmi:P.bmi,heart:P.co&&P.co.heart,renal:P.co&&P.co.renal,shock:g('shock'),highLik:g('hl')});var H2='';
   var t0=(document.getElementById('t0')||{}).value||'';var mt=/^(\d{1,2}):(\d{2})$/.exec(t0);function addH(h){if(!mt)return '';var m=(+mt[1]*60+ +mt[2]+h*60)%1440;return ' (do '+('0'+Math.floor(m/60)).slice(-2)+':'+('0'+m%60).slice(-2)+')';}
   H2+=bx('orange','Pakiet pierwszej godziny (SSC 2021) – lista kontrolna',tbl(['Element','Zalecenie','Status'],[
