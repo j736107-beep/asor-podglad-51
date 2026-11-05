@@ -38,6 +38,8 @@ $('#pc').oninput=function(){var x=C.num(this.value);PT.crMg=isFinite(x)?UN.conv(
 document.querySelectorAll('#psex button').forEach(function(b){b.onclick=function(){PT.sex=b.dataset.s;saveP();patBar();refresh();}});
 document.querySelectorAll('.tg').forEach(function(b){b.onclick=function(){PT.co[b.dataset.c]=!PT.co[b.dataset.c];saveP();patBar();refresh();}});
 // ---------- nawigacja ----------
+// pw25: klasyczne Elektrolity (elyte) ukryte – jedna wersja: Elektrolity SOR (el)
+(function(L){for(var i=L.length-1;i>=0;i--)if(L[i]&&L[i].id==='elyte')L.splice(i,1);})(SKM.list);
 var MODS=SKM.list,active=null;
 function side(){$('#side').innerHTML=MODS.map(function(m){return m.sep?'<hr>':'<button data-id="'+m.id+'" class="'+(m.id===cur?'on ':'')+(m.soon?'soon':'')+'">'+m.icon+' '+m.name+'</button>'}).join('');}
 var navS=[];function go(id){if(id===cur){show();return;}navS.push(cur);try{history.pushState({sk:id},'')}catch(e){}cur=id;localStorage.setItem('sk_mod',cur);show();}
