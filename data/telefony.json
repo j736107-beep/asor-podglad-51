@@ -601,7 +601,8 @@
        "st": "lok",
        "opis": "Wydawanie leków"
       }
-     ]
+     ],
+     "info": "Kierownik wew. 36 00, magazyn leków 36 01, wydawanie leków 39 54 – telefony wewnętrzne / zlecenia w systemie. Silibinina / NAC / penicylina G – dostępność."
     },
     {
      "nazwa": "Dział Informatyki (informatycy)",
@@ -743,7 +744,8 @@
        "st": "lok",
        "opis": "fax"
       }
-     ]
+     ],
+     "info": "Klasyfikator grzybów: dyżur czwartki 08:00–10:00, tylko grzyby świeże; tel. alarmowy na razie brak. Grzyboznawca (świeże i suszone) – brak w Nowym Targu."
     }
    ]
   },
