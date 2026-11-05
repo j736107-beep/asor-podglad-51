@@ -53,8 +53,8 @@ function mkNav(m){var pv=navS.length&&MODS.filter(function(x){return x.id===navS
  var bk=document.createElement('button');bk.id='skBack';bk.type='button';bk.onclick=function(){SKS.back()};bk.hidden=home&&!pv;bk.innerHTML='&#x2190; Wróć'+(pv?' <span>do: '+pv.name+'</span>':' <span>do: Pulpit dyżuru</span>');
  var hm=document.createElement('button');hm.id='skHome';hm.type='button';hm.hidden=home;hm.innerHTML='&#x2302; Pulpit dyżuru';hm.onclick=function(){go('dashboard')};
  navBar.appendChild(bk);navBar.appendChild(hm);
- navBot=document.createElement('div');navBot.id='skNavBot';navBot.className='sk-nav bot';var cl=document.createElement('button');cl.id='skClear';cl.type='button';cl.innerHTML='&#x1F5D1; Wyczyść dane pacjenta';cl.title='Czyści wszystkie dane pacjenta we wszystkich modułach (ustawienia zostają)';cl.onclick=function(){SKS.clearData()};navBot.appendChild(cl);}
-function ensureNav(){var el=$('#main');if(!navBar)return;if(el.firstChild!==navBar)el.insertBefore(navBar,el.firstChild);if(el.lastChild!==navBot)el.appendChild(navBot);}
+ navBot=null; /* pw26: jeden pełny wipe = #nextPt „Następny pacjent”; bez #skClear w dole */}
+function ensureNav(){var el=$('#main');if(!navBar)return;if(el.firstChild!==navBar)el.insertBefore(navBar,el.firstChild);if(navBot&&el.lastChild!==navBot)el.appendChild(navBot);}
 function show(){if(window.SORReport&&active)SORReport.capture(active);side();alarms={};alarm('_',false);var m=MODS.filter(function(x){return x.id===cur})[0]||MODS[0],el=$('#main');active=m;el.className='';if(navObs)navObs.disconnect();el.innerHTML='';mkNav(m);el.appendChild(navBar);
  if(m.frame){el.className='fr';var f=document.createElement('iframe');f.src=m.frame;f.onload=function(){bridge(f,m)};el.appendChild(f);m.sync=function(){sync(f,m)};}
  else m.render(el,SKS);
@@ -95,7 +95,7 @@ window.SKS.setP=function(o){var ch=false;if(o.age!=null&&String(PT.age)!==String
 function wipe(){window.SKS.pwMem=null;window.SKS.ordMem=null;try{window.SORClinicalUI?.reset();}catch(e){}
  if(window.SORClearCase)window.SORClearCase();
  Object.keys(localStorage).forEach(function(k){if(k==='sk_settings'||k==='omdl_settings'||k==='sk_mod'||k==='sor_favorites')return;if(k.indexOf('sk_')===0||k.indexOf('omdl_')===0||k.indexOf('se4state:')===0)localStorage.removeItem(k)});location.reload();}
-window.SKS.clearData=function(){if(window.SORWypis&&SORWypis.active)return;if(!confirm('Wyczyścić wszystkie dane pacjenta we wszystkich modułach (pasek pacjenta, wklejone wyniki, karta zleceń, wykonane, dokumentacja)? Ustawienia i ulubione zostają.'))return;wipe();};
-window.SKS.nextPatient=function(){if(window.SORWypis&&SORWypis.active)return;if(!confirm('Następny pacjent: wyczyścić dane pacjenta i wszystkie moduły, również tekst dokumentacji i trendy? (ustawienia i ulubione zostają)'))return;wipe();};
+window.SKS.nextPatient=function(){if(window.SORWypis&&SORWypis.active)return;if(!confirm('Następny pacjent: wyczyścić dane pacjenta we wszystkich modułach (pasek pacjenta, wyniki, zlecenia, wykonane, dokumentacja, trendy)? Ustawienia i ulubione zostają.'))return;wipe();};
+window.SKS.clearData=window.SKS.nextPatient; /* alias – UI ma tylko #nextPt */
 $('#nextPt').onclick=window.SKS.nextPatient;
 if(window.SKG)SKG.obs($('#main'));})();
