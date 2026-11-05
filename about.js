@@ -2,7 +2,7 @@
 // Dane źródeł (dist/data/zrodla.js, ~140 kB) ładowane leniwie – dopiero przy otwarciu „Źródeł”, druku lub raportu.
 (function(root){
 'use strict';
-var VERSION='5.1',DATE='24.10.2026',LKEY='sor_local_cfg';
+var VERSION='5.1',DATE='05.11.2026',LKEY='sor_local_cfg';
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function safeUrl(u){u=String(u||'');return /^https?:\/\//i.test(u)?u:'#';}
 function a(u,t){return '<a href="'+esc(safeUrl(u))+'" target="_blank" rel="noopener noreferrer">'+esc(t||u)+'</a>';}
@@ -68,6 +68,7 @@ function infoHtml(){var mods=menuMods().map(function(m){return esc(m.name);}).jo
  '<div class="box orange"><h3>Ograniczenia</h3><ul><li>Brak walidacji klinicznej całego produktu; testy automatyczne są techniczne (także przypadki kliniczne liczone ręcznie – to nie walidacja).</li><li>Wartości oznaczone „DO DECYZJI LEKARZA” / „ROBOCZE – ustalić lokalnie” wymagają decyzji lekarza lub procedury szpitala.</li><li>Rozbieżności ChPL ↔ wytyczne są pokazywane, nie rozstrzygane (np. INR przed alteplazą, bolus 3% NaCl, receptura noradrenaliny 80 µg/ml).</li><li>Obszary katalogu bez modułu: resuscytacja, NIV/HFNO, POCUS (źródła przypisane, brak kalkulatora).</li></ul></div>'+
  '<div class="box"><h3>Zmiany w wersji '+VERSION+'</h3><ul>'+
  '<li><b>5.1:</b> nowy moduł „💊 Leki – karty dawkowania”: 121 kart substancji z ChPL (RPL/EMA) i wytycznych, statusy zweryfikowane / DO DECYZJI LEKARZA, wyszukiwanie w katalogu RPL (20 295 produktów, link do ChPL), kopiowanie tekstu zalecenia, dodanie do „Co wykonano” i lista leków na wypis. Pozostałe moduły bez zmian względem 5.0-D.</li>'+
+ '<li><b>Podgląd 5.1 (pw21–pw29, 05.11.2026):</b> PSSE Nowy Targ 18 266 29 14 przy grzybach; schemat pomostowy amatoksyn (NAC i.v., Legalon opcjonalnie); mniej fałszywych alarmów radiologii w Hamulcu/PW; Kompendium interny poza app z powrotem; jedna wersja Elektrolitów SOR; jedno czyszczenie tylko przez „Następny pacjent”; moduł Lekowrażliwość EUCAST (Lekify/KORLD); Hamulec w menu tuż pod Przeglądem wyników; poprawiona literówka KOMPENDIUM.</li>'+
  '<li>Katalog źródeł 24.10.2026 (32 obszary + wspólna baza leków, 311 adresów + 8 z mapy modułów) w aplikacji: źródło podstawowe / uzupełniające / otwarta walidacja dla każdego modułu; lista „Do uzupełnienia / zweryfikowania”; konfiguracja lokalna; stopka źródeł w wydruku.</li>'+
  '<li>Kontrola ChPL/EPAR (24.10.2026): tenekteplaza w udarze wg przedziałów masy (EPAR Metalyse), INR 1,3 vs 1,7 i drgawki na początku udaru (ChPL Actilyse), adrenalina i.m. u niemowląt &lt;6 mies. 0,01 mg/kg, heparyna w pompie (≤1000 j.m./ml – blokada), noradrenalina &gt;40 µg/ml – ostrzeżenie, insulina 0,05–1,0 j./ml – blokada, KCl (6 h, dobutamina, cewnik centralny), 3% NaCl (100 ml/h z ChPL vs ESE).</li>'+
  '<li>Pompy SOR: twarde limity dawek (np. noradrenalina 2, adrenalina 1 µg/kg/min) – wynik wstrzymywany przy podejrzeniu pomyłki jednostek; stężenie poza limitem ChPL wstrzymuje wynik.</li>'+
