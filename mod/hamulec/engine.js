@@ -19,6 +19,7 @@ function news2(v){if([v.rr,v.spo2,v.sbp,v.hr,v.temp].some(function(x){return x==
 function scan(t){var hits={},sents=String(t).split(/(?<=[.!?;])\s+|\n+/);
  RU.kw.forEach(function(k){var re=new RegExp('(?<![a-ząęółśżźćń])(?:'+k[3]+')','i');sents.forEach(function(s){var m=re.exec(s);if(!m)return;var before=s.slice(0,m.index),last=null,nm;NEG.lastIndex=0;while((nm=NEG.exec(before)))last=nm;
   var neg=!!last&&before.length-(last.index+last[0].length)<40&&!/[,;]\s*(?:ale|lecz|natomiast|jednak)/i.test(before.slice(last.index));
+  if(!neg){var aft=s.slice(m.index+m[0].length,m.index+m[0].length+100).split(/[.!?;]/)[0];if(/(?<![a-ząęółśżźćń])(nie uwidoczn\w*|nie stwierdz\w*|nie wykaz\w*|nie widać|nie ma|wyklucz\w*|nie obserwuje\w*)(?![a-ząęółśżźćń])/i.test(aft)&&!/(?:natomiast|ale|jednak|lecz)\s/i.test(aft))neg=true;}
   (hits[k[0]]=hits[k[0]]||{id:k[0],label:k[1],sev:k[2],pos:[],neg:[]})[neg?'neg':'pos'].push(s.trim().slice(0,200));});});return hits;}
 function age(t){var m=t.match(/(?:wiek|lat[ae]?)\s*[:=]?\s*(\d{1,3})\b|\b(\d{1,3})\s*(?:-?\s*let\w*|lata?\b|l\.|r\.\s*ż\.?|rż)/i);if(m){var a=+(m[1]||m[2]);if(a>0&&a<120)return a;}return'';}
 function preg(t){if(/nie (?:jest )?w ciąży|ciąża wykluczona|test ciążowy ujemny|β-?hcg ujemn|beta-?hcg ujemn/i.test(t))return{p:false};var m=t.match(/(\d{1,2})\s*(?:\.\s*)?(?:tc|hbd|tydz\w*\s*ciąży)\b/i);

@@ -128,8 +128,11 @@ var KW=[
 ['plyn','Płyn','warn','płyn'],['zlam','Złamanie','warn','złamani'],['niedodma','Niedodma','warn','niedodm']
 ].map(function(a){return{id:a[0],label:a[1],sev:a[2],re:new RegExp('(?<![a-ząęółśżźćń])(?:'+a[3]+')','i')};});
 var NEG=/(?<![a-ząęółśżźćń])(bez|brak\w*|nie stwierdz\w*|nie uwidoczn\w*|nie wykaz\w*|nie widać|niewidoczn\w*|wyklucz\w*|nie ma)(?![a-ząęółśżźćń])/gi;
+var NEGA=/(?<![a-ząęółśżźćń])(nie uwidoczn\w*|nie stwierdz\w*|nie wykaz\w*|nie widać|nie ma|wyklucz\w*|brak\w*|nie obserwuje\w*)(?![a-ząęółśżźćń])/i;
 var POS=/[,;]\s*[^,;]*?(natomiast|ale|jednak|lecz|widoczn|uwidoczniono|stwierdza się|obecn|z\s+cechami)/i;
 function scanText(text){var hits=[];var sents=String(text).split(/(?<=[.!?])\s+|\n+/);sents.forEach(function(s){KW.forEach(function(k){var m=k.re.exec(s);if(!m)return;var before=s.slice(0,m.index),neg=false,nm,last=null;NEG.lastIndex=0;while((nm=NEG.exec(before)))last=nm;if(last){var between=before.slice(last.index+last[0].length);neg=!POS.test(between);}
+  if(!neg){var after=s.slice(m.index+m[0].length,m.index+m[0].length+120).split(/[.!?;]/)[0];if(NEGA.test(after)&&!/(?:natomiast|ale|jednak|lecz)\s/i.test(after))neg=true;}
+  if(!neg&&k.id==='zator'){var pre=s.slice(Math.max(0,m.index-40),m.index);if(/protok[oó][lł]|w kierunku|angio[- ]?tk|cta|podejrzeni\w*\s*$/i.test(pre)&&!/emboli|skrzeplin|ubyt\w* wype[lł]nieni|zakrzep|w świetle t[eę]tnic|materia[lł] zatorow|zatorowo\w* (?:t[eę]tnic|p[lł]ucn\w* (?:obustronn|prawo|lewo|segment|p[lł]at|centraln))|cechy zatorow/i.test(s.replace(/(protok[oó][lł]\w*|w kierunku|podejrzeni\w*)\s+zatorowo\w*( p[lł]ucn\w*)?/gi,'')))neg=true;}
   hits.push({id:k.id,label:k.label,sev:neg?'neg':k.sev,neg:neg,snippet:s.trim().slice(0,220)});});});
  var seen={};return hits.filter(function(h){var x=h.id+'|'+h.snippet;if(seen[x])return false;seen[x]=1;return true;});}
 // akcje (lok = STANDARD LOKALNY zatwierdzony; dec = DO DECYZJI LEKARZA)
